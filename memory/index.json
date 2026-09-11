@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T08:51:44.473Z",
-  "count": 9,
+  "generatedAt": "2026-09-11T08:51:53.916Z",
+  "count": 10,
   "entries": [
     {
       "file": "2026-09-11_1fd320d_chore-memory-update-memory-index.md",
@@ -48,6 +48,19 @@
       "version": "null",
       "commit": "chore: record initial repository memory",
       "tags": [
+        "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_8705d1d_feat-assets-add-github-repository-banner-and-sync-memory.md",
+      "hash": "8705d1d36d35e951e5132774b00cbd442133748b",
+      "short": "8705d1d",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat(assets): add GitHub repository banner and sync memory",
+      "tags": [
+        "feature",
         "memory"
       ]
     },

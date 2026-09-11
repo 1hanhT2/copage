@@ -1,8 +1,9 @@
 <p align="center">
-  <img src="./copage-logo-for-white-mode.png" alt="Copage Logo" width="180" />
+  <img src="./copage-github-banner.png" alt="Copage Banner" width="100%" />
 </p>
 
 # Copage
+
 
 > **Inspect, hover, and copy any web element into an AI-ready reproduction prompt or component code.**
 
