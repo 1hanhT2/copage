@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T09:59:53.627Z",
-  "count": 29,
+  "generatedAt": "2026-09-11T10:08:18.139Z",
+  "count": 31,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -37,6 +37,19 @@
       "tags": [
         "ui",
         "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_329fa3d_feat-ui-implement-full-material-3-expressive-shapes-spring-j.md",
+      "hash": "329fa3dcf896cb6970fc28ee60f9b5005441f718",
+      "short": "329fa3d",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat(ui): implement full Material 3 Expressive shapes, spring jelly motion, reticle calipers, and aurora mesh glow",
+      "tags": [
+        "feature",
+        "ui"
       ]
     },
     {
@@ -286,6 +299,18 @@
       "commit": "feat(assets): add dark mode logo asset and sync memory",
       "tags": [
         "feature",
+        "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_c786835_chore-memory-finalize-memory-log-for-m3-expressive.md",
+      "hash": "c7868358631ba536843aa6530cbcb41eefb6cb06",
+      "short": "c786835",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore(memory): finalize memory log for M3 Expressive",
+      "tags": [
         "memory"
       ]
     },
