@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T10:17:29.719Z",
-  "count": 36,
+  "generatedAt": "2026-09-11T10:23:02.567Z",
+  "count": 37,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -446,6 +446,18 @@
       "commit": "docs: align AGENTS.md, README.md, and specs with extension mission and LLM prompt synthesizer vision",
       "tags": [
         "docs"
+      ]
+    },
+    {
+      "file": "2026-09-11_fe108aa_feat-shapes-expand-to-canonical-35-m3-expressive-shapes-from.md",
+      "hash": "fe108aad56a1a80b9b7af1942445ff3cf12eceb9",
+      "short": "fe108aa",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat(shapes): expand to canonical 35 M3 Expressive shapes from m3e reference",
+      "tags": [
+        "feature"
       ]
     }
   ]
