@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T14:05:32.437Z",
-  "count": 45,
+  "generatedAt": "2026-09-11T14:17:16.857Z",
+  "count": 46,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -472,6 +472,19 @@
       "commit": "chore(memory): clean memory index",
       "tags": [
         "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_da85fe7_feat-ui-tone-down-glow-effects-and-integrate-official-copage.md",
+      "hash": "da85fe74593081b9f5257b59d1df05c1e138119b",
+      "short": "da85fe7",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat(ui): tone down glow effects and integrate official Copage logo assets across all surfaces",
+      "tags": [
+        "feature",
+        "ui"
       ]
     },
     {
