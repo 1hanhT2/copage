@@ -13,7 +13,7 @@
   - [`PRODUCT.md`](./PRODUCT.md) — Product purpose, user personas, operating context, brand commitments.
   - [`DESIGN.md`](./DESIGN.md) — Design system, aesthetic principles, typography, tokens, craft floor.
   - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — System boundaries, data flow, API contracts.
-- **Git Repo:** Default branch `main`. Annotated tags only (`git tag -a vX.Y.Z -m "..."`).
+- **Git Repo:** Default branch `main`, remote `origin` = `https://github.com/1hanhT2/copage.git`. Annotated tags only (`git tag -a vX.Y.Z -m "..."`).
 
 ---
 
