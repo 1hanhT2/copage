@@ -7,8 +7,10 @@ import {
   getCanonicalModelShape,
   getModelPillShapeClass
 } from "../../lib/shapes";
+import { setupDynamicFavicon } from "../../lib/favicon";
 
 document.addEventListener("DOMContentLoaded", async () => {
+  setupDynamicFavicon();
   const activateBtn = document.getElementById("activate-btn") as HTMLButtonElement;
   const activateIcon = document.getElementById("activate-icon") as HTMLElement;
   const activateBtnText = document.getElementById("activate-btn-text") as HTMLElement;

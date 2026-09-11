@@ -17,8 +17,11 @@ import {
   getModelPillShapeClass,
   getElementM3Shape
 } from "../../lib/shapes";
+import { setupDynamicFavicon } from "../../lib/favicon";
 
 document.addEventListener("DOMContentLoaded", async () => {
+  setupDynamicFavicon();
+
   // Tabs
   const tabButtons = document.querySelectorAll<HTMLButtonElement>(".m3-tab");
   const tabPanels = document.querySelectorAll<HTMLElement>(".m3-tab-panel");

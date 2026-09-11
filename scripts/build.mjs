@@ -98,6 +98,13 @@ async function main() {
     }
   } catch {}
 
+  // Copy favicon.ico to dist/
+  const faviconIco = resolve(rootDir, "public/favicon.ico");
+  try {
+    await access(faviconIco);
+    await copyFile(faviconIco, resolve(distDir, "favicon.ico"));
+  } catch {}
+
   console.log("✓ Build complete. Clean IIFE content.js and ESM background.js ready in dist/");
 }
 

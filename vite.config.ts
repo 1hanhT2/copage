@@ -21,6 +21,10 @@ function copyManifestAndIcons() {
         await copyFile("dist/src/ui/options/index.html", "dist/options.html");
       } catch {}
 
+      try {
+        await copyFile("public/favicon.ico", "dist/favicon.ico");
+      } catch {}
+
       for (const size of [16, 48, 128]) {
         const iconSrc = `public/icons/icon-${size}.png`;
         try {
