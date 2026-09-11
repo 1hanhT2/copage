@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T09:59:50.451Z",
-  "count": 28,
+  "generatedAt": "2026-09-11T09:59:53.627Z",
+  "count": 29,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -99,6 +99,19 @@
       "version": "null",
       "commit": "chore(memory): sync memory index",
       "tags": [
+        "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_591028f_chore-memory-sync-memory-index-for-m3-expressive-design.md",
+      "hash": "591028f9b378aeafe0d28c872e54c3257b795691",
+      "short": "591028f",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore(memory): sync memory index for M3 Expressive design",
+      "tags": [
+        "ui",
         "memory"
       ]
     },
