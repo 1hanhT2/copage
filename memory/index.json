@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T14:54:40.812Z",
-  "count": 50,
+  "generatedAt": "2026-09-11T15:11:15.875Z",
+  "count": 51,
   "entries": [
     {
       "file": "2026-09-11_02d9c6b_feat-library-add-component-library-to-save-and-manage-select.md",
@@ -36,6 +36,19 @@
       "commit": "chore(memory): sync memory index for full Material 3 Expressive implementation",
       "tags": [
         "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_16ce1bc_feat-icons-update-extension-toolbar-icons-to-mini-co-logo-wi.md",
+      "hash": "16ce1bc5e1c5f4ac1aece9d16061cf3bc93a1457",
+      "short": "16ce1bc",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat(icons): update extension toolbar icons to mini CO logo with M3 dark squircle badge",
+      "tags": [
+        "feature",
+        "ui"
       ]
     },
     {
