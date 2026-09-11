@@ -1,0 +1,16 @@
+{
+  "name": "copage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "version:patch": "node scripts/bump-version.mjs patch",
+    "version:minor": "node scripts/bump-version.mjs minor",
+    "version:major": "node scripts/bump-version.mjs major",
+    "version:show": "node -p \"require('./package.json').version\"",
+    "memory:sync": "node scripts/memory.mjs --sync",
+    "memory:hook": "node scripts/memory.mjs --hook",
+    "memory:index": "node scripts/memory.mjs --index",
+    "design:check": "npx impeccable detect"
+  }
+}

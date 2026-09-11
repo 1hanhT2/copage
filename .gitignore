@@ -1,0 +1,46 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# Testing & Coverage
+/coverage
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# Build outputs
+/.next/
+/out/
+/dist/
+/build/
+
+# Misc & OS
+.DS_Store
+Thumbs.db
+*.pem
+*.log*
+
+# Environment variables
+.env*
+!.env.example
+
+# Local databases
+*.db
+*.db-journal
+*.sqlite
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Impeccable local overrides
+.impeccable/config.local.json
+.impeccable/hook.cache.json
+
+# Machine-specific agent harness directories
+.codex/
+.claude/
+.cursor/
+.grok/
+.opencode/
