@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T08:51:43.955Z",
-  "count": 8,
+  "generatedAt": "2026-09-11T08:51:44.473Z",
+  "count": 9,
   "entries": [
     {
       "file": "2026-09-11_1fd320d_chore-memory-update-memory-index.md",
@@ -12,6 +12,19 @@
       "commit": "chore(memory): update memory index",
       "tags": [
         "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_4751e35_chore-memory-sync-memory-index-for-extension-mission-docs.md",
+      "hash": "4751e35c38b27d3bb12bed6c9798e8568173f500",
+      "short": "4751e35",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore(memory): sync memory index for extension mission docs",
+      "tags": [
+        "memory",
+        "docs"
       ]
     },
     {
