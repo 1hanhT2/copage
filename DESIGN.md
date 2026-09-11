@@ -31,25 +31,30 @@ colors:
   success: "#78dc77"
   success-surface: "rgba(120, 220, 119, 0.14)"
 typography:
-  code:
-    fontFamily: '"JetBrains Mono", "Roboto Mono", monospace'
-    fontSize: "12px"
-    lineHeight: 1.45
+  display:
+    fontFamily: '"Comfortaa", cursive, sans-serif'
+    fontSize: "24px"
+    fontWeight: 700
+    letterSpacing: "-0.01em"
   title:
-    fontFamily: 'Roboto, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+    fontFamily: '"Lexend", "Google Sans Text", -apple-system, sans-serif'
     fontSize: "15px"
     fontWeight: 600
-    letterSpacing: "0.0075em"
+    letterSpacing: "-0.005em"
   button:
-    fontFamily: 'Roboto, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+    fontFamily: '"Lexend", "Google Sans Text", -apple-system, sans-serif'
     fontSize: "12.5px"
     fontWeight: 600
-    letterSpacing: "0.03em"
+    letterSpacing: "0.015em"
   body:
-    fontFamily: 'Roboto, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+    fontFamily: '"Lexend", "Google Sans Text", -apple-system, sans-serif'
     fontSize: "13px"
+    lineHeight: 1.5
+    letterSpacing: "0.01em"
+  code:
+    fontFamily: '"JetBrains Mono", "Google Sans Mono", monospace'
+    fontSize: "12px"
     lineHeight: 1.45
-    letterSpacing: "0.01071em"
 shapes:
   full: "9999px"
   extra-large: "28px"

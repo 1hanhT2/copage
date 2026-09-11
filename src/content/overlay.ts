@@ -32,6 +32,8 @@ export class InspectorOverlay {
     // 3. Inject scoped CSS
     const style = document.createElement("style");
     style.textContent = `
+      @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=JetBrains+Mono:wght@400;500;600&family=Lexend:wght@400;500;600;700&display=swap');
+
       :host {
         all: initial !important;
         display: block !important;
@@ -42,7 +44,7 @@ export class InspectorOverlay {
         height: 100vh !important;
         pointer-events: none !important;
         z-index: 2147483647 !important;
-        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+        font-family: 'Lexend', 'Google Sans Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
         box-sizing: border-box !important;
       }
       *, *::before, *::after {
@@ -153,11 +155,11 @@ export class InspectorOverlay {
       .copage-tt-tag {
         color: #a8c7fa;
         font-weight: 600;
-        font-family: monospace;
+        font-family: 'JetBrains Mono', monospace !important;
       }
       .copage-tt-dim {
         color: #ffdf99;
-        font-family: monospace;
+        font-family: 'JetBrains Mono', monospace !important;
       }
       .copage-tt-class {
         color: #d0bcff;
@@ -186,6 +188,7 @@ export class InspectorOverlay {
         flex-direction: column;
         gap: 12px;
         animation: copageExpressiveSpring 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        font-family: 'Lexend', 'Google Sans Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
       }
 
       @keyframes copageExpressiveSpring {
@@ -207,9 +210,10 @@ export class InspectorOverlay {
         flex-wrap: wrap;
       }
       .copage-brand-tag {
+        font-family: 'Comfortaa', cursive, sans-serif !important;
         font-size: 10px;
         font-weight: 700;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.04em;
         text-transform: uppercase;
         background: linear-gradient(135deg, #a8c7fa 0%, #7cacf8 100%);
         color: #062e6f;
@@ -224,12 +228,12 @@ export class InspectorOverlay {
         font-size: 13px;
         font-weight: 600;
         color: #a8c7fa;
-        font-family: monospace;
+        font-family: 'JetBrains Mono', monospace !important;
       }
       .copage-dim-badge {
         font-size: 11px;
         color: #ffdf99;
-        font-family: monospace;
+        font-family: 'JetBrains Mono', monospace !important;
       }
       .copage-class-badge {
         font-size: 11px;
@@ -252,7 +256,7 @@ export class InspectorOverlay {
         border: 1px solid rgba(255, 255, 255, 0.12);
         color: rgba(255, 255, 255, 0.75);
         font-size: 11px;
-        font-family: monospace;
+        font-family: 'JetBrains Mono', monospace !important;
         padding: 3px 10px;
         border-radius: 9999px;
         cursor: pointer;
@@ -308,6 +312,7 @@ export class InspectorOverlay {
         color: rgba(255, 255, 255, 0.92);
         font-size: 11.5px;
         font-weight: 500;
+        font-family: 'Lexend', sans-serif !important;
         padding: 6px 12px;
         border-radius: 9999px;
         cursor: pointer;
@@ -433,7 +438,7 @@ export class InspectorOverlay {
         align-items: center;
         gap: 5px;
         transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.18s ease, color 0.18s ease;
-        font-family: inherit;
+        font-family: 'Lexend', sans-serif !important;
       }
       .copage-segmented-btn:hover {
         background-color: rgba(255, 255, 255, 0.08);
@@ -468,6 +473,7 @@ export class InspectorOverlay {
         display: inline-flex;
         align-items: center;
         gap: 6px;
+        font-family: 'Lexend', sans-serif !important;
         transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
       }
       .copage-split-main:hover:not(:disabled) {
@@ -539,6 +545,7 @@ export class InspectorOverlay {
         display: inline-flex;
         align-items: center;
         gap: 6px;
+        font-family: 'Lexend', sans-serif !important;
         transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease, border-color 0.15s ease;
       }
       .copage-btn-secondary:hover {
@@ -563,14 +570,14 @@ export class InspectorOverlay {
       .copage-code-title {
         font-size: 11px;
         color: rgba(255, 255, 255, 0.65);
-        font-family: monospace;
+        font-family: 'JetBrains Mono', monospace !important;
       }
       .copage-code-pre {
         background-color: #0f0f12;
         border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 16px;
         padding: 12px;
-        font-family: "JetBrains Mono", monospace;
+        font-family: "JetBrains Mono", monospace !important;
         font-size: 11px;
         line-height: 1.45;
         color: rgba(255, 255, 255, 0.9);
