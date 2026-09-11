@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T08:52:20.908Z",
-  "count": 12,
+  "generatedAt": "2026-09-11T09:04:08.187Z",
+  "count": 13,
   "entries": [
     {
       "file": "2026-09-11_1fd320d_chore-memory-update-memory-index.md",
@@ -75,6 +75,18 @@
       "tags": [
         "feature",
         "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_884864f_feat-implement-full-browser-extension-with-in-page-inspector.md",
+      "hash": "884864f8aa46b468f29505ba6abb39e6d3beb371",
+      "short": "884864f",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat: implement full browser extension with in-page inspector, DOM/CSS extraction, and BYOK fast LLM synthesis",
+      "tags": [
+        "feature"
       ]
     },
     {
