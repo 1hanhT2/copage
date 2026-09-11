@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T09:04:18.253Z",
-  "count": 15,
+  "generatedAt": "2026-09-11T09:11:27.197Z",
+  "count": 16,
   "entries": [
     {
       "file": "2026-09-11_1fd320d_chore-memory-update-memory-index.md",
@@ -50,6 +50,18 @@
       "tags": [
         "memory",
         "docs"
+      ]
+    },
+    {
+      "file": "2026-09-11_7815168_fix-resolve-google-com-inspection-issues-trusted-types-host-.md",
+      "hash": "7815168c7de36e87b8e0a163b584a1ffd8b9febb",
+      "short": "7815168",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "fix: resolve Google.com inspection issues (Trusted Types, host_permissions, positioning, dynamic script injection)",
+      "tags": [
+        "fix"
       ]
     },
     {
