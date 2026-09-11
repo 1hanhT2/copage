@@ -44,3 +44,8 @@ next-env.d.ts
 .cursor/
 .grok/
 .opencode/
+
+# Local references & scratch
+/scratch/
+/.ref/
+

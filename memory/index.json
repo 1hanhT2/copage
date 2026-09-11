@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T09:21:15.982Z",
-  "count": 21,
+  "generatedAt": "2026-09-11T09:44:15.424Z",
+  "count": 22,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -183,6 +183,18 @@
       "author": "1hanhT2 <thanh--12@outlook.com>",
       "version": "null",
       "commit": "chore: record initial repository memory",
+      "tags": [
+        "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_bc117dd_chore-memory-sync-memory-index.md",
+      "hash": "bc117ddb44e0401baee97b467c24abc83b30f25b",
+      "short": "bc117dd",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore(memory): sync memory index",
       "tags": [
         "memory"
       ]

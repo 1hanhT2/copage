@@ -35,13 +35,20 @@ export class CopageDock {
   private async copyToClipboard(text: string, button: HTMLElement, successLabel = "Copied!") {
     try {
       await navigator.clipboard.writeText(text);
-      const originalText = button.textContent;
-      button.textContent = successLabel;
-      button.style.backgroundColor = "#059669";
+      const originalHtml = button.innerHTML;
+      button.innerHTML = `
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="#66bb6a" style="flex-shrink: 0;">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        <span style="color: #a5d6a7; font-weight: 500;">${successLabel}</span>
+      `;
+      button.style.backgroundColor = "rgba(102, 187, 106, 0.15)";
+      button.style.borderColor = "rgba(102, 187, 106, 0.4)";
       setTimeout(() => {
-        button.textContent = originalText;
+        button.innerHTML = originalHtml;
         button.style.backgroundColor = "";
-      }, 1800);
+        button.style.borderColor = "";
+      }, 1600);
     } catch {
       // Fallback
       const ta = document.createElement("textarea");
@@ -50,10 +57,11 @@ export class CopageDock {
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
-      button.textContent = successLabel;
+      const originalHtml = button.innerHTML;
+      button.innerHTML = `<span>${successLabel}</span>`;
       setTimeout(() => {
-        button.textContent = "Copy";
-      }, 1800);
+        button.innerHTML = originalHtml;
+      }, 1600);
     }
   }
 
@@ -63,16 +71,21 @@ export class CopageDock {
     const config = await getLLMConfig();
     if (!config.apiKey && config.provider === "openrouter") {
       outputPre.textContent = "Error: OpenRouter API key not configured. Open Copage extension options to add your key.";
-      outputPre.style.color = "#f87171";
+      outputPre.style.color = "#f44336";
       return;
     }
 
     this.isStreaming = true;
     this.generatedCode = "";
     actionBtn.disabled = true;
-    actionBtn.textContent = "Synthesizing...";
+    actionBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="animation: spin 1s linear infinite;">
+        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+      </svg>
+      <span>Synthesizing...</span>
+    `;
     outputPre.textContent = "Connecting to " + config.model + "...\n";
-    outputPre.style.color = "#94a3b8";
+    outputPre.style.color = "rgba(255, 255, 255, 0.6)";
 
     const { system, prompt } = buildPromptForTarget(this.currentData, "react-component");
 
@@ -86,13 +99,18 @@ export class CopageDock {
         (delta) => {
           this.generatedCode += delta;
           outputPre.textContent = this.generatedCode;
-          outputPre.style.color = "#f8fafc";
+          outputPre.style.color = "rgba(255, 255, 255, 0.87)";
           outputPre.scrollTop = outputPre.scrollHeight;
         }
       );
 
       actionBtn.disabled = false;
-      actionBtn.textContent = "Regenerate React Component";
+      actionBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
+        </svg>
+        <span>Regenerate React Component</span>
+      `;
 
       // Auto save capture
       await saveRecentCapture({
@@ -108,10 +126,15 @@ export class CopageDock {
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      outputPre.textContent = `Stream Error: ${msg}\n\nTip: Verify your API key or try switching to another recommended model (e.g. Gemini 2.5 Flash or DeepSeek Flash).`;
-      outputPre.style.color = "#f87171";
+      outputPre.textContent = `Stream Error: ${msg}\n\nTip: Verify your API key or try switching to another recommended model in Settings.`;
+      outputPre.style.color = "#f44336";
       actionBtn.disabled = false;
-      actionBtn.textContent = "Retry Component Generation";
+      actionBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
+        </svg>
+        <span>Retry Component Generation</span>
+      `;
     } finally {
       this.isStreaming = false;
     }
@@ -121,7 +144,8 @@ export class CopageDock {
     if (!this.currentData) return;
     const d = this.currentData;
 
-    // Breadcrumbs items HTML
+    // Breadcrumbs items HTML with Material chevron separator
+    const chevronSvg = `<svg viewBox="0 0 24 24" width="12" height="12" fill="rgba(255,255,255,0.38)" style="flex-shrink: 0;"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>`;
     const breadcrumbHtml = d.breadcrumbs
       .map(
         (b) => `
@@ -130,7 +154,7 @@ export class CopageDock {
         </button>
       `
       )
-      .join('<span style="color: #64748b; font-size: 11px;">›</span>');
+      .join(chevronSvg);
 
     this.container.innerHTML = `
       <div class="copage-dock-panel">
@@ -143,29 +167,46 @@ export class CopageDock {
             ${d.classList.length > 0 ? `<span class="copage-class-badge">${d.classList.slice(0, 3).join(".")}</span>` : ""}
           </div>
           <div class="copage-header-actions">
-            <button id="copage-unlock-btn" class="copage-btn-secondary" title="Resume hover inspection (Esc)">✕ Unlock</button>
+            <button id="copage-unlock-btn" class="copage-btn-secondary" title="Resume hover inspection (Esc)">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>
+              </svg>
+              <span>Unlock</span>
+            </button>
           </div>
         </div>
 
         <!-- Breadcrumbs Navigation -->
         ${d.breadcrumbs.length > 1 ? `<div class="copage-breadcrumbs-bar">${breadcrumbHtml}</div>` : ""}
 
-        <!-- Prompt Copy Grid -->
+        <!-- Prompt Copy Grid (MUI Cards) -->
         <div class="copage-action-grid">
           <button class="copage-action-card" data-target="cursor">
-            <div class="copage-card-title">Cursor Composer Prompt</div>
-            <div class="copage-card-desc">Structured task prompt for Cursor & Windsurf</div>
+            <div class="copage-card-top">
+              <div class="copage-card-title">Cursor Composer</div>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="copage-card-icon"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </div>
+            <div class="copage-card-desc">Production prompt for Cursor &amp; Windsurf</div>
           </button>
           <button class="copage-action-card" data-target="claude">
-            <div class="copage-card-title">Claude Chat Prompt</div>
-            <div class="copage-card-desc">Deep UI & layout deconstruction prompt</div>
+            <div class="copage-card-top">
+              <div class="copage-card-title">Claude Prompt</div>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="copage-card-icon"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </div>
+            <div class="copage-card-desc">Detailed UI decomposition &amp; hierarchy</div>
           </button>
           <button class="copage-action-card" data-target="v0">
-            <div class="copage-card-title">v0 / 21st.dev Prompt</div>
-            <div class="copage-card-desc">Tailwind component generator prompt</div>
+            <div class="copage-card-top">
+              <div class="copage-card-title">v0 / 21st.dev</div>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="copage-card-icon"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </div>
+            <div class="copage-card-desc">Tailwind component reproduction prompt</div>
           </button>
           <button class="copage-action-card" data-target="html-tailwind">
-            <div class="copage-card-title">Copy HTML + Tailwind</div>
+            <div class="copage-card-top">
+              <div class="copage-card-title">HTML + Tailwind</div>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="copage-card-icon"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </div>
             <div class="copage-card-desc">Clean semantic HTML with utility classes</div>
           </button>
         </div>
@@ -174,19 +215,29 @@ export class CopageDock {
         <div class="copage-ai-section">
           <div class="copage-ai-header">
             <div class="copage-model-info">
-              <span style="font-size: 11px; color: #94a3b8;">Active Model:</span>
+              <span class="copage-model-label">Active Model:</span>
               <select id="copage-quick-model-select" class="copage-model-select">
                 ${RECOMMENDED_MODELS.map(
                   (m) => `<option value="${m.id}">${m.name} (${m.speed}, ${m.cost})</option>`
                 ).join("")}
               </select>
             </div>
-            <button id="copage-stream-btn" class="copage-btn-primary">⚡ Synthesize React Component</button>
+            <button id="copage-stream-btn" class="copage-btn-primary">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
+              </svg>
+              <span>Synthesize React Component</span>
+            </button>
           </div>
           <div class="copage-code-preview-wrap">
             <div class="copage-code-preview-header">
-              <span style="font-size: 11px; color: #94a3b8; font-family: monospace;">Output Preview (React TSX)</span>
-              <button id="copage-copy-code-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 2px 8px;">Copy Code</button>
+              <span class="copage-code-title">Output Preview (React TSX)</span>
+              <button id="copage-copy-code-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 3px 10px;">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                </svg>
+                <span>Copy Code</span>
+              </button>
             </div>
             <pre id="copage-stream-output" class="copage-code-pre">Click "Synthesize React Component" above to generate with your configured model...</pre>
           </div>

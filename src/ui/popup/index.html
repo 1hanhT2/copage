@@ -7,6 +7,18 @@
   <style>
     :root {
       color-scheme: dark;
+      --mui-primary: #90caf9;
+      --mui-primary-contrast: #0d47a1;
+      --mui-bg: #121212;
+      --mui-surface: #1e1e1e;
+      --mui-surface-high: #292929;
+      --mui-border: rgba(255, 255, 255, 0.12);
+      --mui-text-primary: rgba(255, 255, 255, 0.87);
+      --mui-text-secondary: rgba(255, 255, 255, 0.60);
+      --mui-text-disabled: rgba(255, 255, 255, 0.38);
+      --mui-success: #66bb6a;
+      --mui-warning: #ffa726;
+      --mui-error: #f44336;
     }
     * {
       box-sizing: border-box;
@@ -15,155 +27,232 @@
     }
     body {
       width: 320px;
-      background-color: #0f172a;
-      color: #f8fafc;
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding: 14px;
+      background-color: var(--mui-bg);
+      color: var(--mui-text-primary);
+      font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 16px;
       font-size: 13px;
+      line-height: 1.43;
+      letter-spacing: 0.01071em;
     }
-    .header {
+
+    /* MUI App Bar / Header */
+    .mui-app-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding-bottom: 12px;
-      border-bottom: 1px solid #1e293b;
-      margin-bottom: 12px;
+      border-bottom: 1px solid var(--mui-border);
+      margin-bottom: 16px;
     }
-    .logo-group {
+    .mui-brand {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .logo-text {
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+    .mui-brand-title {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.0075em;
+      color: var(--mui-text-primary);
     }
-    .version {
+    .mui-chip-version {
       font-size: 10px;
-      color: #64748b;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      background-color: rgba(255, 255, 255, 0.08);
+      color: var(--mui-text-secondary);
+      padding: 2px 6px;
+      border-radius: 12px;
       font-family: monospace;
     }
-    .main-toggle-btn {
-      width: 100%;
-      background-color: #2563eb;
-      color: #ffffff;
+    .mui-icon-button {
+      background: transparent;
       border: none;
-      border-radius: 8px;
-      padding: 10px;
+      color: var(--mui-text-secondary);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mui-icon-button:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+      color: var(--mui-text-primary);
+    }
+
+    /* MUI Contained Button */
+    .mui-btn-contained {
+      width: 100%;
+      background-color: var(--mui-primary);
+      color: var(--mui-primary-contrast);
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
       font-size: 13px;
       font-weight: 600;
+      letter-spacing: 0.035em;
+      text-transform: uppercase;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      transition: background 0.15s ease;
+      gap: 8px;
+      box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+      transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
       margin-bottom: 12px;
     }
-    .main-toggle-btn:hover {
-      background-color: #1d4ed8;
+    .mui-btn-contained:hover:not(:disabled) {
+      background-color: #64b5f6;
+      box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
     }
-    .shortcut-hint {
+    .mui-btn-contained:active:not(:disabled) {
+      box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
+    }
+    .mui-btn-contained:disabled {
+      background-color: rgba(255, 255, 255, 0.12);
+      color: var(--mui-text-disabled);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    /* Shortcut Caption */
+    .mui-caption {
       font-size: 11px;
-      color: #94a3b8;
+      color: var(--mui-text-secondary);
       text-align: center;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
     kbd {
-      background: #1e293b;
-      border: 1px solid #334155;
+      background-color: var(--mui-surface-high);
+      border: 1px solid var(--mui-border);
       border-radius: 4px;
-      padding: 1px 4px;
+      padding: 1px 5px;
       font-family: monospace;
       font-size: 10px;
-      color: #f8fafc;
+      font-weight: 500;
+      color: var(--mui-text-primary);
     }
-    .status-card {
-      background-color: #1e293b;
-      border: 1px solid #334155;
+
+    /* MUI Card (Paper) */
+    .mui-card {
+      background-color: var(--mui-surface);
+      border: 1px solid var(--mui-border);
       border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
       display: flex;
       flex-direction: column;
+      gap: 8px;
+      box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+    }
+    .mui-card-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    .mui-card-label {
+      color: var(--mui-text-secondary);
+      font-weight: 400;
+    }
+    .mui-card-value {
+      font-weight: 500;
+      color: var(--mui-text-primary);
+      display: flex;
+      align-items: center;
       gap: 6px;
     }
-    .status-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
-    }
-    .status-label {
-      color: #94a3b8;
-    }
-    .status-value {
-      font-weight: 600;
-      color: #f8fafc;
-    }
+
+    /* Status indicator dots */
     .status-dot {
       display: inline-block;
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      margin-right: 4px;
     }
-    .dot-green { background-color: #10b981; }
-    .dot-amber { background-color: #f59e0b; }
-    .footer-links {
+    .dot-green { background-color: var(--mui-success); box-shadow: 0 0 6px rgba(102, 187, 106, 0.4); }
+    .dot-amber { background-color: var(--mui-warning); box-shadow: 0 0 6px rgba(255, 167, 38, 0.4); }
+
+    /* Footer */
+    .mui-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 11px;
-      color: #94a3b8;
-      padding-top: 4px;
+      color: var(--mui-text-secondary);
+      padding-top: 2px;
     }
-    .footer-links a {
-      color: #38bdf8;
+    .mui-link {
+      color: var(--mui-primary);
       text-decoration: none;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 150ms ease;
     }
-    .footer-links a:hover {
+    .mui-link:hover {
       text-decoration: underline;
+      color: #bbdefb;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <div class="logo-group">
-      <span class="logo-text">Copage</span>
-      <span class="version">v0.1.0</span>
+  <!-- MUI Header Toolbar -->
+  <header class="mui-app-bar">
+    <div class="mui-brand">
+      <span class="mui-brand-title">Copage</span>
+      <span class="mui-chip-version">v0.1.0</span>
     </div>
-    <a href="#" id="open-options-link" style="font-size: 11px; color: #38bdf8; text-decoration: none;">Settings ⚙</a>
-  </div>
+    <button id="open-options-link" class="mui-icon-button" title="Settings" aria-label="Settings">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+      </svg>
+    </button>
+  </header>
 
-  <button id="activate-btn" class="main-toggle-btn">
-    <span>🎯 Activate Inspector</span>
+  <!-- Primary Contained Action Button -->
+  <button id="activate-btn" class="mui-btn-contained">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+      <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-7 7H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4z"/>
+    </svg>
+    <span>Activate Inspector</span>
   </button>
 
-  <div class="shortcut-hint">
-    Shortcut: press <kbd>Alt+C</kbd> on any webpage
+  <!-- Shortcut Hint -->
+  <div class="mui-caption">
+    Shortcut: press <kbd>Alt + C</kbd> on any webpage
   </div>
 
-  <div class="status-card">
-    <div class="status-row">
-      <span class="status-label">LLM Provider:</span>
-      <span id="stat-provider" class="status-value">OpenRouter</span>
+  <!-- Status Card (MUI Paper) -->
+  <div class="mui-card">
+    <div class="mui-card-row">
+      <span class="mui-card-label">Provider</span>
+      <span id="stat-provider" class="mui-card-value">OpenRouter</span>
     </div>
-    <div class="status-row">
-      <span class="status-label">Active Model:</span>
-      <span id="stat-model" class="status-value">Gemini 2.5 Flash</span>
+    <div class="mui-card-row">
+      <span class="mui-card-label">Active Model</span>
+      <span id="stat-model" class="mui-card-value">Gemini 2.5 Flash</span>
     </div>
-    <div class="status-row">
-      <span class="status-label">API Key:</span>
-      <span id="stat-key" class="status-value"><span class="status-dot dot-amber"></span>Not configured</span>
+    <div class="mui-card-row">
+      <span class="mui-card-label">API Key</span>
+      <span id="stat-key" class="mui-card-value"><span class="status-dot dot-amber"></span>Not configured</span>
     </div>
   </div>
 
-  <div class="footer-links">
+  <!-- Footer Links -->
+  <footer class="mui-footer">
     <span>BYOK Client-Side</span>
-    <a href="#" id="options-footer-link">Configure Keys</a>
-  </div>
+    <a href="#" id="options-footer-link" class="mui-link">Configure Keys</a>
+  </footer>
 
   <script type="module" src="./popup.ts"></script>
 </body>
