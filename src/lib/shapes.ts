@@ -333,3 +333,78 @@ export function getCanonicalModelShape(providerOrModel: string): M3CanonicalShap
   if (lower.includes("anthropic") || lower.includes("claude")) return "puffy-diamond";
   return "gem";
 }
+
+// --- Material 3 Expressive Physical Pill Geometry (14-Point Normalized Polygons) ---
+
+export type M3PillShapeName = "rugged" | "scalloped" | "diamond" | "arch" | "round";
+
+/**
+ * 14-point normalized polygon clip-paths for interactive selection elements (model selectors,
+ * segmented buttons, action pills).
+ * The horizontal middle remains straight for safe content padding, while the left and right ends
+ * take on the physical silhouette of canonical M3 Expressive shapes:
+ * - rugged: Sawtooth / burst jagged ends (3 teeth each side)
+ * - scalloped: Undulating flower / cookie lobes (3 smooth lobes each side)
+ * - diamond: Faceted chevron points (angled tips)
+ * - arch: Inward architectural notches
+ * - round: Normalized smooth pill (14 vertices for seamless morphing)
+ */
+export const M3_EXPRESSIVE_PILL_POLYGONS: Record<M3PillShapeName, string> = {
+  rugged:
+    "polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 6px) 33.3%, 100% 50%, calc(100% - 6px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 6px 66.7%, 0% 50%, 6px 33.3%, 0% 16.7%)",
+  scalloped:
+    "polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 4px) 33.3%, 100% 50%, calc(100% - 4px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 4px 66.7%, 0% 50%, 4px 33.3%, 0% 16.7%)",
+  diamond:
+    "polygon(12px 0%, calc(100% - 12px) 0%, calc(100% - 6px) 25%, calc(100% - 6px) 25%, 100% 50%, calc(100% - 6px) 75%, calc(100% - 6px) 75%, calc(100% - 12px) 100%, 12px 100%, 6px 75%, 6px 75%, 0% 50%, 6px 25%, 6px 25%)",
+  arch:
+    "polygon(8px 0%, calc(100% - 8px) 0%, calc(100% - 8px) 25%, calc(100% - 2px) 35%, calc(100% - 1px) 50%, calc(100% - 2px) 65%, calc(100% - 8px) 75%, calc(100% - 8px) 100%, 8px 100%, 8px 75%, 2px 65%, 1px 50%, 2px 35%, 8px 25%)",
+  round:
+    "polygon(16px 0%, calc(100% - 16px) 0%, calc(100% - 6px) 15%, calc(100% - 1px) 33%, 100% 50%, calc(100% - 1px) 67%, calc(100% - 6px) 85%, calc(100% - 16px) 100%, 16px 100%, 6px 85%, 1px 67%, 0% 50%, 1px 33%, 6px 15%)"
+};
+
+/**
+ * Maps a provider or model ID to its characteristic expressive pill silhouette.
+ */
+export function getModelPillShape(providerOrModel: string): M3PillShapeName {
+  const lower = providerOrModel.toLowerCase();
+  if (lower.includes("google") || lower.includes("gemini")) return "rugged";
+  if (lower.includes("deepseek")) return "scalloped";
+  if (lower.includes("qwen")) return "diamond";
+  if (lower.includes("meta") || lower.includes("llama")) return "rugged";
+  if (lower.includes("anthropic") || lower.includes("claude")) return "scalloped";
+  return "diamond";
+}
+
+/**
+ * Maps a prompt target to its characteristic expressive pill silhouette.
+ */
+export function getTargetPillShape(target: PromptTarget): M3PillShapeName {
+  switch (target) {
+    case "cursor":
+      return "diamond";
+    case "claude":
+      return "scalloped";
+    case "v0":
+      return "arch";
+    case "html-tailwind":
+      return "rugged";
+    case "react-component":
+      return "diamond";
+    default:
+      return "round";
+  }
+}
+
+/**
+ * Returns the CSS class corresponding to the model's expressive pill silhouette.
+ */
+export function getModelPillShapeClass(providerOrModel: string): string {
+  return `m3-pill-${getModelPillShape(providerOrModel)}`;
+}
+
+/**
+ * Returns the CSS class corresponding to the prompt target's expressive pill silhouette.
+ */
+export function getTargetPillShapeClass(target: PromptTarget): string {
+  return `m3-pill-${getTargetPillShape(target)}`;
+}

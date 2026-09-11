@@ -8,8 +8,13 @@ import {
   getFrameworkM3Shape,
   getActionM3Shape,
   getCanonicalModelShape,
+  getModelPillShape,
+  getTargetPillShape,
+  getModelPillShapeClass,
+  getTargetPillShapeClass,
   M3_SHAPE_PATHS,
   M3_CANONICAL_SHAPE_PATHS,
+  M3_EXPRESSIVE_PILL_POLYGONS,
   M3_MOTION_SPRINGS,
   M3_CORNER_TOKENS,
 } from "../src/lib/shapes";
@@ -95,5 +100,43 @@ describe("Material 3 Expressive Shapes", () => {
     expect(getCanonicalModelShape("qwen/qwen-2.5-coder-32b")).toBe("diamond");
     expect(getCanonicalModelShape("meta-llama/llama-3.3-70b")).toBe("burst");
     expect(getCanonicalModelShape("anthropic/claude-3-7-sonnet")).toBe("puffy-diamond");
+  });
+
+  it("normalizes all M3 Expressive pill polygons to exactly 14 vertices for smooth CSS morphing", () => {
+    const pillKeys = Object.keys(M3_EXPRESSIVE_PILL_POLYGONS) as (keyof typeof M3_EXPRESSIVE_PILL_POLYGONS)[];
+    expect(pillKeys).toEqual(["rugged", "scalloped", "diamond", "arch", "round"]);
+
+    for (const key of pillKeys) {
+      const polygonStr = M3_EXPRESSIVE_PILL_POLYGONS[key];
+      expect(polygonStr.startsWith("polygon(")).toBe(true);
+      expect(polygonStr.endsWith(")")).toBe(true);
+
+      const inner = polygonStr.replace(/^polygon\(/, "").replace(/\)$/, "");
+      // Split by commas not enclosed in calc parentheses
+      const vertices = inner.split(/,(?![^(]*\))/);
+      expect(vertices.length).toBe(14);
+    }
+  });
+
+  it("maps models and targets to appropriate expressive pill silhouette classes", () => {
+    expect(getModelPillShape("google/gemini-2.5-flash")).toBe("rugged");
+    expect(getModelPillShape("deepseek/deepseek-r1")).toBe("scalloped");
+    expect(getModelPillShape("qwen/qwen-2.5-coder-32b")).toBe("diamond");
+    expect(getModelPillShape("meta-llama/llama-3.3-70b")).toBe("rugged");
+    expect(getModelPillShape("anthropic/claude-3-7-sonnet")).toBe("scalloped");
+
+    expect(getModelPillShapeClass("google/gemini-2.5-flash")).toBe("m3-pill-rugged");
+    expect(getModelPillShapeClass("deepseek/deepseek-r1")).toBe("m3-pill-scalloped");
+    expect(getModelPillShapeClass("qwen/qwen-2.5-coder-32b")).toBe("m3-pill-diamond");
+
+    expect(getTargetPillShape("cursor")).toBe("diamond");
+    expect(getTargetPillShape("claude")).toBe("scalloped");
+    expect(getTargetPillShape("v0")).toBe("arch");
+    expect(getTargetPillShape("html-tailwind")).toBe("rugged");
+
+    expect(getTargetPillShapeClass("cursor")).toBe("m3-pill-diamond");
+    expect(getTargetPillShapeClass("claude")).toBe("m3-pill-scalloped");
+    expect(getTargetPillShapeClass("v0")).toBe("m3-pill-arch");
+    expect(getTargetPillShapeClass("html-tailwind")).toBe("m3-pill-rugged");
   });
 });

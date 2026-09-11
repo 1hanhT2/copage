@@ -1,6 +1,12 @@
 import { getLLMConfig, setLLMConfig, RECOMMENDED_MODELS, getUserPreferences, setUserPreferences } from "../../lib/storage";
 import type { ExtensionMessage } from "../../lib/types";
-import { getM3ShapeSvg, getCanonicalM3ShapeSvg, getProviderShape, getCanonicalModelShape } from "../../lib/shapes";
+import {
+  getM3ShapeSvg,
+  getCanonicalM3ShapeSvg,
+  getProviderShape,
+  getCanonicalModelShape,
+  getModelPillShapeClass
+} from "../../lib/shapes";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const activateBtn = document.getElementById("activate-btn") as HTMLButtonElement;
@@ -76,6 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await setLLMConfig({ model: preset.id });
         const newShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 14, "currentColor");
         selectedModelLabel.innerHTML = `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${newShape}</span> <span>${preset.name}</span></span>`;
+        modelTrigger.className = `m3-select-trigger ${getModelPillShapeClass(preset.id)}`;
         if (cardWatermark) {
           cardWatermark.innerHTML = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 130, "currentColor");
         }
@@ -96,6 +103,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     selectedModelLabel.innerHTML = activePreset
       ? `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${activePreset.name}</span></span>`
       : `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${config.model.split("/").pop() || config.model}</span></span>`;
+    modelTrigger.className = `m3-select-trigger ${getModelPillShapeClass(config.model)}`;
   }
 
   function openDropdown() {

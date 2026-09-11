@@ -9,7 +9,8 @@ import {
   getElementM3Shape,
   getTargetM3Shape,
   getActionM3Shape,
-  getCanonicalModelShape
+  getCanonicalModelShape,
+  getModelPillShapeClass
 } from "../../lib/shapes";
 
 export class CopageDock {
@@ -381,6 +382,9 @@ export class CopageDock {
 
     getLLMConfig().then((cfg) => {
       const activePreset = RECOMMENDED_MODELS.find((m) => m.id === cfg.model);
+      if (modelTrigger) {
+        modelTrigger.className = `copage-select-trigger ${getModelPillShapeClass(cfg.model)}`;
+      }
       if (modelNameLabel) {
         modelNameLabel.textContent = activePreset ? activePreset.name : (cfg.model.split("/").pop() || cfg.model);
       }
@@ -412,6 +416,9 @@ export class CopageDock {
             modelNameLabel.textContent = preset.name;
             if (modelIconSpan) {
               modelIconSpan.innerHTML = `<span class="copage-shape-well">${getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 13, "currentColor")}</span>`;
+            }
+            if (modelTrigger) {
+              modelTrigger.className = `copage-select-trigger ${getModelPillShapeClass(preset.id)}`;
             }
             modelMenu.querySelectorAll(".copage-menu-item").forEach((it) => it.classList.remove("selected"));
             item.classList.add("selected");

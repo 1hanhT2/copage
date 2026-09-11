@@ -103,14 +103,39 @@
       transform: scale(0.92);
     }
 
-    /* M3 Expressive Contained Pill Button */
+    /* Material 3 Expressive Physical Pill Shapes (Normalized 14-Point Geometry) */
+    .m3-pill-rugged {
+      clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 6px) 33.3%, 100% 50%, calc(100% - 6px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 6px 66.7%, 0% 50%, 6px 33.3%, 0% 16.7%);
+    }
+    .m3-pill-scalloped {
+      clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 4px) 33.3%, 100% 50%, calc(100% - 4px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 4px 66.7%, 0% 50%, 4px 33.3%, 0% 16.7%);
+    }
+    .m3-pill-diamond {
+      clip-path: polygon(12px 0%, calc(100% - 12px) 0%, calc(100% - 6px) 25%, calc(100% - 6px) 25%, 100% 50%, calc(100% - 6px) 75%, calc(100% - 6px) 75%, calc(100% - 12px) 100%, 12px 100%, 6px 75%, 6px 75%, 0% 50%, 6px 25%, 6px 25%);
+    }
+    .m3-pill-arch {
+      clip-path: polygon(8px 0%, calc(100% - 8px) 0%, calc(100% - 8px) 25%, calc(100% - 2px) 35%, calc(100% - 1px) 50%, calc(100% - 2px) 65%, calc(100% - 8px) 75%, calc(100% - 8px) 100%, 8px 100%, 8px 75%, 2px 65%, 1px 50%, 2px 35%, 8px 25%);
+    }
+    .m3-pill-round {
+      clip-path: polygon(16px 0%, calc(100% - 16px) 0%, calc(100% - 6px) 15%, calc(100% - 1px) 33%, 100% 50%, calc(100% - 1px) 67%, calc(100% - 6px) 85%, calc(100% - 16px) 100%, 16px 100%, 6px 85%, 1px 67%, 0% 50%, 1px 33%, 6px 15%);
+    }
+
+    /* M3 Expressive Contained Pill Button with Contour Glow Wrapper */
+    .m3-btn-wrap {
+      width: 100%;
+      filter: drop-shadow(0 0 1.5px rgba(168, 199, 250, 0.45)) drop-shadow(0 4px 14px rgba(0,0,0,0.45));
+      margin-bottom: 12px;
+      transition: filter 0.25s ease;
+    }
+    .m3-btn-wrap:hover {
+      filter: drop-shadow(0 0 2px var(--m3-primary)) drop-shadow(0 6px 20px rgba(168, 199, 250, 0.35));
+    }
     .m3-btn-pill {
       width: 100%;
       background-color: var(--m3-primary);
       color: var(--m3-on-primary);
       border: none;
-      border-radius: 9999px;
-      padding: 12px 20px;
+      padding: 12px 24px;
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.025em;
@@ -119,9 +144,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0px 4px 14px -2px rgba(0,0,0,0.45), 0px 0px 20px -4px rgba(168,199,250,0.3);
-      transition: transform 0.2s var(--m3-spring), background-color 0.15s ease, box-shadow 0.2s ease;
-      margin-bottom: 12px;
+      transition: clip-path 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s var(--m3-spring), background-color 0.15s ease;
       font-family: 'Lexend', sans-serif;
     }
     @keyframes m3Jelly {
@@ -134,16 +157,13 @@
     .m3-btn-pill:hover:not(:disabled) {
       background-color: #7cacf8;
       transform: translateY(-2px) scale(1.02);
-      box-shadow: 0px 6px 18px -2px rgba(0,0,0,0.5), 0px 0px 24px -2px rgba(168,199,250,0.4);
     }
     .m3-btn-pill:active:not(:disabled) {
       animation: m3Jelly 0.28s var(--m3-spring);
-      box-shadow: 0px 2px 8px rgba(0,0,0,0.4);
     }
     .m3-btn-pill:disabled {
       background-color: rgba(255, 255, 255, 0.12);
       color: var(--m3-text-disabled);
-      box-shadow: none;
       cursor: not-allowed;
     }
 
@@ -179,19 +199,23 @@
       padding-left: 4px;
     }
 
-    /* M3 Expressive Model Select Trigger with Morphing Asymmetric Silhouette */
+    /* M3 Expressive Model Select Trigger with Morphing Pill Silhouette */
     .m3-select-wrapper {
       position: relative;
       width: 100%;
       margin-bottom: 14px;
+      filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.45)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
+      transition: filter 0.25s ease;
+    }
+    .m3-select-wrapper:hover {
+      filter: drop-shadow(0 0 1.5px var(--m3-primary)) drop-shadow(0 6px 18px rgba(168, 199, 250, 0.22));
     }
     .m3-select-trigger {
       width: 100%;
       background-color: var(--m3-surface-container);
-      border: 1px solid var(--m3-border-input);
+      border: none;
       color: var(--m3-text-primary);
-      border-radius: 20px 8px 20px 8px;
-      padding: 8px 14px;
+      padding: 9px 20px;
       font-size: 12px;
       font-family: inherit;
       display: flex;
@@ -199,25 +223,19 @@
       justify-content: space-between;
       cursor: pointer;
       user-select: none;
-      transition: border-radius 0.28s var(--m3-spring), transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.2s ease;
+      transition: clip-path 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s var(--m3-spring), background-color 0.15s ease;
     }
     .m3-select-trigger:hover {
-      border-radius: 10px 22px 10px 22px;
-      border-color: var(--m3-primary);
       transform: translateY(-1px) scale(1.01);
-      background-color: rgba(168, 199, 250, 0.08);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      background-color: rgba(168, 199, 250, 0.12);
     }
     .m3-select-trigger:active {
       transform: scale(0.97);
-      border-radius: 14px;
     }
     .m3-select-trigger.open,
     .m3-select-trigger:focus {
-      border-radius: 9999px;
-      border-color: var(--m3-primary);
-      box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25), 0 4px 16px rgba(168, 199, 250, 0.15);
       outline: none;
+      background-color: rgba(168, 199, 250, 0.18);
     }
     .m3-select-value {
       display: flex;
@@ -502,11 +520,13 @@
     </button>
   </header>
 
-  <!-- M3 Pill Action Button -->
-  <button id="activate-btn" class="m3-btn-pill">
-    <span id="activate-icon" class="m3-shape-beacon"></span>
-    <span id="activate-btn-text">Activate Inspector</span>
-  </button>
+  <!-- M3 Expressive Pill Action Button with Rugged Silhouette -->
+  <div class="m3-btn-wrap">
+    <button id="activate-btn" class="m3-btn-pill m3-pill-rugged">
+      <span id="activate-icon" class="m3-shape-beacon"></span>
+      <span id="activate-btn-text">Activate Inspector</span>
+    </button>
+  </div>
 
   <!-- Shortcut Hint -->
   <div class="m3-caption">

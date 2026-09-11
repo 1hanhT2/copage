@@ -336,41 +336,57 @@ export class InspectorOverlay {
         font-weight: 500;
       }
 
-      /* M3 Expressive Dropdown Select in HUD with Morphing Asymmetric Silhouette */
+      /* Material 3 Expressive Physical Pill Shapes (Normalized 14-Point Geometry) */
+      .m3-pill-rugged, .copage-pill-rugged {
+        clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 6px) 33.3%, 100% 50%, calc(100% - 6px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 6px 66.7%, 0% 50%, 6px 33.3%, 0% 16.7%);
+      }
+      .m3-pill-scalloped, .copage-pill-scalloped {
+        clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 4px) 33.3%, 100% 50%, calc(100% - 4px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 4px 66.7%, 0% 50%, 4px 33.3%, 0% 16.7%);
+      }
+      .m3-pill-diamond, .copage-pill-diamond {
+        clip-path: polygon(12px 0%, calc(100% - 12px) 0%, calc(100% - 6px) 25%, calc(100% - 6px) 25%, 100% 50%, calc(100% - 6px) 75%, calc(100% - 6px) 75%, calc(100% - 12px) 100%, 12px 100%, 6px 75%, 6px 75%, 0% 50%, 6px 25%, 6px 25%);
+      }
+      .m3-pill-arch, .copage-pill-arch {
+        clip-path: polygon(8px 0%, calc(100% - 8px) 0%, calc(100% - 8px) 25%, calc(100% - 2px) 35%, calc(100% - 1px) 50%, calc(100% - 2px) 65%, calc(100% - 8px) 75%, calc(100% - 8px) 100%, 8px 100%, 8px 75%, 2px 65%, 1px 50%, 2px 35%, 8px 25%);
+      }
+      .m3-pill-round, .copage-pill-round {
+        clip-path: polygon(16px 0%, calc(100% - 16px) 0%, calc(100% - 6px) 15%, calc(100% - 1px) 33%, 100% 50%, calc(100% - 1px) 67%, calc(100% - 6px) 85%, calc(100% - 16px) 100%, 16px 100%, 6px 85%, 1px 67%, 0% 50%, 1px 33%, 6px 15%);
+      }
+
+      /* M3 Expressive Dropdown Select in HUD with Morphing Pill Silhouette */
       .copage-select-wrap {
         position: relative;
+        filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.45)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
+        transition: filter 0.25s ease;
+      }
+      .copage-select-wrap:hover {
+        filter: drop-shadow(0 0 1.5px #a8c7fa) drop-shadow(0 6px 18px rgba(168, 199, 250, 0.22));
       }
       .copage-select-trigger {
         background-color: #27252d;
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        border: none;
         color: rgba(255, 255, 255, 0.92);
         font-size: 11.5px;
         font-weight: 500;
         font-family: 'Lexend', sans-serif !important;
-        padding: 6px 14px;
-        border-radius: 18px 7px 18px 7px;
+        padding: 7px 18px;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         gap: 8px;
         user-select: none;
-        transition: border-radius 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.2s ease;
+        transition: clip-path 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
       }
       .copage-select-trigger:hover {
-        border-radius: 9px 20px 9px 20px;
-        border-color: #a8c7fa;
         transform: translateY(-1px) scale(1.01);
         background-color: rgba(168, 199, 250, 0.12);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
       }
       .copage-select-trigger:active {
         transform: scale(0.97);
-        border-radius: 12px;
       }
       .copage-select-trigger.open {
-        border-radius: 9999px;
-        border-color: #a8c7fa;
-        box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25), 0 4px 16px rgba(168, 199, 250, 0.15);
+        outline: none;
+        background-color: rgba(168, 199, 250, 0.18);
       }
       /* Dedicated HUD M3 Inner Shape Well */
       .copage-shape-well {
@@ -482,10 +498,10 @@ export class InspectorOverlay {
         display: inline-flex;
         border: 1px solid rgba(255, 255, 255, 0.14);
         border-radius: 9999px;
-        overflow: hidden;
         background-color: #15151a;
         padding: 3px;
-        gap: 2px;
+        gap: 3px;
+        filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.35));
       }
       .copage-segmented-btn {
         background: transparent;
@@ -499,14 +515,8 @@ export class InspectorOverlay {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        transition: border-radius 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.18s ease, color 0.18s ease;
+        transition: clip-path 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.18s ease, color 0.18s ease;
         font-family: 'Lexend', sans-serif !important;
-      }
-      .copage-segmented-btn:first-child {
-        border-radius: 9999px 8px 8px 9999px;
-      }
-      .copage-segmented-btn:last-child {
-        border-radius: 8px 9999px 9999px 8px;
       }
       .copage-segmented-btn:hover {
         background-color: rgba(255, 255, 255, 0.09);
@@ -517,27 +527,40 @@ export class InspectorOverlay {
         animation: copageJelly 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       .copage-segmented-btn.active {
-        background-color: rgba(168, 199, 250, 0.24);
+        background-color: rgba(168, 199, 250, 0.26);
         color: #a8c7fa;
-        border-radius: 9999px !important;
         font-weight: 600;
         transform: scale(1.04);
-        box-shadow: 0 2px 8px rgba(168, 199, 250, 0.25);
+        filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.5));
+      }
+      .copage-segmented-btn[data-target="cursor"].active {
+        clip-path: polygon(12px 0%, calc(100% - 12px) 0%, calc(100% - 6px) 25%, calc(100% - 6px) 25%, 100% 50%, calc(100% - 6px) 75%, calc(100% - 6px) 75%, calc(100% - 12px) 100%, 12px 100%, 6px 75%, 6px 75%, 0% 50%, 6px 25%, 6px 25%);
+      }
+      .copage-segmented-btn[data-target="claude"].active {
+        clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 4px) 33.3%, 100% 50%, calc(100% - 4px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 4px 66.7%, 0% 50%, 4px 33.3%, 0% 16.7%);
+      }
+      .copage-segmented-btn[data-target="v0"].active {
+        clip-path: polygon(8px 0%, calc(100% - 8px) 0%, calc(100% - 8px) 25%, calc(100% - 2px) 35%, calc(100% - 1px) 50%, calc(100% - 2px) 65%, calc(100% - 8px) 75%, calc(100% - 8px) 100%, 8px 100%, 8px 75%, 2px 65%, 1px 50%, 2px 35%, 8px 25%);
+      }
+      .copage-segmented-btn[data-target="html-tailwind"].active {
+        clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 6px) 33.3%, 100% 50%, calc(100% - 6px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 6px 66.7%, 0% 50%, 6px 33.3%, 0% 16.7%);
       }
 
-      /* M3 Expressive Connected Split Button */
+      /* M3 Expressive Connected Split Button with Contour Glow */
       .copage-split-group {
         display: inline-flex;
-        border-radius: 9999px;
-        box-shadow: 0px 4px 14px -2px rgba(0,0,0,0.45), 0px 2px 6px 0px rgba(0,0,0,0.25);
         position: relative;
+        filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.45)) drop-shadow(0 4px 14px rgba(0,0,0,0.45));
+        transition: filter 0.25s ease;
+      }
+      .copage-split-group:hover {
+        filter: drop-shadow(0 0 2px #a8c7fa) drop-shadow(0 6px 18px rgba(168, 199, 250, 0.35));
       }
       .copage-split-main {
         background-color: #a8c7fa;
         color: #062e6f;
         border: none;
-        border-radius: 9999px 8px 8px 9999px;
-        padding: 7px 16px;
+        padding: 7px 18px;
         font-size: 12px;
         font-weight: 600;
         letter-spacing: 0.02em;
@@ -546,7 +569,9 @@ export class InspectorOverlay {
         align-items: center;
         gap: 6px;
         font-family: 'Lexend', sans-serif !important;
-        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
+        transition: clip-path 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
+        /* Left end rugged sawtooth */
+        clip-path: polygon(0% 16.7%, 6px 33.3%, 0% 50%, 6px 66.7%, 0% 83.3%, 8px 100%, 100% 100%, 100% 0%, 8px 0%);
       }
       .copage-split-main:hover:not(:disabled) {
         background-color: #7cacf8;
@@ -565,13 +590,14 @@ export class InspectorOverlay {
         color: #062e6f;
         border: none;
         border-left: 1px solid rgba(6, 46, 111, 0.25);
-        border-radius: 0 9999px 9999px 0;
-        padding: 7px 10px;
+        padding: 7px 12px;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
+        transition: clip-path 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
+        /* Right end rugged sawtooth */
+        clip-path: polygon(0% 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 6px) 33.3%, 100% 50%, calc(100% - 6px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 0% 100%);
       }
       .copage-split-arrow-btn:hover:not(:disabled) {
         background-color: #7cacf8;

@@ -14,6 +14,7 @@ import {
   getCanonicalM3ShapeSvg,
   getProviderShape,
   getCanonicalModelShape,
+  getModelPillShapeClass,
   getElementM3Shape
 } from "../../lib/shapes";
 
@@ -190,6 +191,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     selectedModelText.innerHTML = activePreset
       ? `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${activePreset.name} (${activePreset.provider})</span></span>`
       : `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${customModelInput.value}</span></span>`;
+    modelDropdownTrigger.className = `m3-select-trigger ${getModelPillShapeClass(customModelInput.value)}`;
   }
 
   function selectModel(modelId: string, modelName: string) {
@@ -199,6 +201,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     selectedModelText.innerHTML = activePreset
       ? `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${activePreset.name} (${activePreset.provider})</span></span>`
       : `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${modelName}</span></span>`;
+    modelDropdownTrigger.className = `m3-select-trigger ${getModelPillShapeClass(modelId)}`;
     document.querySelectorAll(".m3-action-card").forEach((c) => c.classList.remove("selected"));
     document.querySelectorAll(".m3-menu-item").forEach((item) => {
       const isMatch = item.querySelector(".m3-menu-item-title")?.textContent === modelName;
