@@ -254,7 +254,9 @@ async function main() {
     const commit = { hash, short, date, author: `${an} <${ae}>`, subject, body };
     const res = await generateFor(commit, extraNote);
     console.log(res.skipped ? `Hook: skipped (exists): ${res.filepath}` : `Hook: created ${res.filepath}`);
-    await generateIndex();
+    if (!res.skipped) {
+      await generateIndex();
+    }
     return;
   }
 
