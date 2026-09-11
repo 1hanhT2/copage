@@ -1,7 +1,19 @@
 {
-  "generatedAt": "2026-09-11T09:11:27.804Z",
-  "count": 17,
+  "generatedAt": "2026-09-11T09:13:42.836Z",
+  "count": 18,
   "entries": [
+    {
+      "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
+      "hash": "14014204ac8bf64fc2b233d245f78c5f4facd635",
+      "short": "1401420",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "fix: bundle content script as standalone IIFE to resolve syntax error on all pages",
+      "tags": [
+        "fix"
+      ]
+    },
     {
       "file": "2026-09-11_1fd320d_chore-memory-update-memory-index.md",
       "hash": "1fd320d1a139b6f290b4056a72bc36a37f247afb",
