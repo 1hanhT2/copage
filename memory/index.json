@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T13:56:52.651Z",
-  "count": 43,
+  "generatedAt": "2026-09-11T13:57:04.701Z",
+  "count": 42,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -36,19 +36,6 @@
       "commit": "chore(memory): update memory index",
       "tags": [
         "memory"
-      ]
-    },
-    {
-      "file": "2026-09-11_295a74c_docs-memory-record-physical-expressive-pill-silhouettes-and-.md",
-      "hash": "295a74c7e5a9523699d2c493687966527f5e0fa6",
-      "short": "295a74c",
-      "date": "2026-09-11",
-      "author": "1hanhT2 <thanh--12@outlook.com>",
-      "version": "null",
-      "commit": "docs(memory): record physical expressive pill silhouettes and 14-point morphing",
-      "tags": [
-        "memory",
-        "docs"
       ]
     },
     {
