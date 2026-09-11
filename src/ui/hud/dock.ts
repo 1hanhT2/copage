@@ -258,23 +258,23 @@ export class CopageDock {
         <!-- Breadcrumbs Navigation -->
         ${d.breadcrumbs.length > 1 ? `<div class="copage-breadcrumbs-bar">${breadcrumbHtml}</div>` : ""}
 
-        <!-- Material 3 Segmented Toggle Group for Prompt Targets with M3 Shapes -->
+        <!-- Material 3 Segmented Toggle Group for Prompt Targets with Official Brand Icons -->
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
           <div class="copage-segmented-group" id="copage-prompt-targets">
             <button class="copage-segmented-btn active" data-target="cursor" title="Copy production prompt for Cursor &amp; Windsurf">
-              ${getCanonicalM3ShapeSvg("diamond", 13, "currentColor")}
+              ${getBrandIconSvg("cursor", 13)}
               <span>Cursor</span>
             </button>
             <button class="copage-segmented-btn" data-target="claude" title="Copy detailed UI decomposition prompt for Claude">
-              ${getCanonicalM3ShapeSvg("flower", 13, "currentColor")}
+              ${getBrandIconSvg("claude", 13)}
               <span>Claude</span>
             </button>
             <button class="copage-segmented-btn" data-target="v0" title="Copy Tailwind component prompt for v0 &amp; 21st.dev">
-              ${getCanonicalM3ShapeSvg("arch", 13, "currentColor")}
+              ${getBrandIconSvg("v0", 13)}
               <span>v0 / 21st</span>
             </button>
             <button class="copage-segmented-btn" data-target="html-tailwind" title="Copy semantic HTML with mapped Tailwind utilities">
-              ${getCanonicalM3ShapeSvg("sunny", 13, "currentColor")}
+              ${getBrandIconSvg("tailwind", 13)}
               <span>Tailwind HTML</span>
             </button>
           </div>
@@ -322,7 +322,7 @@ export class CopageDock {
               <div id="copage-actions-menu" class="copage-actions-popover">
                 <div class="copage-menu-item" data-action="copy-html">
                   <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="copage-action-badge">${getCanonicalM3ShapeSvg("arch", 15, "#a8c7fa")}</div>
+                    <div class="copage-action-badge">${getBrandIconSvg("html", 15)}</div>
                     <div class="copage-menu-item-text">
                       <span class="copage-menu-item-title">Copy Clean HTML</span>
                       <span class="copage-menu-item-desc">Pruned DOM without trackers</span>
@@ -340,7 +340,7 @@ export class CopageDock {
                 </div>
                 <div class="copage-menu-item" data-action="copy-tailwind">
                   <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="copage-action-badge">${getCanonicalM3ShapeSvg("diamond", 15, "#78dc77")}</div>
+                    <div class="copage-action-badge">${getBrandIconSvg("tailwind", 15)}</div>
                     <div class="copage-menu-item-text">
                       <span class="copage-menu-item-title">Copy Tailwind Classes</span>
                       <span class="copage-menu-item-desc">${d.tailwindClasses.length} mapped utility classes</span>
@@ -373,7 +373,10 @@ export class CopageDock {
           <div class="copage-code-preview-wrap">
             <div class="copage-code-preview-header">
               <span class="copage-code-title">
-                ${getCanonicalM3ShapeSvg("gem", 12, "#a8c7fa", "margin-right: 4px; vertical-align: -1px;")}
+                <span style="display: inline-flex; align-items: center; gap: 3px; margin-right: 5px; vertical-align: middle;">
+                  ${getBrandIconSvg("react", 14)}
+                  ${getBrandIconSvg("tailwind", 14)}
+                </span>
                 <span>Component Output (React TSX + Tailwind)</span>
               </span>
               <div style="display: flex; gap: 6px;">

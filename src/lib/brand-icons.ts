@@ -11,6 +11,16 @@ import { svg as googleSvg } from "thesvg/google";
 import { svg as openaiSvg } from "thesvg/openai";
 import { svg as anthropicSvg } from "thesvg/anthropic";
 
+// Frameworks & Dev Tools
+import { svg as reactSvg } from "thesvg/react";
+import { svg as tailwindSvg } from "thesvg/tailwindcss";
+import { svg as vueSvg } from "thesvg/vue";
+import { svg as svelteSvg } from "thesvg/svelte";
+import { svg as htmlSvg } from "thesvg/html5";
+import { svg as cursorSvg } from "thesvg/cursor";
+import { svg as claudeSvg } from "thesvg/claude";
+import { svg as v0Svg } from "thesvg/v0";
+
 /**
  * Official vector brand icon for Poolside (beach umbrella in circle silhouette).
  */
@@ -21,15 +31,22 @@ export const poolsideSvg = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="
  */
 export const thinkingmachinesSvg = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title>Thinking Machines</title><path fill-rule="evenodd" clip-rule="evenodd" d="M5 2h14a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm1 0v7h3.5v7h5v-7H18V2H6z"/></svg>`;
 
+export { reactSvg, tailwindSvg, vueSvg, svelteSvg, htmlSvg, cursorSvg, claudeSvg, v0Svg };
+
 /**
  * Normalizes an SVG string from thesvg or custom brand asset to fit given dimensions cleanly.
  */
 export function formatBrandSvg(rawSvg: string, size = 16, extraStyle = ""): string {
   if (!rawSvg) return "";
   const cleaned = rawSvg
+    .replace(/<\?xml[^>]*\?>/gi, "")
+    .replace(/<!--[\s\S]*?-->/g, "")
     .replace(/\s(width|height)="[^"]*"/gi, "")
-    .replace(/<svg\b/i, '<svg width="' + size + '" height="' + size + '" style="width: ' + size + 'px; height: ' + size + 'px; flex-shrink: 0; display: inline-block; vertical-align: middle; ' + extraStyle + '"');
-  return cleaned;
+    .replace(
+      /<svg\b/i,
+      `<svg width="${size}" height="${size}" style="width: ${size}px; height: ${size}px; flex-shrink: 0; display: inline-block; vertical-align: middle; ${extraStyle}"`
+    );
+  return cleaned.trim();
 }
 
 export type BrandIconKey =
@@ -49,7 +66,15 @@ export type BrandIconKey =
   | "openrouter"
   | "google"
   | "openai"
-  | "anthropic";
+  | "anthropic"
+  | "react"
+  | "tailwind"
+  | "vue"
+  | "svelte"
+  | "html"
+  | "cursor"
+  | "claude"
+  | "v0";
 
 export const BRAND_SVGS: Record<string, string> = {
   gemini: geminiSvg,
@@ -68,11 +93,21 @@ export const BRAND_SVGS: Record<string, string> = {
   openrouter: openrouterSvg,
   google: googleSvg,
   openai: openaiSvg,
-  anthropic: anthropicSvg
+  anthropic: anthropicSvg,
+  react: reactSvg,
+  tailwind: tailwindSvg,
+  tailwindcss: tailwindSvg,
+  vue: vueSvg,
+  svelte: svelteSvg,
+  html: htmlSvg,
+  html5: htmlSvg,
+  cursor: cursorSvg,
+  claude: claudeSvg,
+  v0: v0Svg
 };
 
 /**
- * Returns the brand SVG for a model ID, provider name, or brand keyword.
+ * Returns the brand SVG for a model ID, provider name, framework, or brand keyword.
  */
 export function getBrandIconSvg(identifier: string, size = 16, extraStyle = ""): string {
   const lower = (identifier || "").toLowerCase();
@@ -88,10 +123,43 @@ export function getBrandIconSvg(identifier: string, size = 16, extraStyle = ""):
   else if (lower.includes("qwen")) raw = qwenSvg;
   else if (lower.includes("ollama")) raw = ollamaSvg;
   else if (lower.includes("llama") || lower.includes("meta")) raw = metaSvg;
-  else if (lower.includes("claude") || lower.includes("anthropic")) raw = anthropicSvg;
+  else if (lower.includes("claude") || lower.includes("anthropic")) raw = claudeSvg;
+  else if (lower.includes("cursor") || lower.includes("windsurf")) raw = cursorSvg;
+  else if (lower.includes("v0") || lower.includes("21st")) raw = v0Svg;
+  else if (lower.includes("react")) raw = reactSvg;
+  else if (lower.includes("tailwind")) raw = tailwindSvg;
+  else if (lower.includes("vue")) raw = vueSvg;
+  else if (lower.includes("svelte")) raw = svelteSvg;
+  else if (lower.includes("html")) raw = htmlSvg;
   else if (lower.includes("gpt") || lower.includes("openai") || lower.includes("chatgpt") || lower.includes("o1") || lower.includes("o3")) raw = openaiSvg;
   else if (lower.includes("google")) raw = googleSvg;
   else if (lower.includes("openrouter")) raw = openrouterSvg;
 
   return formatBrandSvg(raw, size, extraStyle);
+}
+
+/**
+ * Resolves the official vector brand icon for a target framework.
+ */
+export function getFrameworkIconSvg(framework: string, size = 14, extraStyle = ""): string {
+  const lower = (framework || "").toLowerCase();
+  if (lower.includes("react")) return formatBrandSvg(reactSvg, size, extraStyle);
+  if (lower.includes("vue")) return formatBrandSvg(vueSvg, size, extraStyle);
+  if (lower.includes("svelte")) return formatBrandSvg(svelteSvg, size, extraStyle);
+  if (lower.includes("html")) return formatBrandSvg(htmlSvg, size, extraStyle);
+  if (lower.includes("tailwind")) return formatBrandSvg(tailwindSvg, size, extraStyle);
+  return formatBrandSvg(reactSvg, size, extraStyle);
+}
+
+/**
+ * Resolves the official brand icon for an LLM prompt target (Cursor, Claude, v0, Tailwind HTML).
+ */
+export function getPromptTargetIconSvg(target: string, size = 14, extraStyle = ""): string {
+  const lower = (target || "").toLowerCase();
+  if (lower.includes("cursor")) return formatBrandSvg(cursorSvg, size, extraStyle);
+  if (lower.includes("claude")) return formatBrandSvg(claudeSvg, size, extraStyle);
+  if (lower.includes("v0") || lower.includes("21st")) return formatBrandSvg(v0Svg, size, extraStyle);
+  if (lower.includes("tailwind") || lower.includes("html-tailwind")) return formatBrandSvg(tailwindSvg, size, extraStyle);
+  if (lower.includes("react")) return formatBrandSvg(reactSvg, size, extraStyle);
+  return formatBrandSvg(openrouterSvg, size, extraStyle);
 }

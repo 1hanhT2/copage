@@ -404,6 +404,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   let activeFramework = prefs.frameworkTarget || "react";
+  const reactFwBtn = frameworkToggleGroup?.querySelector('[data-framework="react"]');
+  const vueFwBtn = frameworkToggleGroup?.querySelector('[data-framework="vue"]');
+  const svelteFwBtn = frameworkToggleGroup?.querySelector('[data-framework="svelte"]');
+  const htmlFwBtn = frameworkToggleGroup?.querySelector('[data-framework="html"]');
+
+  if (reactFwBtn) {
+    const existingSvg = reactFwBtn.querySelector("svg");
+    if (existingSvg) {
+      existingSvg.outerHTML = `<span style="display:inline-flex; align-items:center; gap:3px;">${getBrandIconSvg("react", 13)}${getBrandIconSvg("tailwind", 13)}</span>`;
+    }
+  }
+  if (vueFwBtn) {
+    const existingSvg = vueFwBtn.querySelector("svg");
+    if (existingSvg) existingSvg.outerHTML = getBrandIconSvg("vue", 13);
+  }
+  if (svelteFwBtn) {
+    const existingSvg = svelteFwBtn.querySelector("svg");
+    if (existingSvg) existingSvg.outerHTML = getBrandIconSvg("svelte", 13);
+  }
+  if (htmlFwBtn) {
+    const existingSvg = htmlFwBtn.querySelector("svg");
+    if (existingSvg) existingSvg.outerHTML = getBrandIconSvg("html", 13);
+  }
+
   frameworkToggleGroup.querySelectorAll(".m3-toggle-button").forEach((btn) => {
     const fw = (btn as HTMLElement).dataset.framework;
     btn.classList.toggle("active", fw === activeFramework);
@@ -671,16 +695,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           <div class="m3-lib-actions-row">
             <div class="m3-lib-button-group">
-              <button class="m3-lib-btn primary copy-code-btn" title="Copy React component or AI prompt">
-                ${getCanonicalM3ShapeSvg("gem", 12, "currentColor")}
+              <button class="m3-lib-btn primary copy-code-btn" title="Copy code snippet">
+                ${item.generatedCode ? getBrandIconSvg("react", 12) : getCanonicalM3ShapeSvg("gem", 12, "currentColor")}
                 <span>${item.generatedCode ? "Copy React TSX" : "Copy Prompt"}</span>
               </button>
               <button class="m3-lib-btn copy-html-btn" title="Copy clean sanitized HTML">
-                ${getCanonicalM3ShapeSvg("arch", 12, "currentColor")}
+                ${getBrandIconSvg("html", 12)}
                 <span>HTML</span>
               </button>
               <button class="m3-lib-btn copy-tw-btn" title="Copy mapped Tailwind utilities">
-                ${getCanonicalM3ShapeSvg("diamond", 12, "currentColor")}
+                ${getBrandIconSvg("tailwind", 12)}
                 <span>Tailwind</span>
               </button>
               <button class="m3-lib-btn copy-css-btn" title="Copy computed CSS styles">
