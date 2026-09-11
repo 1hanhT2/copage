@@ -2,6 +2,7 @@ import type { InspectedElementData, PromptTarget, LLMConfig } from "../../lib/ty
 import { buildPromptForTarget } from "../../llm/prompts";
 import { streamCompletion } from "../../llm/gateway";
 import { getLLMConfig, setLLMConfig, saveRecentCapture, RECOMMENDED_MODELS, getUserPreferences } from "../../lib/storage";
+import { getM3ShapeSvg, getProviderShape } from "../../lib/shapes";
 
 export class CopageDock {
   private container: HTMLElement;
@@ -180,7 +181,12 @@ export class CopageDock {
         <!-- Top Bar -->
         <div class="copage-dock-header">
           <div class="copage-badge-group">
-            <span class="copage-brand-tag">Copage</span>
+            <span class="copage-brand-tag">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="flex-shrink: 0;">
+                <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z"/>
+              </svg>
+              <span>Copage</span>
+            </span>
             <span class="copage-tag-badge">&lt;${d.tagName}&gt;</span>
             <span class="copage-dim-badge">${d.rect.width} × ${d.rect.height}px</span>
             ${d.classList.length > 0 ? `<span class="copage-class-badge">${d.classList.slice(0, 3).join(".")}</span>` : ""}
@@ -234,6 +240,7 @@ export class CopageDock {
               <span class="copage-model-label">Model:</span>
               <div class="copage-select-wrap">
                 <div id="copage-dock-model-trigger" class="copage-select-trigger" tabindex="0">
+                  <span id="copage-dock-model-icon" style="display: inline-flex; align-items: center;"></span>
                   <span id="copage-dock-model-name">Gemini 2.5 Flash</span>
                   <svg class="copage-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                     <path d="M7 10l5 5 5-5z"/>
@@ -351,23 +358,31 @@ export class CopageDock {
     const modelTrigger = this.container.querySelector("#copage-dock-model-trigger") as HTMLElement;
     const modelMenu = this.container.querySelector("#copage-dock-model-menu") as HTMLElement;
     const modelNameLabel = this.container.querySelector("#copage-dock-model-name") as HTMLElement;
+    const modelIconSpan = this.container.querySelector("#copage-dock-model-icon") as HTMLElement;
 
     getLLMConfig().then((cfg) => {
       const activePreset = RECOMMENDED_MODELS.find((m) => m.id === cfg.model);
       if (modelNameLabel) {
         modelNameLabel.textContent = activePreset ? activePreset.name : (cfg.model.split("/").pop() || cfg.model);
       }
+      if (modelIconSpan) {
+        modelIconSpan.innerHTML = getM3ShapeSvg(getProviderShape(cfg.model), 14, "#a8c7fa");
+      }
 
       if (modelMenu) {
         modelMenu.innerHTML = "";
         RECOMMENDED_MODELS.forEach((preset) => {
           const isSelected = cfg.model === preset.id;
+          const shapeSvg = getM3ShapeSvg(getProviderShape(preset.id), 15, "#a8c7fa");
           const item = document.createElement("div");
           item.className = `copage-menu-item ${isSelected ? "selected" : ""}`;
           item.innerHTML = `
-            <div class="copage-menu-item-text">
-              <span class="copage-menu-item-title">${preset.name}</span>
-              <span class="copage-menu-item-desc">${preset.speed} • ${preset.cost}</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              ${shapeSvg}
+              <div class="copage-menu-item-text">
+                <span class="copage-menu-item-title">${preset.name}</span>
+                <span class="copage-menu-item-desc">${preset.speed} • ${preset.cost}</span>
+              </div>
             </div>
             <svg class="copage-menu-item-check" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
@@ -376,6 +391,9 @@ export class CopageDock {
           item.addEventListener("click", async () => {
             await setLLMConfig({ model: preset.id });
             modelNameLabel.textContent = preset.name;
+            if (modelIconSpan) {
+              modelIconSpan.innerHTML = getM3ShapeSvg(getProviderShape(preset.id), 14, "#a8c7fa");
+            }
             modelMenu.querySelectorAll(".copage-menu-item").forEach((it) => it.classList.remove("selected"));
             item.classList.add("selected");
             modelMenu.classList.remove("open");

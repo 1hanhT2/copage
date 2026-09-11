@@ -24,11 +24,11 @@ When browsing the web, developers frequently encounter UI patterns, interactive 
 
 ## Core Capabilities
 
-- 🎯 **Visual Element Inspector:** Precision bounding box highlight, layout metrics HUD, and DOM hierarchy breadcrumb navigation.
-- 🔑 **Bring Your Own Key (BYOK):** Direct connection to OpenRouter, OpenAI-compatible APIs, Anthropic, or local LLM instances (Ollama / OpenCode). Keys stay safely in your browser's local storage (`chrome.storage.local`).
-- 🤖 **Smart Prompt Synthesizer:** Crafts structured, high-context AI prompts tailored to your favorite coding assistant (Claude, Cursor, v0, ChatGPT).
-- ⚡ **1-Click Component Generation:** Direct translation of captured elements into clean, modern component frameworks (React + Tailwind CSS, Vue, Svelte, or plain HTML/CSS).
-- 🔒 **Zero-Leakage Privacy:** No telemetry, no third-party proxies. Requests travel directly from your browser to your configured LLM endpoint.
+- **Visual Element Inspector:** Precision bounding box highlight, layout metrics HUD, and DOM hierarchy breadcrumb navigation.
+- **Bring Your Own Key (BYOK):** Direct connection to OpenRouter, OpenAI-compatible APIs, Anthropic, or local LLM instances (Ollama / OpenCode). Keys stay safely in your browser's local storage (`chrome.storage.local`).
+- **Smart Prompt Synthesizer:** Crafts structured, high-context AI prompts tailored to your favorite coding assistant (Claude, Cursor, v0, ChatGPT).
+- **1-Click Component Generation:** Direct translation of captured elements into clean, modern component frameworks (React + Tailwind CSS, Vue, Svelte, or plain HTML/CSS).
+- **Zero-Leakage Privacy:** No telemetry, no third-party proxies. Requests travel directly from your browser to your configured LLM endpoint.
 
 ---
 

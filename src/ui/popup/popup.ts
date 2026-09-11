@@ -1,5 +1,6 @@
 import { getLLMConfig, setLLMConfig, RECOMMENDED_MODELS, getUserPreferences, setUserPreferences } from "../../lib/storage";
 import type { ExtensionMessage } from "../../lib/types";
+import { getM3ShapeSvg, getProviderShape } from "../../lib/shapes";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const activateBtn = document.getElementById("activate-btn") as HTMLButtonElement;
@@ -39,14 +40,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     modelMenu.innerHTML = "";
     RECOMMENDED_MODELS.forEach((preset) => {
       const isSelected = config.model === preset.id;
+      const shapeSvg = getM3ShapeSvg(getProviderShape(preset.id), 14, "#a8c7fa");
       const item = document.createElement("div");
       item.className = `m3-menu-item ${isSelected ? "selected" : ""}`;
       item.setAttribute("role", "option");
       item.setAttribute("aria-selected", isSelected ? "true" : "false");
       item.innerHTML = `
-        <div class="m3-menu-item-text">
-          <span class="m3-menu-item-title">${preset.name}</span>
-          <span class="m3-menu-item-desc">${preset.speed} • ${preset.cost}</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          ${shapeSvg}
+          <div class="m3-menu-item-text">
+            <span class="m3-menu-item-title">${preset.name}</span>
+            <span class="m3-menu-item-desc">${preset.speed} • ${preset.cost}</span>
+          </div>
         </div>
         <svg class="m3-menu-item-check" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
@@ -56,7 +61,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       item.addEventListener("click", async () => {
         config.model = preset.id;
         await setLLMConfig({ model: preset.id });
-        selectedModelLabel.textContent = preset.name;
+        const newShape = getM3ShapeSvg(getProviderShape(preset.id), 14, "#a8c7fa");
+        selectedModelLabel.innerHTML = `<span style="display:inline-flex; align-items:center; gap:6px;">${newShape} <span>${preset.name}</span></span>`;
         document.querySelectorAll("#popup-model-menu .m3-menu-item").forEach((it) => {
           it.classList.remove("selected");
           it.setAttribute("aria-selected", "false");
@@ -70,7 +76,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === config.model);
-    selectedModelLabel.textContent = activePreset ? activePreset.name : (config.model.split("/").pop() || config.model);
+    const activeShape = getM3ShapeSvg(getProviderShape(config.model), 14, "#a8c7fa");
+    selectedModelLabel.innerHTML = activePreset
+      ? `<span style="display:inline-flex; align-items:center; gap:6px;">${activeShape} <span>${activePreset.name}</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:6px;">${activeShape} <span>${config.model.split("/").pop() || config.model}</span></span>`;
   }
 
   function openDropdown() {

@@ -33,8 +33,10 @@
       padding: 0;
     }
     body {
-      width: 336px;
-      background-color: var(--m3-bg);
+      width: 338px;
+      background: radial-gradient(circle at 10% 0%, rgba(168, 199, 250, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 90% 10%, rgba(208, 188, 255, 0.12) 0%, transparent 45%),
+                  var(--m3-bg);
       color: var(--m3-text-primary);
       font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       padding: 18px;
@@ -42,6 +44,7 @@
       line-height: 1.45;
       letter-spacing: 0.01071em;
       border-radius: 24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.65), 0 0 32px rgba(168, 199, 250, 0.15);
     }
 
     /* M3 Expressive Header Bar */
@@ -117,13 +120,20 @@
       margin-bottom: 12px;
       font-family: inherit;
     }
+    @keyframes m3Jelly {
+      0% { transform: scale(1, 1); }
+      25% { transform: scale(1.08, 0.92); }
+      50% { transform: scale(0.95, 1.05); }
+      75% { transform: scale(1.02, 0.98); }
+      100% { transform: scale(1, 1); }
+    }
     .m3-btn-pill:hover:not(:disabled) {
       background-color: #7cacf8;
       transform: translateY(-2px) scale(1.02);
       box-shadow: 0px 6px 18px -2px rgba(0,0,0,0.5), 0px 0px 24px -2px rgba(168,199,250,0.4);
     }
     .m3-btn-pill:active:not(:disabled) {
-      transform: scale(0.96);
+      animation: m3Jelly 0.28s var(--m3-spring);
       box-shadow: 0px 2px 8px rgba(0,0,0,0.4);
     }
     .m3-btn-pill:disabled {
@@ -407,6 +417,9 @@
   <!-- M3 Expressive Header Bar -->
   <header class="m3-app-bar">
     <div class="m3-brand">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="#a8c7fa" style="filter: drop-shadow(0 0 8px rgba(168, 199, 250, 0.55)); flex-shrink: 0;" aria-hidden="true">
+        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z"/>
+      </svg>
       <span class="m3-brand-title">Copage</span>
       <span class="m3-chip-version">v0.1.0</span>
     </div>

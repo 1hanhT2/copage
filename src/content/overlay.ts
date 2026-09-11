@@ -56,17 +56,76 @@ export class InspectorOverlay {
         left: 0 !important;
         pointer-events: none !important;
         border: 2px solid #a8c7fa !important;
-        background-color: rgba(168, 199, 250, 0.14) !important;
-        border-radius: 6px !important;
+        background-color: rgba(168, 199, 250, 0.12) !important;
+        border-radius: 8px !important;
+        box-shadow: 0 0 0 1px rgba(168, 199, 250, 0.25), 0 0 16px -2px rgba(168, 199, 250, 0.25) !important;
+        animation: copagePulseAura 2.2s ease-in-out infinite alternate !important;
         transition: transform 0.04s cubic-bezier(0.2, 0, 0, 1), width 0.04s cubic-bezier(0.2, 0, 0, 1), height 0.04s cubic-bezier(0.2, 0, 0, 1);
         will-change: transform, width, height;
         display: none;
         z-index: 2147483640 !important;
       }
+      @keyframes copagePulseAura {
+        0% { box-shadow: 0 0 0 1px rgba(168, 199, 250, 0.25), 0 0 12px -2px rgba(168, 199, 250, 0.2); }
+        100% { box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.55), 0 0 24px 2px rgba(168, 199, 250, 0.35); }
+      }
       .copage-bbox.locked {
         border-color: #78dc77 !important;
-        background-color: rgba(120, 220, 119, 0.15) !important;
-        box-shadow: 0 0 0 2px rgba(120, 220, 119, 0.4), 0 0 24px rgba(120, 220, 119, 0.3) !important;
+        background-color: rgba(120, 220, 119, 0.16) !important;
+        box-shadow: 0 0 0 2px rgba(120, 220, 119, 0.5), 0 0 32px rgba(120, 220, 119, 0.35) !important;
+        animation: copageLockShockwave 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+      }
+      @keyframes copageLockShockwave {
+        0% { box-shadow: 0 0 0 0 rgba(120, 220, 119, 0.8), 0 0 16px rgba(120, 220, 119, 0.5); }
+        50% { box-shadow: 0 0 0 8px rgba(120, 220, 119, 0.25), 0 0 28px rgba(120, 220, 119, 0.6); }
+        100% { box-shadow: 0 0 0 2px rgba(120, 220, 119, 0.5), 0 0 32px rgba(120, 220, 119, 0.35); }
+      }
+
+      /* Reticle Precision Calipers */
+      .copage-caliper {
+        position: absolute !important;
+        width: 10px !important;
+        height: 10px !important;
+        border-color: #a8c7fa !important;
+        border-style: solid !important;
+        pointer-events: none !important;
+        transition: border-color 0.2s ease;
+      }
+      .copage-caliper.tl {
+        top: -3px !important;
+        left: -3px !important;
+        border-width: 3px 0 0 3px !important;
+        border-top-left-radius: 5px !important;
+      }
+      .copage-caliper.tr {
+        top: -3px !important;
+        right: -3px !important;
+        border-width: 3px 3px 0 0 !important;
+        border-top-right-radius: 5px !important;
+      }
+      .copage-caliper.bl {
+        bottom: -3px !important;
+        left: -3px !important;
+        border-width: 0 0 3px 3px !important;
+        border-bottom-left-radius: 5px !important;
+      }
+      .copage-caliper.br {
+        bottom: -3px !important;
+        right: -3px !important;
+        border-width: 0 3px 3px 0 !important;
+        border-bottom-right-radius: 5px !important;
+      }
+      .copage-bbox.locked .copage-caliper {
+        border-color: #78dc77 !important;
+      }
+
+      /* Spring Jelly Wobble Keyframes */
+      @keyframes copageJelly {
+        0% { transform: scale(1, 1); }
+        25% { transform: scale(1.08, 0.92); }
+        50% { transform: scale(0.95, 1.05); }
+        75% { transform: scale(1.02, 0.98); }
+        100% { transform: scale(1, 1); }
       }
 
       /* Floating Tooltip (M3 Expressive Squircle Tooltip) */
@@ -115,12 +174,12 @@ export class InspectorOverlay {
         transform: translateX(-50%);
         width: 92vw;
         max-width: 760px;
-        background-color: rgba(28, 27, 33, 0.94);
+        background: linear-gradient(180deg, rgba(28, 27, 33, 0.96) 0%, rgba(20, 19, 24, 0.98) 100%);
         backdrop-filter: blur(28px) saturate(190%);
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(168, 199, 250, 0.22);
         border-radius: 28px;
         padding: 16px 20px;
-        box-shadow: 0 20px 48px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08), 0 0 40px -4px rgba(168, 199, 250, 0.18);
+        box-shadow: 0 24px 56px -8px rgba(0,0,0,0.68), 0 0 0 1px rgba(255,255,255,0.08), 0 0 44px -4px rgba(168, 199, 250, 0.22), inset 0 1px 1px rgba(255,255,255,0.16);
         pointer-events: auto !important;
         z-index: 2147483646 !important;
         display: flex;
@@ -152,10 +211,14 @@ export class InspectorOverlay {
         font-weight: 700;
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        background: #a8c7fa;
+        background: linear-gradient(135deg, #a8c7fa 0%, #7cacf8 100%);
         color: #062e6f;
-        padding: 3px 9px;
+        padding: 3px 10px;
         border-radius: 9999px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        box-shadow: 0 2px 8px rgba(168, 199, 250, 0.35);
       }
       .copage-tag-badge {
         font-size: 13px;
@@ -203,7 +266,7 @@ export class InspectorOverlay {
         transform: translateY(-1px) scale(1.03);
       }
       .copage-bc-btn:active {
-        transform: scale(0.96);
+        animation: copageJelly 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
       /* AI Section (M3 Expressive Sub-Surface) */
@@ -377,7 +440,7 @@ export class InspectorOverlay {
         color: #ffffff;
       }
       .copage-segmented-btn:active {
-        transform: scale(0.96);
+        animation: copageJelly 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       .copage-segmented-btn.active {
         background-color: rgba(168, 199, 250, 0.22);
@@ -412,7 +475,7 @@ export class InspectorOverlay {
         transform: translateY(-1px);
       }
       .copage-split-main:active:not(:disabled) {
-        transform: scale(0.96);
+        animation: copageJelly 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       .copage-split-main:disabled {
         background-color: rgba(255, 255, 255, 0.12);
@@ -436,7 +499,7 @@ export class InspectorOverlay {
         background-color: #7cacf8;
       }
       .copage-split-arrow-btn:active:not(:disabled) {
-        transform: scale(0.96);
+        animation: copageJelly 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       .copage-split-arrow-btn:disabled {
         background-color: rgba(255, 255, 255, 0.12);
@@ -484,7 +547,7 @@ export class InspectorOverlay {
         transform: translateY(-1px) scale(1.02);
       }
       .copage-btn-secondary:active {
-        transform: scale(0.96);
+        animation: copageJelly 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
       .copage-code-preview-wrap {
@@ -521,6 +584,19 @@ export class InspectorOverlay {
     // 4. Create and attach elements
     this.bbox = document.createElement("div");
     this.bbox.className = "copage-bbox";
+
+    const tlCaliper = document.createElement("div");
+    tlCaliper.className = "copage-caliper tl";
+    const trCaliper = document.createElement("div");
+    trCaliper.className = "copage-caliper tr";
+    const blCaliper = document.createElement("div");
+    blCaliper.className = "copage-caliper bl";
+    const brCaliper = document.createElement("div");
+    brCaliper.className = "copage-caliper br";
+    this.bbox.appendChild(tlCaliper);
+    this.bbox.appendChild(trCaliper);
+    this.bbox.appendChild(blCaliper);
+    this.bbox.appendChild(brCaliper);
 
     this.tooltip = document.createElement("div");
     this.tooltip.className = "copage-tooltip";

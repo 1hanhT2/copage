@@ -45,15 +45,19 @@
       letter-spacing: 0.01071em;
     }
 
-    /* M3 Expressive Container (Large Squircle Island) */
+    /* M3 Expressive Container (Large Squircle Island with Aurora Mesh Backdrop) */
     .m3-container {
-      max-width: 720px;
+      max-width: 740px;
       margin: 0 auto;
-      background-color: var(--m3-surface);
-      border: 1px solid var(--m3-border);
+      background: radial-gradient(ellipse at 15% 0%, rgba(168, 199, 250, 0.14) 0%, transparent 50%),
+                  radial-gradient(ellipse at 85% 8%, rgba(208, 188, 255, 0.12) 0%, transparent 45%),
+                  radial-gradient(ellipse at 50% 100%, rgba(120, 220, 119, 0.08) 0%, transparent 60%),
+                  var(--m3-surface);
+      border: 1px solid rgba(168, 199, 250, 0.22);
       border-radius: 28px;
-      padding: 36px 40px;
-      box-shadow: 0px 12px 36px -4px rgba(0,0,0,0.5), 0px 0px 32px -4px rgba(168, 199, 250, 0.1);
+      padding: 38px 42px;
+      box-shadow: 0px 20px 52px -8px rgba(0,0,0,0.65), 0px 0px 48px -4px rgba(168, 199, 250, 0.15), inset 0 1px 1px rgba(255,255,255,0.14);
+      position: relative;
     }
 
     /* Header */
@@ -382,33 +386,70 @@
     .m3-action-card {
       background-color: var(--m3-surface-container);
       border: 1px solid var(--m3-border);
-      border-radius: 18px;
-      padding: 12px 14px;
+      border-radius: 20px;
+      padding: 14px 16px;
       cursor: pointer;
-      transition: transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.2s ease;
     }
     .m3-action-card:hover {
-      border-color: rgba(255, 255, 255, 0.3);
+      border-color: rgba(168, 199, 250, 0.4);
       transform: translateY(-2px) scale(1.015);
       background-color: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 8px 24px -4px rgba(0,0,0,0.4), 0 0 16px rgba(168, 199, 250, 0.1);
     }
     .m3-action-card:active {
       transform: scale(0.97);
     }
     .m3-action-card.selected {
       border-color: var(--m3-primary);
-      background-color: rgba(168, 199, 250, 0.1);
-      box-shadow: 0 0 0 1px var(--m3-primary);
+      background: linear-gradient(145deg, rgba(168, 199, 250, 0.14) 0%, rgba(208, 188, 255, 0.08) 100%);
+      box-shadow: 0 0 0 1px var(--m3-primary), 0 4px 16px rgba(168, 199, 250, 0.15);
+    }
+    .m3-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .m3-card-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(168, 199, 250, 0.14);
+      color: var(--m3-primary);
+      flex-shrink: 0;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .m3-action-card.selected .m3-card-badge {
+      background: var(--m3-primary);
+      color: var(--m3-on-primary);
     }
     .m3-card-name {
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--m3-text-primary);
-      margin-bottom: 3px;
     }
     .m3-card-meta {
       font-size: 11px;
       color: var(--m3-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .m3-card-tag {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 9999px;
+      padding: 2px 8px;
+      font-size: 10.5px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.8);
     }
 
     /* M3 Expressive Switches */
@@ -590,13 +631,32 @@
       font-family: inherit;
       transition: transform 0.2s var(--m3-spring), background-color 0.15s ease, border-color 0.15s ease;
     }
+    /* Spring Jelly & Radar Ring Keyframes */
+    @keyframes m3Jelly {
+      0% { transform: scale(1, 1); }
+      25% { transform: scale(1.08, 0.92); }
+      50% { transform: scale(0.95, 1.05); }
+      75% { transform: scale(1.02, 0.98); }
+      100% { transform: scale(1, 1); }
+    }
+    @keyframes m3RadarRing {
+      0% { box-shadow: 0 0 0 0 rgba(168, 199, 250, 0.7); }
+      70% { box-shadow: 0 0 0 14px rgba(168, 199, 250, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(168, 199, 250, 0); }
+    }
+
     .m3-btn-outlined:hover:not(:disabled) {
       background-color: rgba(168, 199, 250, 0.12);
       border-color: var(--m3-primary);
       transform: translateY(-1px) scale(1.02);
     }
     .m3-btn-outlined:active:not(:disabled) {
-      transform: scale(0.96);
+      animation: m3Jelly 0.28s var(--m3-spring);
+    }
+    .m3-btn-outlined.testing {
+      animation: m3RadarRing 1.2s cubic-bezier(0.2, 0, 0, 1) infinite;
+      border-color: var(--m3-primary);
+      color: var(--m3-primary);
     }
     .m3-btn-outlined:disabled {
       border-color: var(--m3-border);
@@ -627,7 +687,7 @@
       box-shadow: 0px 6px 18px -2px rgba(0,0,0,0.5), 0px 0px 24px -2px rgba(168,199,250,0.4);
     }
     .m3-btn-contained:active:not(:disabled) {
-      transform: scale(0.96);
+      animation: m3Jelly 0.28s var(--m3-spring);
     }
     .m3-btn-contained:disabled {
       background-color: rgba(255, 255, 255, 0.12);
@@ -687,7 +747,12 @@
   <main class="m3-container">
     <header class="m3-header">
       <div class="m3-title-row">
-        <h1 class="m3-title">Copage Settings</h1>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="#a8c7fa" style="filter: drop-shadow(0 0 10px rgba(168, 199, 250, 0.55)); flex-shrink: 0;" aria-hidden="true">
+            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z"/>
+          </svg>
+          <h1 class="m3-title">Copage Settings</h1>
+        </div>
         <span class="m3-chip-version">v0.1.0</span>
       </div>
       <p class="m3-subtitle">Configure LLM inference providers, extraction behavior, and inspection defaults.</p>

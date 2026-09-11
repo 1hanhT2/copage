@@ -66,28 +66,34 @@ motion:
 ## 1. Aesthetic Direction: Material 3 Expressive (M3 Expressive)
 
 Copage follows **Google's Material 3 Expressive** design guidelines for high-productivity developer utilities:
-- **Tonal Elevation & Ambient Glow:** Dark tonal surfaces (`#0f0f12`, `#1c1b21`, `#27252d`, `#323039`) with ambient primary luminescence, subtle backdrop blur (`backdrop-filter: blur(20px)`), and layered depth.
-- **Expressive Pill & Squircle Shapes:**
-  - **Containers:** Rounded `28px` floating island dock with organic curves.
-  - **Buttons & Segmented Groups:** Fully rounded `9999px` pill contours (`shape-full`).
-  - **Cards & Popovers:** Squircles with `16px` to `20px` corner radii.
-  - **Inputs:** Ergonomic `12px` rounded corners.
-- **Spring-Physics Motion System:**
-  - Fast-settle spring curves (`cubic-bezier(0.34, 1.56, 0.64, 1)`) for drop-down menus, switches, and tab indicators.
-  - Micro-scale feedback: subtle press scale (`transform: scale(0.97)`) on active state, with a tactile spring return.
+- **Tonal Elevation & Ambient Aurora Mesh Glow:** Dark tonal surfaces (`#0f0f12`, `#1c1b21`, `#27252d`, `#323039`) with ambient multi-stop radial gradient aura (`rgba(168, 199, 250, 0.14)` Electric Cyan, `rgba(208, 188, 255, 0.12)` Lilac, `rgba(120, 220, 119, 0.08)` Mint), deep backdrop glassmorphism (`backdrop-filter: blur(28px) saturate(190%)`), and glowing illuminated borders.
+- **Expressive Shape Taxonomy (35 Expressive Shapes):**
+  - **4-Point Starburst (Sparkle):** Core brand and AI synthesis badge (`M12 2L14.5 9.5L22 12...`).
+  - **6-Petal Scalloped Flower Badge:** Reasoning and open-source models (DeepSeek).
+  - **Astroid Diamond:** Precision code generation models (Qwen Coder).
+  - **8-Point Sunburst:** Open weights power architectures (Meta Llama).
+  - **Reticle Precision Calipers:** 4-corner bracket markers on the bounding box highlight for pixel-perfect targeting.
+  - **Floating Island Dock:** Organic `28px` corner radius squircle capsule.
+  - **Capsule Buttons & Segmented Groups:** Pill contours (`border-radius: 9999px`).
+  - **Cards & Popovers:** Squircles with `18px` to `20px` corner radii.
+- **Spring-Physics Motion & Jelly Wobble:**
+  - **Jelly Wobble Micro-Interaction:** Tactile overshoot compression on `:active` clicks (`@keyframes copageJelly` and `@keyframes m3Jelly` cycling `scale(1) -> scale(1.08, 0.92) -> scale(0.95, 1.05) -> scale(1)`).
+  - **Bouncy Spring Entrances:** Fast-settle spring curves (`cubic-bezier(0.34, 1.56, 0.64, 1)`) for drop-down popovers, breadcrumb chips, and floating dock entrance.
+  - **Lock Shockwave:** Concentric expanding ring animation (`@keyframes copageLockShockwave`) that radiates outward when locking onto an element.
+  - **Radar Sensor Ring:** Concentric ping waves (`@keyframes m3RadarRing`) on the connection test action.
 - **M3 Expressive Dynamic Color Roles:**
   - Primary Electric Cyan (`#a8c7fa`) with deep contrast `#062e6f`.
   - Secondary Cerulean (`#7cacf8`) and Tertiary Lilac (`#d0bcff`).
   - Mint Success (`#78dc77`), Warm Amber (`#ffdf99`), and Coral Alert (`#ffb4ab`).
 - **Expressive Components:**
   - **M3 Expressive Floating Dock:** Capsule island with floating breadcrumbs, pill segmented buttons, and a spring-loaded split action button.
-  - **M3 Expressive Switches:** Large pill track (`48px × 28px`) with bouncy spring-expanded thumb (`22px` expanding to `26px` on drag/toggle).
+  - **M3 Expressive Switches:** Large pill track (`44px × 26px`) with bouncy spring-expanded thumb (`18px` expanding on toggle).
   - **M3 Expressive Tabs:** Capsule pill tabs with sliding primary container highlights.
-  - **M3 Expressive Dropdowns:** Floating squircle popovers (`16px` radius) with spring scale-in transitions.
+  - **M3 Expressive Dropdowns:** Floating squircle popovers (`20px` radius) with spring scale-in transitions.
 
 ## 2. Craft Floor & Absolute Bans
 
-- **Absolute Ban on Emojis:** Never use emojis or unicode pictographs anywhere in the user interface, dialogs, buttons, cards, or toasts. Always use crisp Google Material Symbol inline vector SVGs.
+- **Absolute Ban on Emojis:** Never use emojis or unicode pictographs anywhere in the user interface, dialogs, buttons, cards, or toasts. Always use crisp Google Material Symbol inline vector SVGs or M3 Expressive shape badges.
 - **No host page layout shifts:** The overlay must be `position: fixed` inside an isolated Shadow DOM container mounted to `document.documentElement` with `pointer-events: none` during hover tracking.
 - **No CSS collision:** Scoped within open Shadow DOM. Use custom element tags (`<copage-inspector-root>`) immune to host page CSS resets.
 - **No flickering tooltip:** Bounding box and tooltip recalculate smoothly via `requestAnimationFrame`.

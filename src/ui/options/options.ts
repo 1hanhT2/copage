@@ -9,6 +9,7 @@ import {
 } from "../../lib/storage";
 import { testConnection } from "../../llm/gateway";
 import type { LLMProvider, UserPreferences, RecentCapture } from "../../lib/types";
+import { getM3ShapeSvg, getProviderShape } from "../../lib/shapes";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Tabs
@@ -113,11 +114,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   function renderPresets() {
     modelPresetsContainer.innerHTML = "";
     RECOMMENDED_MODELS.forEach((preset) => {
+      const isSelected = customModelInput.value === preset.id;
+      const shapeSvg = getM3ShapeSvg(getProviderShape(preset.id), 15, isSelected ? "var(--m3-on-primary)" : "var(--m3-primary)");
       const card = document.createElement("div");
-      card.className = `m3-action-card ${customModelInput.value === preset.id ? "selected" : ""}`;
+      card.className = `m3-action-card ${isSelected ? "selected" : ""}`;
       card.innerHTML = `
-        <div class="m3-card-name">${preset.name}</div>
-        <div class="m3-card-meta">${preset.speed} • ${preset.cost}</div>
+        <div class="m3-card-top">
+          <div class="m3-card-name">${preset.name}</div>
+          <div class="m3-card-badge">${shapeSvg}</div>
+        </div>
+        <div class="m3-card-meta">
+          <span class="m3-card-tag">${preset.provider}</span>
+          <span>${preset.speed} • ${preset.cost}</span>
+        </div>
       `;
       card.addEventListener("click", () => {
         selectModel(preset.id, preset.name);
@@ -131,14 +140,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     modelDropdownMenu.innerHTML = "";
     RECOMMENDED_MODELS.forEach((preset) => {
       const isSelected = customModelInput.value === preset.id;
+      const shapeSvg = getM3ShapeSvg(getProviderShape(preset.id), 16, "var(--m3-primary)");
       const item = document.createElement("div");
       item.className = `m3-menu-item ${isSelected ? "selected" : ""}`;
       item.setAttribute("role", "option");
       item.setAttribute("aria-selected", isSelected ? "true" : "false");
       item.innerHTML = `
-        <div class="m3-menu-item-text">
-          <span class="m3-menu-item-title">${preset.name}</span>
-          <span class="m3-menu-item-desc">${preset.provider} • ${preset.speed} • ${preset.cost}</span>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          ${shapeSvg}
+          <div class="m3-menu-item-text">
+            <span class="m3-menu-item-title">${preset.name}</span>
+            <span class="m3-menu-item-desc">${preset.provider} • ${preset.speed} • ${preset.cost}</span>
+          </div>
         </div>
         <svg class="m3-menu-item-check" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
@@ -152,14 +165,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === customModelInput.value);
-    selectedModelText.textContent = activePreset
-      ? `${activePreset.name} (${activePreset.provider})`
-      : customModelInput.value;
+    const activeShape = getM3ShapeSvg(getProviderShape(customModelInput.value), 16, "var(--m3-primary)");
+    selectedModelText.innerHTML = activePreset
+      ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${activePreset.name} (${activePreset.provider})</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${customModelInput.value}</span></span>`;
   }
 
   function selectModel(modelId: string, modelName: string) {
     customModelInput.value = modelId;
-    selectedModelText.textContent = modelName;
+    const activePreset = RECOMMENDED_MODELS.find((m) => m.id === modelId);
+    const activeShape = getM3ShapeSvg(getProviderShape(modelId), 16, "var(--m3-primary)");
+    selectedModelText.innerHTML = activePreset
+      ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${activePreset.name} (${activePreset.provider})</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${modelName}</span></span>`;
     document.querySelectorAll(".m3-action-card").forEach((c) => c.classList.remove("selected"));
     document.querySelectorAll(".m3-menu-item").forEach((item) => {
       const isMatch = item.querySelector(".m3-menu-item-title")?.textContent === modelName;
@@ -198,7 +216,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   customModelInput.addEventListener("input", () => {
     const matched = RECOMMENDED_MODELS.find((m) => m.id === customModelInput.value);
-    selectedModelText.textContent = matched ? `${matched.name} (${matched.provider})` : customModelInput.value;
+    const activeShape = getM3ShapeSvg(getProviderShape(customModelInput.value), 16, "var(--m3-primary)");
+    selectedModelText.innerHTML = matched
+      ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${matched.name} (${matched.provider})</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${customModelInput.value}</span></span>`;
     document.querySelectorAll(".m3-action-card").forEach((c) => {
       const name = c.querySelector(".m3-card-name")?.textContent;
       c.classList.toggle("selected", matched ? name === matched.name : false);
@@ -211,6 +232,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Test Connection
   testBtn.addEventListener("click", async () => {
     testBtn.disabled = true;
+    testBtn.classList.add("testing");
     testBtn.innerHTML = `
       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="animation: spin 1s linear infinite;">
         <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
@@ -228,31 +250,37 @@ document.addEventListener("DOMContentLoaded", async () => {
       model: customModelInput.value.trim()
     };
 
-    const res = await testConnection(currentTestConfig);
-    testBtn.disabled = false;
-    testBtn.innerHTML = `
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-      </svg>
-      <span>Test Connection</span>
-    `;
+    try {
+      const res = await testConnection(currentTestConfig);
+      testBtn.classList.remove("testing");
+      testBtn.disabled = false;
+      testBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+        </svg>
+        <span>Test Connection</span>
+      `;
 
-    if (res.success) {
-      testResultBox.className = "m3-alert m3-alert-success";
-      testResultBox.innerHTML = `
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink: 0;">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-        </svg>
-        <span>${res.message}</span>
-      `;
-    } else {
-      testResultBox.className = "m3-alert m3-alert-error";
-      testResultBox.innerHTML = `
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink: 0;">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </svg>
-        <span>${res.message}</span>
-      `;
+      if (res.success) {
+        testResultBox.className = "m3-alert m3-alert-success";
+        testResultBox.innerHTML = `
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink: 0;">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          <span>${res.message}</span>
+        `;
+      } else {
+        testResultBox.className = "m3-alert m3-alert-error";
+        testResultBox.innerHTML = `
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink: 0;">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+          <span>${res.message}</span>
+        `;
+      }
+    } catch {
+      testBtn.classList.remove("testing");
+      testBtn.disabled = false;
     }
   });
 
