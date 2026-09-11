@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T08:47:05.226Z",
-  "count": 4,
+  "generatedAt": "2026-09-11T08:47:11.168Z",
+  "count": 5,
   "entries": [
     {
       "file": "2026-09-11_6152d88_docs-add-github-remote-origin-link-to-agents-md.md",
@@ -47,6 +47,18 @@
       "author": "1hanhT2 <thanh--12@outlook.com>",
       "version": "null",
       "commit": "chore: record initial repository memory",
+      "tags": [
+        "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_ed6df6c_chore-memory-sync-memory-for-remote-link-commit.md",
+      "hash": "ed6df6ce43b3285bbc17cdab50699b53556f7378",
+      "short": "ed6df6c",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore(memory): sync memory for remote link commit",
       "tags": [
         "memory"
       ]
