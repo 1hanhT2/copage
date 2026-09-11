@@ -58,30 +58,25 @@ export class InspectorOverlay {
         top: 0 !important;
         left: 0 !important;
         pointer-events: none !important;
-        border: 2px solid #a8c7fa !important;
-        background-color: rgba(168, 199, 250, 0.12) !important;
-        border-radius: 8px !important;
-        box-shadow: 0 0 0 1px rgba(168, 199, 250, 0.25), 0 0 16px -2px rgba(168, 199, 250, 0.25) !important;
-        animation: copagePulseAura 2.2s ease-in-out infinite alternate !important;
+        border: 1.5px solid #a8c7fa !important;
+        background-color: rgba(168, 199, 250, 0.08) !important;
+        border-radius: 6px !important;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.25) !important;
         transition: transform 0.04s cubic-bezier(0.2, 0, 0, 1), width 0.04s cubic-bezier(0.2, 0, 0, 1), height 0.04s cubic-bezier(0.2, 0, 0, 1);
         will-change: transform, width, height;
         display: none;
         z-index: 2147483640 !important;
       }
-      @keyframes copagePulseAura {
-        0% { box-shadow: 0 0 0 1px rgba(168, 199, 250, 0.25), 0 0 12px -2px rgba(168, 199, 250, 0.2); }
-        100% { box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.55), 0 0 24px 2px rgba(168, 199, 250, 0.35); }
-      }
       .copage-bbox.locked {
-        border-color: #78dc77 !important;
-        background-color: rgba(120, 220, 119, 0.16) !important;
-        box-shadow: 0 0 0 2px rgba(120, 220, 119, 0.5), 0 0 32px rgba(120, 220, 119, 0.35) !important;
-        animation: copageLockShockwave 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+        border: 2px solid #78dc77 !important;
+        background-color: rgba(120, 220, 119, 0.12) !important;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+        animation: copageLockShockwave 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
       }
       @keyframes copageLockShockwave {
-        0% { box-shadow: 0 0 0 0 rgba(120, 220, 119, 0.8), 0 0 16px rgba(120, 220, 119, 0.5); }
-        50% { box-shadow: 0 0 0 8px rgba(120, 220, 119, 0.25), 0 0 28px rgba(120, 220, 119, 0.6); }
-        100% { box-shadow: 0 0 0 2px rgba(120, 220, 119, 0.5), 0 0 32px rgba(120, 220, 119, 0.35); }
+        0% { box-shadow: 0 0 0 0 rgba(120, 220, 119, 0.6), 0 0 0 1px rgba(0,0,0,0.5); }
+        50% { box-shadow: 0 0 0 4px rgba(120, 220, 119, 0.2), 0 0 0 1px rgba(0,0,0,0.5); }
+        100% { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.35); }
       }
 
       /* Reticle Precision Calipers */
@@ -139,7 +134,7 @@ export class InspectorOverlay {
         display: none;
         align-items: center;
         gap: 5px;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 12px rgba(120, 220, 119, 0.35) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
         backdrop-filter: blur(8px) !important;
         z-index: 2147483648 !important;
         user-select: none !important;
@@ -199,7 +194,6 @@ export class InspectorOverlay {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        filter: drop-shadow(0 0 4px rgba(168, 199, 250, 0.5));
       }
 
       /* Dock Panel (M3 Expressive Floating Island) */
@@ -212,10 +206,10 @@ export class InspectorOverlay {
         max-width: 760px;
         background: linear-gradient(180deg, rgba(28, 27, 33, 0.96) 0%, rgba(20, 19, 24, 0.98) 100%);
         backdrop-filter: blur(28px) saturate(190%);
-        border: 1px solid rgba(168, 199, 250, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 28px;
         padding: 16px 20px;
-        box-shadow: 0 24px 56px -8px rgba(0,0,0,0.68), 0 0 0 1px rgba(255,255,255,0.08), 0 0 44px -4px rgba(168, 199, 250, 0.22), inset 0 1px 1px rgba(255,255,255,0.16);
+        box-shadow: 0 24px 48px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.12);
         pointer-events: auto !important;
         z-index: 2147483646 !important;
         display: flex;
@@ -243,20 +237,16 @@ export class InspectorOverlay {
         gap: 8px;
         flex-wrap: wrap;
       }
+      .copage-dock-logo {
+        height: 20px;
+        width: auto;
+        display: block;
+        object-fit: contain;
+      }
       .copage-brand-tag {
-        font-family: 'Comfortaa', cursive, sans-serif !important;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        background: linear-gradient(135deg, #a8c7fa 0%, #7cacf8 100%);
-        color: #062e6f;
-        padding: 3px 10px;
-        border-radius: 9999px;
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        box-shadow: 0 2px 8px rgba(168, 199, 250, 0.35);
       }
       .copage-tag-badge {
         font-size: 13px;
@@ -362,12 +352,12 @@ export class InspectorOverlay {
         z-index: 1000;
       }
       .copage-trigger-contour {
-        filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.45)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
         transition: filter 0.25s ease;
       }
       .copage-trigger-contour:hover,
       .copage-select-wrap.open .copage-trigger-contour {
-        filter: drop-shadow(0 0 1.5px #a8c7fa) drop-shadow(0 6px 18px rgba(168, 199, 250, 0.25));
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
       }
       .copage-select-trigger {
         background-color: #27252d;
@@ -437,7 +427,7 @@ export class InspectorOverlay {
         background-color: #27252d;
         border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 18px;
-        box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.7), 0px 0px 24px rgba(168,199,250,0.18);
+        box-shadow: 0px 16px 36px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.12);
         padding: 6px 0;
         z-index: 2147483647;
         display: none;
@@ -520,7 +510,6 @@ export class InspectorOverlay {
         background-color: #15151a;
         padding: 3px;
         gap: 3px;
-        filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.35));
       }
       .copage-segmented-btn {
         background: transparent;
@@ -550,7 +539,6 @@ export class InspectorOverlay {
         color: #a8c7fa;
         font-weight: 600;
         transform: scale(1.04);
-        filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.5));
       }
       .copage-segmented-btn[data-target="cursor"].active {
         clip-path: polygon(12px 0%, calc(100% - 12px) 0%, calc(100% - 6px) 25%, calc(100% - 6px) 25%, 100% 50%, calc(100% - 6px) 75%, calc(100% - 6px) 75%, calc(100% - 12px) 100%, 12px 100%, 6px 75%, 6px 75%, 0% 50%, 6px 25%, 6px 25%);
@@ -565,15 +553,15 @@ export class InspectorOverlay {
         clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 6px) 33.3%, 100% 50%, calc(100% - 6px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 6px 66.7%, 0% 50%, 6px 33.3%, 0% 16.7%);
       }
 
-      /* M3 Expressive Connected Split Button with Contour Glow */
+      /* M3 Expressive Connected Split Button with Tactile Elevation */
       .copage-split-group {
         display: inline-flex;
         position: relative;
-        filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.45)) drop-shadow(0 4px 14px rgba(0,0,0,0.45));
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
         transition: filter 0.25s ease;
       }
       .copage-split-group:hover {
-        filter: drop-shadow(0 0 2px #a8c7fa) drop-shadow(0 6px 18px rgba(168, 199, 250, 0.35));
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
       }
       .copage-split-main {
         background-color: #a8c7fa;
@@ -637,7 +625,7 @@ export class InspectorOverlay {
         background-color: #27252d;
         border: 1px solid rgba(255, 255, 255, 0.16);
         border-radius: 20px;
-        box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.55), 0px 0px 24px rgba(168,199,250,0.12);
+        box-shadow: 0px 16px 36px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.12);
         backdrop-filter: blur(24px);
         padding: 6px 0;
         z-index: 2147483647;

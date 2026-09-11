@@ -29,7 +29,7 @@ function showToast(message: string, isActivated: boolean) {
     font-size: 12px !important;
     font-weight: 600 !important;
     font-family: 'Lexend', 'Google Sans Text', -apple-system, BlinkMacSystemFont, sans-serif !important;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.65), 0 0 16px rgba(168, 199, 250, 0.2) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
     backdrop-filter: blur(16px) !important;
     z-index: 2147483647 !important;
     pointer-events: none !important;

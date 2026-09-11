@@ -2,12 +2,14 @@
 import { build } from "vite";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { copyFile, mkdir, access } from "node:fs/promises";
+import { copyFile, mkdir, access, readdir } from "node:fs/promises";
+import { generateIcons } from "./generate-icons.mjs";
 
 const rootDir = fileURLToPath(new URL("..", import.meta.url));
 
 async function main() {
   console.log("Building Copage extension...");
+  await generateIcons();
 
   // 1. Build UI & Background (ESM format)
   await build({
@@ -84,6 +86,17 @@ async function main() {
       } catch {}
     }
   }
+
+  // Copy assets to dist/assets
+  const assetsSrc = resolve(rootDir, "public/assets");
+  const assetsDist = resolve(distDir, "assets");
+  await mkdir(assetsDist, { recursive: true });
+  try {
+    const assetFiles = await readdir(assetsSrc);
+    for (const file of assetFiles) {
+      await copyFile(resolve(assetsSrc, file), resolve(assetsDist, file));
+    }
+  } catch {}
 
   console.log("✓ Build complete. Clean IIFE content.js and ESM background.js ready in dist/");
 }

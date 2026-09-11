@@ -40,9 +40,7 @@
       min-height: 480px;
       overflow-x: hidden;
       overflow-y: auto;
-      background: radial-gradient(circle at 10% 0%, rgba(168, 199, 250, 0.15) 0%, transparent 50%),
-                  radial-gradient(circle at 90% 10%, rgba(208, 188, 255, 0.12) 0%, transparent 45%),
-                  var(--m3-bg);
+      background-color: var(--m3-bg);
       color: var(--m3-text-primary);
       font-family: 'Lexend', 'Google Sans Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       padding: 18px;
@@ -50,7 +48,7 @@
       line-height: 1.45;
       letter-spacing: 0.01071em;
       border-radius: 24px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.65), 0 0 32px rgba(168, 199, 250, 0.15);
+      box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--m3-border);
     }
 
     /* M3 Expressive Header Bar */
@@ -65,7 +63,13 @@
     .m3-brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+    }
+    .m3-brand-logo {
+      height: 24px;
+      width: auto;
+      display: block;
+      object-fit: contain;
     }
     .m3-brand-title {
       font-family: 'Comfortaa', cursive, sans-serif;
@@ -123,15 +127,15 @@
       clip-path: polygon(16px 0%, calc(100% - 16px) 0%, calc(100% - 6px) 15%, calc(100% - 1px) 33%, 100% 50%, calc(100% - 1px) 67%, calc(100% - 6px) 85%, calc(100% - 16px) 100%, 16px 100%, 6px 85%, 1px 67%, 0% 50%, 1px 33%, 6px 15%);
     }
 
-    /* M3 Expressive Contained Pill Button with Contour Glow Wrapper */
+    /* M3 Expressive Contained Pill Button with Tactile Elevation */
     .m3-btn-wrap {
       width: 100%;
-      filter: drop-shadow(0 0 1.5px rgba(168, 199, 250, 0.45)) drop-shadow(0 4px 14px rgba(0,0,0,0.45));
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
       margin-bottom: 12px;
       transition: filter 0.25s ease;
     }
     .m3-btn-wrap:hover {
-      filter: drop-shadow(0 0 2px var(--m3-primary)) drop-shadow(0 6px 20px rgba(168, 199, 250, 0.35));
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
     }
     .m3-btn-pill {
       width: 100%;
@@ -214,12 +218,12 @@
     }
     .m3-trigger-contour {
       width: 100%;
-      filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.45)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
       transition: filter 0.25s ease;
     }
     .m3-trigger-contour:hover,
     .m3-select-wrapper.open .m3-trigger-contour {
-      filter: drop-shadow(0 0 1.5px var(--m3-primary)) drop-shadow(0 6px 18px rgba(168, 199, 250, 0.25));
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
     }
     .m3-select-trigger {
       width: 100%;
@@ -299,7 +303,7 @@
       background-color: #27252d;
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 18px;
-      box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.7), 0px 0px 24px rgba(168,199,250,0.18);
+      box-shadow: 0px 16px 36px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px var(--m3-border);
       padding: 6px;
       z-index: 1001;
       display: none;
@@ -427,12 +431,10 @@
     }
     .m3-shape-beacon.ready {
       color: var(--m3-success);
-      filter: drop-shadow(0 0 5px rgba(120, 220, 119, 0.5));
       animation: m3BeaconPulse 2.4s ease-in-out infinite alternate;
     }
     .m3-shape-beacon.warning {
       color: var(--m3-warning);
-      filter: drop-shadow(0 0 5px rgba(255, 223, 153, 0.5));
     }
     @keyframes m3BeaconPulse {
       0% { transform: scale(0.92); opacity: 0.82; }
@@ -444,8 +446,8 @@
       height: 8px;
       border-radius: 50%;
     }
-    .dot-green { background-color: var(--m3-success); box-shadow: 0 0 8px rgba(120, 220, 119, 0.5); }
-    .dot-amber { background-color: var(--m3-warning); box-shadow: 0 0 8px rgba(255, 223, 153, 0.5); }
+    .dot-green { background-color: var(--m3-success); box-shadow: 0 0 0 2px rgba(120, 220, 119, 0.2); }
+    .dot-amber { background-color: var(--m3-warning); box-shadow: 0 0 0 2px rgba(255, 223, 153, 0.2); }
 
     /* M3 Expressive Switch */
     .m3-switch-row {
@@ -532,10 +534,7 @@
   <!-- M3 Expressive Header Bar -->
   <header class="m3-app-bar">
     <div class="m3-brand">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="#a8c7fa" style="filter: drop-shadow(0 0 8px rgba(168, 199, 250, 0.55)); flex-shrink: 0;" aria-hidden="true">
-        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z"/>
-      </svg>
-      <span class="m3-brand-title">Copage</span>
+      <img src="/assets/copage-logo-dark.png" alt="Copage" class="m3-brand-logo" />
       <span class="m3-chip-version">v0.1.0</span>
     </div>
     <button id="open-options-link" class="m3-icon-button" title="Settings" aria-label="Settings">

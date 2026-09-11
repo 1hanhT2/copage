@@ -186,14 +186,17 @@ export class CopageDock {
       )
       .join(chevronSvg);
 
+    const logoUrl = (typeof chrome !== "undefined" && chrome.runtime?.getURL)
+      ? chrome.runtime.getURL("assets/copage-logo-dark.png")
+      : "";
+
     this.container.innerHTML = `
       <div class="copage-dock-panel">
         <!-- Top Bar -->
         <div class="copage-dock-header">
           <div class="copage-badge-group">
             <span class="copage-brand-tag">
-              ${getCanonicalM3ShapeSvg("very-sunny", 12, "currentColor")}
-              <span>Copage</span>
+              ${logoUrl ? `<img src="${logoUrl}" alt="Copage" class="copage-dock-logo" />` : `<span>Copage</span>`}
             </span>
             <span class="copage-tag-badge">
               ${getCanonicalM3ShapeSvg(getElementM3Shape(d.tagName), 12, "#a8c7fa", "vertical-align: -1px; margin-right: 3px;")}
