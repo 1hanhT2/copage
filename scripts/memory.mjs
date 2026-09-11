@@ -84,6 +84,7 @@ async function exists(path) {
 async function generateFor(commit, extraNote = "") {
   const { hash, short, date, author, subject, body } = commit;
   if (!hash || !short) return { filepath: null, skipped: true };
+  if (subject.startsWith("chore(memory)")) return { filepath: null, skipped: true };
 
   const slug = slugify(subject);
   const version = versionFromSubject(subject);
