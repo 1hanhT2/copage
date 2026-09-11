@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T08:51:53.916Z",
-  "count": 10,
+  "generatedAt": "2026-09-11T08:52:16.232Z",
+  "count": 11,
   "entries": [
     {
       "file": "2026-09-11_1fd320d_chore-memory-update-memory-index.md",
@@ -36,6 +36,19 @@
       "version": "null",
       "commit": "docs: add GitHub remote origin link to AGENTS.md",
       "tags": [
+        "docs"
+      ]
+    },
+    {
+      "file": "2026-09-11_639b95f_docs-readme-embed-github-banner-and-sync-memory.md",
+      "hash": "639b95fc4fab0f7e4e915825503a3a27d460d460",
+      "short": "639b95f",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "docs(readme): embed GitHub banner and sync memory",
+      "tags": [
+        "memory",
         "docs"
       ]
     },
