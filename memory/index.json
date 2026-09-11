@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T15:11:15.875Z",
-  "count": 51,
+  "generatedAt": "2026-09-11T15:22:24.524Z",
+  "count": 54,
   "entries": [
     {
       "file": "2026-09-11_02d9c6b_feat-library-add-component-library-to-save-and-manage-select.md",
@@ -112,6 +112,20 @@
       "tags": [
         "ui",
         "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_3a559c0_feat-ui-add-thesvg-brand-icons-fix-in-page-dock-fonts-logo-a.md",
+      "hash": "3a559c0bcf7f93d4f8059b94b41ebe131a4c286a",
+      "short": "3a559c0",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat(ui): add thesvg brand icons, fix in-page dock fonts, logo, and horizontal scrollbars",
+      "tags": [
+        "fix",
+        "feature",
+        "ui"
       ]
     },
     {
@@ -415,6 +429,33 @@
       "tags": [
         "fix",
         "ui"
+      ]
+    },
+    {
+      "file": "2026-09-11_a7346ca_docs-memory-sync-memory-for-library-feature.md",
+      "hash": "a7346ca8aa776d7a1ef8867a88ef6a19a0827365",
+      "short": "a7346ca",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "docs(memory): sync memory for library feature",
+      "tags": [
+        "feature",
+        "memory",
+        "docs"
+      ]
+    },
+    {
+      "file": "2026-09-11_aacd8cf_docs-memory-sync-memory-for-mini-extension-icons.md",
+      "hash": "aacd8cf439332caa429a51c6da5af121836d436a",
+      "short": "aacd8cf",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "docs(memory): sync memory for mini extension icons",
+      "tags": [
+        "memory",
+        "docs"
       ]
     },
     {
