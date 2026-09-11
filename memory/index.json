@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T15:22:30.480Z",
-  "count": 55,
+  "generatedAt": "2026-09-11T15:42:32.468Z",
+  "count": 56,
   "entries": [
     {
       "file": "2026-09-11_02d9c6b_feat-library-add-component-library-to-save-and-manage-select.md",
@@ -404,6 +404,18 @@
       "tags": [
         "feature",
         "ui"
+      ]
+    },
+    {
+      "file": "2026-09-11_a07facd_feat-models-update-model-set-to-gemma-4-laguna-s-inkling-sma.md",
+      "hash": "a07facdee17fc219a9df013b06afa04de358d754",
+      "short": "a07facd",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat(models): update model set to gemma 4, laguna s, inkling small, and nemotron with official brand icons",
+      "tags": [
+        "feature"
       ]
     },
     {
