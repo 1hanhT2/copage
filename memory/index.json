@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T10:38:02.186Z",
-  "count": 38,
+  "generatedAt": "2026-09-11T10:38:12.686Z",
+  "count": 39,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -263,6 +263,18 @@
       "commit": "feat: implement full browser extension with in-page inspector, DOM/CSS extraction, and BYOK fast LLM synthesis",
       "tags": [
         "feature"
+      ]
+    },
+    {
+      "file": "2026-09-11_8a0085a_chore-record-memory-for-material-3-expressive-shapes-expansi.md",
+      "hash": "8a0085ae2179998758e0d61c01bc4c28534ce7d4",
+      "short": "8a0085a",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore: record memory for Material 3 Expressive shapes expansion",
+      "tags": [
+        "memory"
       ]
     },
     {
