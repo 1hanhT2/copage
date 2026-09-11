@@ -75,7 +75,7 @@ async function main() {
     await copyFile(resolve(distDir, "src/ui/options/index.html"), resolve(distDir, "options.html"));
   } catch {}
 
-  for (const size of [16, 48, 128]) {
+  for (const size of [16, 32, 48, 128]) {
     const iconSrc = resolve(rootDir, `public/icons/icon-${size}.png`);
     try {
       await access(iconSrc);

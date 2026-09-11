@@ -140,7 +140,41 @@ export async function generateIcons() {
     console.log('✓ Generated dark mode & white mode mini logo favicons + favicon.ico');
   }
 
-  // 4. Extract and isolate the chromatic torus mark for extension icons
+  // 4. Generate Chrome extension icons with M3 Dark Squircle Badge from mini logo
+  if (fs.existsSync(mini1Logo)) {
+    const trimmedMini = await sharp(mini1Logo).trim().toBuffer();
+
+    for (const s of [16, 32, 48, 128]) {
+      const r = s <= 16 ? 3 : Math.max(2, Math.round(s * 0.22));
+      const pad = s <= 16 ? 1 : (s <= 32 ? 2 : Math.max(2, Math.round(s * 0.1)));
+      const inner = Math.max(2, s - pad * 2);
+
+      const svgSquircle = Buffer.from(`
+        <svg width="${s}" height="${s}" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="0" width="${s}" height="${s}" rx="${r}" ry="${r}" fill="#16161b" />
+          <rect x="0.5" y="0.5" width="${s - 1}" height="${s - 1}" rx="${r}" ry="${r}" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1" />
+        </svg>
+      `);
+
+      const miniResized = await sharp(trimmedMini)
+        .resize(inner, inner, {
+          fit: 'contain',
+          background: { r: 0, g: 0, b: 0, alpha: 0 },
+          kernel: sharp.kernel.lanczos3
+        })
+        .toBuffer();
+
+      const iconBuffer = await sharp(svgSquircle)
+        .composite([{ input: miniResized, gravity: 'center' }])
+        .png()
+        .toBuffer();
+
+      fs.writeFileSync(path.join(iconsDir, `icon-${s}.png`), iconBuffer);
+    }
+    console.log('✓ Generated M3 Dark Squircle mini extension icons (16, 32, 48, 128)');
+  }
+
+  // 5. Extract and isolate the chromatic torus mark for auxiliary assets
   if (fs.existsSync(darkLogo)) {
     const { data, info } = await sharp(darkLogo).raw().toBuffer({ resolveWithObject: true });
     const cx = 583;
@@ -176,15 +210,6 @@ export async function generateIcons() {
     }
 
     const baseImage = sharp(cropped, { raw: { width: size, height: size, channels: 4 } });
-
-    // Generate square extension icons
-    for (const s of [16, 32, 48, 128]) {
-      await baseImage
-        .clone()
-        .resize(s, s, { kernel: sharp.kernel.lanczos3 })
-        .png()
-        .toFile(path.join(iconsDir, `icon-${s}.png`));
-    }
 
     // Save high-res torus mark to assets
     await baseImage
