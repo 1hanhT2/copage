@@ -356,11 +356,18 @@ export class InspectorOverlay {
       /* M3 Expressive Dropdown Select in HUD with Morphing Pill Silhouette */
       .copage-select-wrap {
         position: relative;
+        z-index: 10;
+      }
+      .copage-select-wrap.open {
+        z-index: 1000;
+      }
+      .copage-trigger-contour {
         filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.45)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
         transition: filter 0.25s ease;
       }
-      .copage-select-wrap:hover {
-        filter: drop-shadow(0 0 1.5px #a8c7fa) drop-shadow(0 6px 18px rgba(168, 199, 250, 0.22));
+      .copage-trigger-contour:hover,
+      .copage-select-wrap.open .copage-trigger-contour {
+        filter: drop-shadow(0 0 1.5px #a8c7fa) drop-shadow(0 6px 18px rgba(168, 199, 250, 0.25));
       }
       .copage-select-trigger {
         background-color: #27252d;
@@ -377,16 +384,17 @@ export class InspectorOverlay {
         user-select: none;
         transition: clip-path 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
       }
-      .copage-select-trigger:hover {
-        transform: translateY(-1px) scale(1.01);
+      .copage-select-trigger:hover:not(.open) {
+        transform: translateY(-1px);
         background-color: rgba(168, 199, 250, 0.12);
       }
       .copage-select-trigger:active {
-        transform: scale(0.97);
+        transform: scale(0.98);
       }
       .copage-select-trigger.open {
         outline: none;
         background-color: rgba(168, 199, 250, 0.18);
+        transform: translateY(-1px);
       }
       /* Dedicated HUD M3 Inner Shape Well */
       .copage-shape-well {
@@ -427,22 +435,33 @@ export class InspectorOverlay {
         left: 0;
         min-width: 270px;
         background-color: #27252d;
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        border-radius: 22px 8px 22px 22px;
-        box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.55), 0px 0px 24px rgba(168,199,250,0.12);
-        backdrop-filter: blur(28px) saturate(190%);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 18px;
+        box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.7), 0px 0px 24px rgba(168,199,250,0.18);
         padding: 6px 0;
         z-index: 2147483647;
         display: none;
+        max-height: 280px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
         transform-origin: bottom left;
-        animation: copageMenuSpring 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       .copage-menu-popover.open {
         display: block;
+        animation: copageMenuSpring 0.24s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      }
+      .copage-menu-popover::-webkit-scrollbar {
+        width: 5px;
+      }
+      .copage-menu-popover::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .copage-menu-popover::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.22);
+        border-radius: 9999px;
       }
       @keyframes copageMenuSpring {
-        from { opacity: 0; transform: scale(0.88) translateY(12px); }
-        65% { transform: scale(1.02) translateY(-2px); }
+        from { opacity: 0; transform: scale(0.92) translateY(8px); }
         to { opacity: 1; transform: scale(1) translateY(0); }
       }
       .copage-menu-item {

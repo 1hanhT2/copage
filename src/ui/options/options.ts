@@ -211,13 +211,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderPresets();
   }
 
+  const optionsModelWrapper = document.getElementById("options-model-wrapper");
+
   function openDropdown() {
+    optionsModelWrapper?.classList.add("open");
     modelDropdownTrigger.classList.add("open");
     modelDropdownTrigger.setAttribute("aria-expanded", "true");
     modelDropdownMenu.classList.add("open");
   }
 
   function closeDropdown() {
+    optionsModelWrapper?.classList.remove("open");
     modelDropdownTrigger.classList.remove("open");
     modelDropdownTrigger.setAttribute("aria-expanded", "false");
     modelDropdownMenu.classList.remove("open");
@@ -229,6 +233,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       closeDropdown();
     } else {
       openDropdown();
+    }
+  });
+
+  modelDropdownTrigger.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (modelDropdownMenu.classList.contains("open")) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    } else if (e.key === "Escape") {
+      closeDropdown();
     }
   });
 

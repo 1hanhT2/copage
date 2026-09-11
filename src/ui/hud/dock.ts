@@ -247,13 +247,15 @@ export class CopageDock {
             <!-- Material Outlined Model Selector Dropdown -->
             <div class="copage-model-info">
               <span class="copage-model-label">Model:</span>
-              <div class="copage-select-wrap">
-                <div id="copage-dock-model-trigger" class="copage-select-trigger" tabindex="0">
-                  <span id="copage-dock-model-icon" style="display: inline-flex; align-items: center;"></span>
-                  <span id="copage-dock-model-name">Gemini 2.5 Flash</span>
-                  <svg class="copage-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                    <path d="M7 10l5 5 5-5z"/>
-                  </svg>
+              <div class="copage-select-wrap" id="copage-dock-select-wrap">
+                <div class="copage-trigger-contour">
+                  <div id="copage-dock-model-trigger" class="copage-select-trigger" tabindex="0">
+                    <span id="copage-dock-model-icon" style="display: inline-flex; align-items: center;"></span>
+                    <span id="copage-dock-model-name">Gemini 2.5 Flash</span>
+                    <svg class="copage-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                      <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                  </div>
                 </div>
                 <div id="copage-dock-model-menu" class="copage-menu-popover">
                   <!-- Injected dynamically -->
@@ -424,18 +426,36 @@ export class CopageDock {
             item.classList.add("selected");
             modelMenu.classList.remove("open");
             modelTrigger.classList.remove("open");
+            dockSelectWrap?.classList.remove("open");
           });
           modelMenu.appendChild(item);
         });
       }
     });
 
+    const dockSelectWrap = this.container.querySelector("#copage-dock-select-wrap") as HTMLElement;
+
     modelTrigger?.addEventListener("click", (e) => {
       e.stopPropagation();
       const isOpen = modelMenu.classList.toggle("open");
       modelTrigger.classList.toggle("open", isOpen);
+      dockSelectWrap?.classList.toggle("open", isOpen);
       // Close actions menu if open
       actionsMenu?.classList.remove("open");
+    });
+
+    modelTrigger?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        const isOpen = modelMenu.classList.toggle("open");
+        modelTrigger.classList.toggle("open", isOpen);
+        dockSelectWrap?.classList.toggle("open", isOpen);
+        actionsMenu?.classList.remove("open");
+      } else if (e.key === "Escape") {
+        modelMenu.classList.remove("open");
+        modelTrigger.classList.remove("open");
+        dockSelectWrap?.classList.remove("open");
+      }
     });
 
     // Split Button Actions Dropdown
@@ -448,6 +468,7 @@ export class CopageDock {
       // Close model menu if open
       modelMenu?.classList.remove("open");
       modelTrigger?.classList.remove("open");
+      dockSelectWrap?.classList.remove("open");
     });
 
     // Actions items
@@ -455,9 +476,7 @@ export class CopageDock {
       item.addEventListener("click", (e) => {
         const action = (e.currentTarget as HTMLElement).dataset.action;
         actionsMenu.classList.remove("open");
-
         if (!this.currentData) return;
-
         if (action === "copy-html") {
           this.copyToClipboard(this.currentData.cleanHtml, splitArrow, "HTML Copied!");
         } else if (action === "copy-css") {
@@ -479,6 +498,7 @@ export class CopageDock {
       if (!modelTrigger.contains(e.target as Node) && !modelMenu.contains(e.target as Node)) {
         modelMenu.classList.remove("open");
         modelTrigger.classList.remove("open");
+        dockSelectWrap?.classList.remove("open");
       }
       if (!splitArrow.contains(e.target as Node) && !actionsMenu.contains(e.target as Node)) {
         actionsMenu.classList.remove("open");

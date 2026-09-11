@@ -252,11 +252,19 @@
     .m3-select-wrapper {
       position: relative;
       width: 100%;
+      z-index: 10;
+    }
+    .m3-select-wrapper.open {
+      z-index: 1000;
+    }
+    .m3-trigger-contour {
+      width: 100%;
       filter: drop-shadow(0 0 1px rgba(168, 199, 250, 0.45)) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
       transition: filter 0.25s ease;
     }
-    .m3-select-wrapper:hover {
-      filter: drop-shadow(0 0 1.5px var(--m3-primary)) drop-shadow(0 6px 18px rgba(168, 199, 250, 0.22));
+    .m3-trigger-contour:hover,
+    .m3-select-wrapper.open .m3-trigger-contour {
+      filter: drop-shadow(0 0 1.5px var(--m3-primary)) drop-shadow(0 6px 18px rgba(168, 199, 250, 0.25));
     }
     .m3-select-trigger {
       width: 100%;
@@ -273,7 +281,7 @@
       user-select: none;
       transition: clip-path 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s var(--m3-spring), background-color 0.15s ease;
     }
-    .m3-select-trigger:hover {
+    .m3-select-trigger:hover:not(.open) {
       transform: translateY(-1px);
       background-color: rgba(168, 199, 250, 0.12);
     }
@@ -284,6 +292,7 @@
     .m3-select-trigger:focus {
       outline: none;
       background-color: rgba(168, 199, 250, 0.18);
+      transform: translateY(-1px);
     }
     .m3-select-value {
       display: flex;
@@ -326,27 +335,40 @@
     }
     .m3-menu-popover {
       position: absolute;
-      top: calc(100% + 6px);
+      top: calc(100% + 4px);
       left: 0;
       right: 0;
-      background-color: var(--m3-surface-container);
-      border: 1px solid var(--m3-border);
-      border-radius: 22px 8px 22px 22px;
-      box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.55), 0px 0px 24px rgba(168,199,250,0.12);
-      backdrop-filter: blur(28px) saturate(190%);
+      background-color: #27252d;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.65), 0px 0px 24px rgba(168,199,250,0.15);
       padding: 6px;
-      z-index: 100;
+      z-index: 1001;
       display: none;
       max-height: 280px;
       overflow-y: auto;
+      overscroll-behavior: contain;
       transform-origin: top center;
-      animation: m3MenuSpring 0.26s var(--m3-spring);
     }
     .m3-menu-popover.open {
       display: block;
+      animation: m3MenuSpring 0.22s var(--m3-spring) forwards;
+    }
+    .m3-menu-popover::-webkit-scrollbar {
+      width: 6px;
+    }
+    .m3-menu-popover::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .m3-menu-popover::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.22);
+      border-radius: 9999px;
+    }
+    .m3-menu-popover::-webkit-scrollbar-thumb:hover {
+      background: var(--m3-primary);
     }
     @keyframes m3MenuSpring {
-      from { opacity: 0; transform: scale(0.9) translateY(-8px); }
+      from { opacity: 0; transform: scale(0.96) translateY(-6px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
     .m3-menu-item {
@@ -987,14 +1009,16 @@
       <!-- M3 Expressive Custom Dropdown Menu for Model Selection -->
       <div class="m3-form-group">
         <label class="m3-label" for="model-dropdown-trigger">Active Model Preset</label>
-        <div class="m3-select-wrapper">
-          <div id="model-dropdown-trigger" class="m3-select-trigger" tabindex="0" role="combobox" aria-expanded="false">
-            <div class="m3-select-value">
-              <span id="selected-model-text">Gemini 2.5 Flash (Google)</span>
+        <div class="m3-select-wrapper" id="options-model-wrapper">
+          <div class="m3-trigger-contour">
+            <div id="model-dropdown-trigger" class="m3-select-trigger" tabindex="0" role="combobox" aria-expanded="false">
+              <div class="m3-select-value">
+                <span id="selected-model-text">Gemini 2.5 Flash (Google)</span>
+              </div>
+              <svg class="m3-select-arrow" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M7 10l5 5 5-5z"/>
+              </svg>
             </div>
-            <svg class="m3-select-arrow" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M7 10l5 5 5-5z"/>
-            </svg>
           </div>
           <div id="model-dropdown-menu" class="m3-menu-popover" role="listbox">
             <!-- Items populated via options.ts -->

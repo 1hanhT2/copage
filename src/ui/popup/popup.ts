@@ -77,7 +77,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         </svg>
       `;
 
-      item.addEventListener("click", async () => {
+      item.addEventListener("click", async (e) => {
+        e.stopPropagation();
         config.model = preset.id;
         await setLLMConfig({ model: preset.id });
         const newShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 14, "currentColor");
@@ -106,13 +107,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     modelTrigger.className = `m3-select-trigger ${getModelPillShapeClass(config.model)}`;
   }
 
+  const modelWrapper = document.getElementById("popup-model-wrapper");
+
   function openDropdown() {
+    modelWrapper?.classList.add("open");
     modelTrigger.classList.add("open");
     modelTrigger.setAttribute("aria-expanded", "true");
     modelMenu.classList.add("open");
   }
 
   function closeDropdown() {
+    modelWrapper?.classList.remove("open");
     modelTrigger.classList.remove("open");
     modelTrigger.setAttribute("aria-expanded", "false");
     modelMenu.classList.remove("open");
@@ -124,6 +129,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       closeDropdown();
     } else {
       openDropdown();
+    }
+  });
+
+  modelTrigger?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (modelMenu.classList.contains("open")) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    } else if (e.key === "Escape") {
+      closeDropdown();
     }
   });
 
