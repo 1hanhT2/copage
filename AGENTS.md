@@ -6,6 +6,22 @@
 
 ## 0. Project Overview & Conventions
 
+- **Mission:** **Copage** is a developer-first browser extension (Manifest V3) that allows engineers to hover, inspect, and copy any element on the web—similar to the F12 DevTools element inspector, but with complete flexibility and LLM superpower.
+- **Core Concept:**
+  - **In-Page Hover & Select:** Intuitive overlay highlighting elements with bounding boxes, dimensions, HTML tags, classes, and parent/child breadcrumb traversal.
+  - **DOM & Style Extraction:** Captures sanitized HTML, computed CSS styles, font metrics, layout box data, and inline SVGs/assets.
+  - **LLM Prompt Synthesis:** Users plug in their own LLM API key (OpenRouter, OpenAI-compatible, Anthropic, etc.). An LLM processes the captured element and distills it into a hyper-targeted reproduction prompt (for Claude, ChatGPT, Cursor, v0, 21st.dev) or directly generates ready-to-use component code (React + Tailwind CSS, Vue, Svelte, or plain HTML).
+  - **Extensible Roadmap:** Screenshot-to-code multimodal prompts, local snippet library, prompt template customization, and 1-click export to clipboard or editor.
+- **Key Subsystems:**
+  1. `content/`: High-performance in-page inspector overlay, event interceptors, bounding-box renderer.
+  2. `extractor/`: Tree pruning, computed style distillation, asset and SVG collector.
+  3. `llm/`: Client-side multi-provider gateway (OpenRouter, OpenAI-compatible), prompt templates, streaming responses.
+  4. `ui/`: Extension popup, side panel / floating action HUD, settings/options surface for API keys and preferences.
+  5. `background/`: Extension service worker for shortcuts, cross-tab messaging, and storage coordination.
+- **Security & Privacy (Non-Negotiable):**
+  - User API keys are stored strictly in local browser storage (`chrome.storage.local`).
+  - Never transmit user API keys to any third-party intermediary backend; all requests go directly from the client/extension to the configured provider endpoint.
+  - Never commit `.env`, test keys, or log secrets to git or `memory/`.
 - **Current Version:** Defined in `VERSION` and `package.json` (`version` field). Starts at `0.1.0`.
 - **Source of Truth for Version:** `package.json` `version` + `VERSION` file (must stay in sync) + annotated git tag `vX.Y.Z`.
 - **Changelog:** `CHANGELOG/` — one markdown file per variant/release indexed in `CHANGELOG/README.md`.

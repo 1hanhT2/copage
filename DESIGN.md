@@ -1,57 +1,66 @@
 ---
 name: Copage
-description: A restrained, typography-first collaborative interface with high information density and purposeful contrast.
+description: High-precision developer inspection overlay and clean HUD controls for capturing and translating web UI into AI prompts.
 colors:
   canvas: "#ffffff"
-  surface: "#f8f9fa"
-  surface-raised: "#ffffff"
-  border: "#e5e7eb"
-  border-subtle: "#f3f4f6"
-  ink: "#111827"
-  ink-muted: "#6b7280"
-  ink-subtle: "#9ca3af"
+  surface: "#0f172a"
+  surface-raised: "#1e293b"
+  surface-subtle: "#334155"
+  border: "#334155"
+  border-subtle: "#1e293b"
+  ink: "#f8fafc"
+  ink-muted: "#94a3b8"
+  ink-subtle: "#64748b"
+  inspector-box: "#2563eb"
+  inspector-box-hover: "#3b82f6"
+  inspector-box-fill: "rgba(37, 99, 235, 0.08)"
+  inspector-tag: "#38bdf8"
+  inspector-class: "#a78bfa"
+  inspector-dimension: "#fbbf24"
   brand: "#0f172a"
   brand-accent: "#2563eb"
   brand-accent-hover: "#1d4ed8"
-  danger: "#dc2626"
-  danger-surface: "#fef2f2"
-  success: "#16a34a"
-  success-surface: "#f0fdf4"
+  danger: "#ef4444"
+  danger-surface: "#450a0a"
+  success: "#10b981"
+  success-surface: "#064e3b"
 typography:
-  display:
-    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-    fontSize: "clamp(24px, 2.5vw, 32px)"
-    fontWeight: 700
-    letterSpacing: "-0.03em"
+  code:
+    fontFamily: '"JetBrains Mono", "Fira Code", monospace'
+    fontSize: "12px"
+    lineHeight: 1.4
   title:
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-    fontSize: "18px"
+    fontSize: "14px"
     fontWeight: 600
-    letterSpacing: "-0.02em"
+    letterSpacing: "-0.01em"
   body:
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-    fontSize: "14px"
+    fontSize: "13px"
     lineHeight: 1.5
 ---
 
-# Design System & Craft Floor
+# Design System & Craft Floor — Copage
 
 ## 1. Aesthetic Direction
 
-Copage adheres to a **restrained, modern workspace aesthetic**:
-- Generous but intentional whitespace.
-- Crisp hairline borders (`1px solid #e5e7eb`) instead of heavy dropshadows.
-- Clear visual hierarchy where interactive states are explicit and distinct.
+Copage is an **elite developer utility**:
+- **High-Contrast HUD & Floating Dock:** Dark, semi-translucent backdrop (`#0f172a` at 94% opacity with subtle backdrop blur), crisp hairline borders (`1px solid #334155`), and monospaced typography for metrics.
+- **Precision Highlighting:** 1.5px solid bounding box around hovered elements with a soft primary fill (`rgba(37, 99, 235, 0.08)`) that indicates the exact target without obscuring underlying typography or borders.
+- **Informative Floating Tooltip:** Positioned dynamically (defaulting above or below the bounding box without clipping the viewport), displaying:
+  - Tag Name in cyan (`#38bdf8`)
+  - Dimensions in amber (`#fbbf24`)
+  - Top classes in purple (`#a78bfa`)
+  - Parent/child traversal breadcrumbs
 
 ## 2. Craft Floor (Absolute Bans)
 
-- **No AI-slop visual cliches:** Avoid gratuitous floating spheres, saturated multi-stop purple/cyan gradients, or neon drop-shadow glows.
-- **No horizontal layout blowouts:** Every container must respect viewport boundaries without unintentional scrollbars at any breakpoint (from 375px mobile to 1440px desktop).
-- **No unstyled empty states:** Every list, table, or workspace surface must feature a clean, contextual empty state with a clear call-to-action.
-- **No unhandled loading states:** Interactive buttons, mutations, and data fetches must display clear disabled or skeleton states.
+- **No host page layout shifts:** The overlay must be `position: absolute` or `fixed` inside an isolated Shadow DOM container with `pointer-events: none` during hover tracking.
+- **No CSS collision:** Never inject global CSS classes or tags that can conflict with the host page (e.g. `body { ... }` or general utility classes).
+- **No flickering tooltip:** The HUD and bounding box must recalculate smoothly via `requestAnimationFrame` with hysteresis/debouncing on rapid pointer movement.
+- **No unhandled clipped state:** When an element is close to the window border, the tooltip must automatically flip inside or clamp within viewport coordinates.
 
-## 3. Component Sourcing
+## 3. UI Component Sourcing & Ergonomics
 
-- When implementing new UI elements, prefer referencing battle-tested component patterns from [21st.dev](https://21st.dev) (React + Tailwind + shadcn).
-- Adapt all imported component styles to the tokens defined in this document and `globals.css`.
-- Record component provenance in memory notes.
+- All extension surfaces (Popup, Options, Floating Dock) should prefer clean, modern Tailwind styling compatible with [21st.dev](https://21st.dev) component conventions.
+- Keyboard shortcuts (`Esc` to cancel, `Enter` to confirm, `Up/Down` arrow keys to navigate parent/child DOM hierarchy) must have immediate visual feedback in the HUD.

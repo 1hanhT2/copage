@@ -1,17 +1,59 @@
-# Architecture
+# Architecture — Copage Browser Extension
 
 ## 1. System Overview
 
-Copage follows a modular, client-first collaborative architecture designed for predictable state management and high developer ergonomics.
+Copage is built as a modern **Chrome / Chromium Manifest V3 WebExtension** using TypeScript and modular subsystem architecture. It bridges in-browser DOM inspection with LLM-powered prompt and code synthesis.
 
-## 2. Directory Structure Conventions
+```
+┌─────────────────────────────────────────────────────────────┐
+│                       Host Web Page                         │
+│  ┌─────────────────────────┐   ┌─────────────────────────┐  │
+│  │ Target DOM Element      │   │ Copage Content Script   │  │
+│  │ (Hovered / Selected)    │──>│ • Shadow DOM Overlay    │  │
+│  └─────────────────────────┘   │ • Bounding Box HUD      │  │
+│                                │ • Event Interceptor     │  │
+│                                └────────────┬────────────┘  │
+└─────────────────────────────────────────────┼───────────────┘
+                                              │ Extracted Node & Styles
+                                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Copage Extension Core                    │
+│                                                             │
+│   ┌─────────────────────────────────────────────────────┐   │
+│   │ DOM & Style Extractor                               │   │
+│   │ • Prunes script / noise tags                        │   │
+│   │ • Distills computed layout, typography & colors     │   │
+│   │ • Inlines SVGs and image asset references           │   │
+│   └─────────────────────────┬───────────────────────────┘   │
+│                             │ Clean Element Spec            │
+│                             ▼                               │
+│   ┌─────────────────────────────────────────────────────┐   │
+│   │ LLM Gateway (BYOK Client-Side)                      │   │
+│   │ • OpenRouter & OpenAI-compatible endpoints          │   │
+│   │ • Prompt synthesizer (Claude / Cursor / v0 / Code)  │   │
+│   │ • Secure local key storage (chrome.storage.local)   │   │
+│   └─────────────────────────┬───────────────────────────┘   │
+│                             │                               │
+└─────────────────────────────┼───────────────────────────────┘
+                              ▼
+        ┌───────────────────────────────────────────┐
+        │ Destination: Clipboard / AI Chat / Editor │
+        │ • Optimized Reproduction Prompt           │
+        │ • Production React + Tailwind Component   │
+        └───────────────────────────────────────────┘
+```
+
+---
+
+## 2. Directory Layout Conventions
 
 ```
 copage/
+├── manifest.json         # Extension Manifest V3 configuration
 ├── AGENTS.md             # Authoritative agent rules & workflow
 ├── CLAUDE.md             # Pointer to AGENTS.md
-├── PRODUCT.md            # Product intent & constraints
-├── DESIGN.md             # Design tokens & craft floor
+├── PRODUCT.md            # Product spec & constraints
+├── DESIGN.md             # Design tokens & HUD craft floor
 ├── ARCHITECTURE.md       # Technical boundaries & contracts
 ├── VERSION               # Plain-text version mirror
 ├── CHANGELOG/            # Per-release changelog variants
@@ -25,15 +67,30 @@ copage/
 │   ├── memory.mjs
 │   └── hooks/
 │       └── post-commit.sh
-└── src/                  # Application source code
-    ├── app/              # Routes and page shells
-    ├── components/       # Reusable UI components
-    └── lib/              # Utilities, hooks, and adapters
+└── src/
+    ├── background/       # Service worker (shortcuts, messaging)
+    ├── content/          # In-page inspector & Shadow DOM HUD
+    │   ├── inspector.ts  # Hover, bounding box, hit detection
+    │   ├── overlay.ts    # Shadow DOM container renderer
+    │   └── events.ts     # Keyboard shortcuts & lock events
+    ├── extractor/        # DOM & CSS extraction engine
+    │   ├── dom.ts        # DOM sanitizer, tree pruner, SVG inliner
+    │   └── styles.ts     # Computed CSS & typography extractor
+    ├── llm/              # LLM client & prompt synthesizer
+    │   ├── providers/    # OpenRouter, OpenAI-compatible adapters
+    │   └── prompts/      # Target-specific prompt templates
+    ├── ui/               # Extension popup, options, & HUD components
+    │   ├── popup/        # Action popup
+    │   ├── options/      # API key & model settings
+    │   └── hud/          # Floating inspection dock
+    └── lib/              # Shared types, storage helpers, utils
 ```
+
+---
 
 ## 3. Core Technical Principles
 
-1. **Strict Typing:** All data models and component props must be explicitly typed (no implicit `any`).
-2. **Deterministic State:** State mutations must be pure and reproducible.
-3. **Boundary Isolation:** Keep server-side secrets, database credentials, and external tokens completely isolated from browser bundles.
-4. **Verification-Driven Delivery:** Every pull request or release must pass type checking, linting, and build verification.
+1. **Zero Host Contamination (Shadow DOM):** All injected overlays, bounding boxes, and HUD controls must reside within an isolated `ShadowRoot` (`mode: 'closed'` or `'open'` with strict styling resets) to prevent host page CSS from leaking in and extension CSS from leaking out.
+2. **Local Security (BYOK):** API keys must be stored in `chrome.storage.local`. Under no circumstances should keys be logged, sent to telemetry, or transmitted to any server other than the user-configured LLM endpoint.
+3. **High Framerate Hover (<16ms):** Bounding box positioning must use `requestAnimationFrame` and `getBoundingClientRect()`. Avoid heavy tree traversals during hover; defer deep extraction until element lock (click).
+4. **Resilient DOM Sanitization:** Strip scripts, tracking pixels, ads, and hidden elements to keep token count compact and signal-to-noise ratio high for LLMs.
