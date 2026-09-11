@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T09:13:42.836Z",
-  "count": 18,
+  "generatedAt": "2026-09-11T09:13:50.940Z",
+  "count": 19,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -86,6 +86,19 @@
       "commit": "fix: resolve Google.com inspection issues (Trusted Types, host_permissions, positioning, dynamic script injection)",
       "tags": [
         "fix"
+      ]
+    },
+    {
+      "file": "2026-09-11_83bc723_chore-memory-sync-memory-index-for-iife-bundle-fix.md",
+      "hash": "83bc723833c5ecaf5d5a0628f6ae6882656bba01",
+      "short": "83bc723",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore(memory): sync memory index for IIFE bundle fix",
+      "tags": [
+        "fix",
+        "memory"
       ]
     },
     {
