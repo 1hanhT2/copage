@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Copage Inspector</title>
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      width: 320px;
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 14px;
+      font-size: 13px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1e293b;
+      margin-bottom: 12px;
+    }
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-text {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .version {
+      font-size: 10px;
+      color: #64748b;
+      font-family: monospace;
+    }
+    .main-toggle-btn {
+      width: 100%;
+      background-color: #2563eb;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s ease;
+      margin-bottom: 12px;
+    }
+    .main-toggle-btn:hover {
+      background-color: #1d4ed8;
+    }
+    .shortcut-hint {
+      font-size: 11px;
+      color: #94a3b8;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    kbd {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 1px 4px;
+      font-family: monospace;
+      font-size: 10px;
+      color: #f8fafc;
+    }
+    .status-card {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+    .status-label {
+      color: #94a3b8;
+    }
+    .status-value {
+      font-weight: 600;
+      color: #f8fafc;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+    .dot-green { background-color: #10b981; }
+    .dot-amber { background-color: #f59e0b; }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #94a3b8;
+      padding-top: 4px;
+    }
+    .footer-links a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-group">
+      <span class="logo-text">Copage</span>
+      <span class="version">v0.1.0</span>
+    </div>
+    <a href="#" id="open-options-link" style="font-size: 11px; color: #38bdf8; text-decoration: none;">Settings ⚙</a>
+  </div>
+
+  <button id="activate-btn" class="main-toggle-btn">
+    <span>🎯 Activate Inspector</span>
+  </button>
+
+  <div class="shortcut-hint">
+    Shortcut: press <kbd>Alt+C</kbd> on any webpage
+  </div>
+
+  <div class="status-card">
+    <div class="status-row">
+      <span class="status-label">LLM Provider:</span>
+      <span id="stat-provider" class="status-value">OpenRouter</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">Active Model:</span>
+      <span id="stat-model" class="status-value">Gemini 2.5 Flash</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">API Key:</span>
+      <span id="stat-key" class="status-value"><span class="status-dot dot-amber"></span>Not configured</span>
+    </div>
+  </div>
+
+  <div class="footer-links">
+    <span>BYOK Client-Side</span>
+    <a href="#" id="options-footer-link">Configure Keys</a>
+  </div>
+
+  <script type="module" src="./popup.ts"></script>
+</body>
+</html>

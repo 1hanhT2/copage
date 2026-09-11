@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T08:52:16.232Z",
-  "count": 11,
+  "generatedAt": "2026-09-11T08:52:20.908Z",
+  "count": 12,
   "entries": [
     {
       "file": "2026-09-11_1fd320d_chore-memory-update-memory-index.md",
@@ -112,6 +112,18 @@
       "commit": "feat(assets): add dark mode logo asset and sync memory",
       "tags": [
         "feature",
+        "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_cc88f1d_chore-memory-update-memory-index.md",
+      "hash": "cc88f1d434b940723a5616dbf3e9c90170af78d0",
+      "short": "cc88f1d",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore(memory): update memory index",
+      "tags": [
         "memory"
       ]
     },
