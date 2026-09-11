@@ -1,5 +1,6 @@
 import type { InspectedElementData } from "../lib/types";
 import { CopageDock } from "../ui/hud/dock";
+import { getCanonicalM3ShapeSvg, getElementM3Shape } from "../lib/shapes";
 
 export class InspectorOverlay {
   private hostEl: HTMLElement;
@@ -121,6 +122,33 @@ export class InspectorOverlay {
         border-color: #78dc77 !important;
       }
 
+      /* M3 Expressive Locked Element Beacon Badge */
+      .copage-lock-badge {
+        position: absolute !important;
+        top: -26px !important;
+        left: -2px !important;
+        background: rgba(16, 32, 20, 0.94) !important;
+        border: 1px solid #78dc77 !important;
+        color: #78dc77 !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 9.5px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em !important;
+        padding: 2px 8px !important;
+        border-radius: 9999px !important;
+        display: none;
+        align-items: center;
+        gap: 5px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 12px rgba(120, 220, 119, 0.35) !important;
+        backdrop-filter: blur(8px) !important;
+        z-index: 2147483648 !important;
+        user-select: none !important;
+      }
+      .copage-bbox.locked .copage-lock-badge {
+        display: inline-flex !important;
+        animation: copageLockShockwave 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+      }
+
       /* Spring Jelly Wobble Keyframes */
       @keyframes copageJelly {
         0% { transform: scale(1, 1); }
@@ -166,6 +194,12 @@ export class InspectorOverlay {
         max-width: 240px;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+      .copage-tt-shape {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        filter: drop-shadow(0 0 4px rgba(168, 199, 250, 0.5));
       }
 
       /* Dock Panel (M3 Expressive Floating Island) */
@@ -531,6 +565,22 @@ export class InspectorOverlay {
       .copage-actions-popover.open {
         display: block;
       }
+      .copage-action-badge {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
+      }
+      .copage-menu-item:hover .copage-action-badge {
+        transform: scale(1.1) rotate(6deg);
+        background: rgba(168, 199, 250, 0.16);
+      }
 
       /* M3 Expressive Outlined Button */
       .copage-btn-secondary {
@@ -605,6 +655,15 @@ export class InspectorOverlay {
     this.bbox.appendChild(blCaliper);
     this.bbox.appendChild(brCaliper);
 
+    // M3 Expressive Locked Element Beacon
+    const lockBadge = document.createElement("div");
+    lockBadge.className = "copage-lock-badge";
+    lockBadge.innerHTML = `
+      ${getCanonicalM3ShapeSvg("gem", 11, "#78dc77")}
+      <span>LOCKED</span>
+    `;
+    this.bbox.appendChild(lockBadge);
+
     this.tooltip = document.createElement("div");
     this.tooltip.className = "copage-tooltip";
 
@@ -656,6 +715,10 @@ export class InspectorOverlay {
 
     this.tooltip.textContent = "";
 
+    const shapeSpan = document.createElement("span");
+    shapeSpan.className = "copage-tt-shape";
+    shapeSpan.innerHTML = getCanonicalM3ShapeSvg(getElementM3Shape(tag), 11, "#a8c7fa");
+
     const tagSpan = document.createElement("span");
     tagSpan.className = "copage-tt-tag";
     tagSpan.textContent = `<${tag}>`;
@@ -664,6 +727,7 @@ export class InspectorOverlay {
     dimSpan.className = "copage-tt-dim";
     dimSpan.textContent = dim;
 
+    this.tooltip.appendChild(shapeSpan);
     this.tooltip.appendChild(tagSpan);
     this.tooltip.appendChild(dimSpan);
 

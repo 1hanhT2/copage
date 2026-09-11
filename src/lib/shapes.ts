@@ -5,6 +5,8 @@
  * Contains both compact 24x24 UI icons and the full 35 canonical high-precision shapes (380x380).
  */
 
+import type { PromptTarget } from "./types";
+
 // --- Compact 24x24 UI Icon Shapes ---
 
 export type M3ShapeName = "sparkle" | "flower" | "diamond" | "sunburst" | "squircle" | "radar";
@@ -190,3 +192,144 @@ export const M3_CORNER_TOKENS = {
   extraExtraLarge: "48px",
   full: "9999px"
 } as const;
+
+// --- Material 3 Expressive Semantic Shape Mappers ---
+
+/**
+ * Maps an HTML element tag name to a canonical M3 Expressive shape.
+ * Provides instant cognitive visual cues for element types in breadcrumbs and history.
+ */
+export function getElementM3Shape(tagName: string): M3CanonicalShapeName {
+  const tag = tagName.toLowerCase();
+  switch (tag) {
+    case "a":
+      return "arch";
+    case "button":
+    case "input":
+    case "select":
+    case "textarea":
+    case "label":
+      return "pill";
+    case "div":
+    case "section":
+    case "main":
+    case "article":
+    case "nav":
+    case "aside":
+    case "header":
+    case "footer":
+      return "square";
+    case "svg":
+    case "img":
+    case "canvas":
+    case "video":
+    case "picture":
+    case "image":
+      return "gem";
+    case "span":
+    case "p":
+    case "h1":
+    case "h2":
+    case "h3":
+    case "h4":
+    case "h5":
+    case "h6":
+    case "strong":
+    case "em":
+    case "b":
+    case "i":
+    case "small":
+      return "4-sided-cookie";
+    case "ul":
+    case "ol":
+    case "li":
+      return "circle";
+    case "table":
+    case "thead":
+    case "tbody":
+    case "tr":
+    case "td":
+    case "th":
+      return "hexagon";
+    case "form":
+      return "pentagon";
+    case "code":
+    case "pre":
+    case "kbd":
+      return "pixel-circle";
+    default:
+      return "soft-burst";
+  }
+}
+
+/**
+ * Maps a prompt target to a canonical M3 Expressive shape.
+ */
+export function getTargetM3Shape(target: PromptTarget): M3CanonicalShapeName {
+  switch (target) {
+    case "cursor":
+      return "diamond";
+    case "claude":
+      return "flower";
+    case "v0":
+      return "arch";
+    case "html-tailwind":
+      return "sunny";
+    case "react-component":
+      return "gem";
+    default:
+      return "diamond";
+  }
+}
+
+/**
+ * Maps a framework to a canonical M3 Expressive shape.
+ */
+export function getFrameworkM3Shape(framework: string): M3CanonicalShapeName {
+  switch (framework) {
+    case "react":
+      return "diamond";
+    case "vue":
+      return "triangle";
+    case "svelte":
+      return "soft-boom";
+    case "html":
+      return "arch";
+    default:
+      return "square";
+  }
+}
+
+/**
+ * Maps a HUD split action to a canonical M3 Expressive shape.
+ */
+export function getActionM3Shape(action: string): M3CanonicalShapeName {
+  switch (action) {
+    case "copy-html":
+      return "arch";
+    case "copy-css":
+      return "flower";
+    case "copy-tailwind":
+      return "diamond";
+    case "copy-svgs":
+      return "burst";
+    case "download-tsx":
+      return "gem";
+    default:
+      return "gem";
+  }
+}
+
+/**
+ * Resolves a canonical M3 Expressive shape for a model or provider ID.
+ * Used for watermarks and distinctive model identity cards.
+ */
+export function getCanonicalModelShape(providerOrModel: string): M3CanonicalShapeName {
+  const lower = providerOrModel.toLowerCase();
+  if (lower.includes("google") || lower.includes("gemini")) return "very-sunny";
+  if (lower.includes("deepseek")) return "flower";
+  if (lower.includes("qwen")) return "diamond";
+  if (lower.includes("meta") || lower.includes("llama")) return "burst";
+  if (lower.includes("anthropic") || lower.includes("claude")) return "puffy-diamond";
+  return "gem";
+}

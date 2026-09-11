@@ -389,6 +389,8 @@
       margin-bottom: 18px;
     }
     .m3-action-card {
+      position: relative;
+      overflow: hidden;
       background-color: var(--m3-surface-container);
       border: 1px solid var(--m3-border);
       border-radius: 20px;
@@ -398,6 +400,24 @@
       flex-direction: column;
       gap: 8px;
       transition: transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.2s ease;
+    }
+    .m3-action-card-watermark {
+      position: absolute;
+      right: -16px;
+      bottom: -16px;
+      color: var(--m3-primary);
+      opacity: 0.055;
+      pointer-events: none;
+      transform: rotate(0deg) scale(1);
+      transition: transform 0.35s var(--m3-spring), opacity 0.25s ease;
+    }
+    .m3-action-card:hover .m3-action-card-watermark {
+      transform: rotate(15deg) scale(1.18);
+      opacity: 0.11;
+    }
+    .m3-action-card.selected .m3-action-card-watermark {
+      opacity: 0.14;
+      transform: rotate(10deg) scale(1.1);
     }
     .m3-action-card:hover {
       border-color: rgba(168, 199, 250, 0.4);
@@ -580,6 +600,37 @@
       font-family: 'JetBrains Mono', monospace;
       font-weight: 600;
       color: var(--m3-primary);
+    }
+    .m3-history-shape {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: rgba(168, 199, 250, 0.12);
+      color: var(--m3-primary);
+      flex-shrink: 0;
+    }
+    .m3-shape-beacon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s var(--m3-spring), filter 0.2s ease;
+    }
+    .m3-shape-beacon.ready {
+      color: var(--m3-success);
+      filter: drop-shadow(0 0 6px rgba(120, 220, 119, 0.55));
+      animation: m3BeaconPulse 2.4s ease-in-out infinite alternate;
+    }
+    .m3-shape-beacon.warning {
+      color: var(--m3-warning);
+      filter: drop-shadow(0 0 6px rgba(255, 223, 153, 0.55));
+    }
+    @keyframes m3BeaconPulse {
+      0% { transform: scale(0.92); opacity: 0.82; }
+      100% { transform: scale(1.08); opacity: 1; }
     }
     .m3-history-meta {
       font-size: 11px;
@@ -796,15 +847,11 @@
       <!-- Segmented Buttons for Provider -->
       <div class="m3-toggle-button-group" id="provider-toggle-group">
         <button type="button" class="m3-toggle-button active" data-provider="openrouter">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-          </svg>
+          <svg viewBox="0 0 380 380" width="14" height="14" fill="currentColor"><path d="M166.725 43.1869C177.261 25.6044 202.739 25.6044 213.275 43.1868L225.124 62.9597C231.268 73.2136 243.399 78.2385 254.995 75.3327L277.355 69.7294C297.237 64.7468 315.253 82.7627 310.271 102.645L304.667 125.005C301.762 136.601 306.786 148.732 317.04 154.876L336.813 166.725C354.396 177.261 354.396 202.739 336.813 213.275L317.04 225.124C306.786 231.268 301.762 243.399 304.667 254.995L310.271 277.355C315.253 297.237 297.237 315.253 277.355 310.271L254.995 304.667C243.399 301.762 231.268 306.786 225.124 317.04L213.275 336.813C202.739 354.396 177.261 354.396 166.725 336.813L154.876 317.04C148.732 306.786 136.601 301.762 125.005 304.667L102.646 310.271C82.7627 315.253 64.7468 297.237 69.7294 277.355L75.3327 254.995C78.2385 243.399 73.2136 231.268 62.9597 225.124L43.1869 213.275C25.6044 202.739 25.6044 177.261 43.1868 166.725L62.9597 154.876C73.2136 148.732 78.2385 136.601 75.3327 125.005L69.7294 102.646C64.7468 82.7627 82.7627 64.7468 102.645 69.7294L125.005 75.3327C136.601 78.2385 148.732 73.2136 154.876 62.9597L166.725 43.1869Z"/></svg>
           <span>OpenRouter</span>
         </button>
         <button type="button" class="m3-toggle-button" data-provider="openai-compatible">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-            <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
-          </svg>
+          <svg viewBox="0 0 380 380" width="14" height="14" fill="currentColor"><path d="M133.415 65.7498C150.981 52.991 159.763 46.6116 169.124 43.4402C182.663 38.8533 197.337 38.8533 210.876 43.4402C220.237 46.6116 229.019 52.991 246.585 65.7498L286.083 94.4402C296.514 102.017 301.729 105.805 305.981 110.353C312.125 116.926 316.839 124.702 319.823 133.189C321.888 139.062 322.834 145.437 324.725 158.189L332.038 207.501C335.355 229.87 337.014 241.055 335.34 251.136C332.918 265.718 325.6 279.04 314.59 288.907C306.979 295.728 296.649 300.329 275.987 309.532L229.176 330.382C216.707 335.935 210.473 338.712 204.064 340.131C194.8 342.182 185.2 342.182 175.936 340.131C169.527 338.712 163.293 335.935 150.824 330.382L104.013 309.532C83.3515 300.329 73.0207 295.728 65.4097 288.907C54.4005 279.04 47.0819 265.718 44.6602 251.136C42.9859 241.055 44.6447 229.87 47.9621 207.501L55.2752 158.189C57.1662 145.437 58.1117 139.062 60.1768 133.189C63.1612 124.702 67.8747 116.926 74.0191 110.353C78.2706 105.805 83.4862 102.017 93.9172 94.4402L133.415 65.7498Z"/></svg>
           <span>Custom OpenAI / Local Ollama</span>
         </button>
       </div>
@@ -885,15 +932,19 @@
         <label class="m3-label">Default Framework Output</label>
         <div class="m3-toggle-button-group" id="framework-toggle-group">
           <button type="button" class="m3-toggle-button active" data-framework="react">
+            <svg viewBox="0 0 380 380" width="13" height="13" fill="currentColor"><path d="M247.442 306.481C230.606 328.514 222.188 339.53 212.466 344.548C198.383 351.817 181.617 351.817 167.534 344.548C157.812 339.53 149.394 328.514 132.558 306.481L76.646 233.308C66.4059 219.906 61.2859 213.206 58.7505 206.032C55.0832 195.654 55.0832 184.346 58.7505 173.968C61.2859 166.794 66.4059 160.094 76.6461 146.692L132.558 73.5194C149.394 51.4863 157.812 40.4697 167.534 35.4518C181.617 28.1827 198.383 28.1827 212.466 35.4518C222.188 40.4697 230.606 51.4863 247.442 73.5195L303.354 146.692C313.594 160.094 318.714 166.794 321.249 173.968C324.917 184.346 324.917 195.654 321.249 206.032C318.714 213.206 313.594 219.906 303.354 233.308L247.442 306.481Z"/></svg>
             <span>React + Tailwind</span>
           </button>
           <button type="button" class="m3-toggle-button" data-framework="vue">
+            <svg viewBox="0 0 380 380" width="13" height="13" fill="currentColor"><path d="M136.461 98.2021C151.597 71.8217 159.165 58.6315 168.342 53.0594C181.648 44.9802 198.352 44.9802 211.658 53.0594C220.835 58.6315 228.403 71.8217 243.539 98.2021L325.309 240.72C340.3 266.847 347.795 279.911 347.993 290.585C348.28 306.06 339.949 320.418 326.364 327.864C316.994 333 301.919 333 271.77 333H108.23C78.0806 333 63.006 333 53.636 327.864C40.0505 320.418 31.7204 306.06 32.0072 290.585C32.2049 279.911 39.7003 266.847 54.6909 240.72L136.461 98.2021Z"/></svg>
             <span>Vue 3</span>
           </button>
           <button type="button" class="m3-toggle-button" data-framework="svelte">
+            <svg viewBox="0 0 380 380" width="13" height="13" fill="currentColor"><path d="M204.57 116.822C226.539 6.39254 153.487 6.39254 175.457 116.822C153.487 6.39254 85.9934 34.3433 148.549 127.966C85.9934 34.3433 34.3433 85.9934 127.966 148.549C34.3433 85.9934 6.39254 153.487 116.822 175.444C6.39254 153.474 6.39254 226.526 116.822 204.556C6.39254 226.526 34.3565 294.007 127.966 231.451C34.3565 294.007 86.0066 345.657 148.549 252.034C85.9934 345.644 153.487 373.594 175.444 263.178C153.474 373.607 226.526 373.607 204.556 263.178C226.526 373.607 294.007 345.644 231.451 252.034C294.007 345.644 345.657 293.993 252.034 231.451C345.644 294.007 373.594 226.513 263.178 204.556C373.607 226.526 373.607 153.474 263.178 175.444C373.607 153.474 345.644 85.9934 252.034 148.549C345.644 85.9934 293.993 34.3433 231.451 127.966C294.007 34.3565 226.513 6.40574 204.556 116.822H204.57Z"/></svg>
             <span>Svelte</span>
           </button>
           <button type="button" class="m3-toggle-button" data-framework="html">
+            <svg viewBox="0 0 380 380" width="13" height="13" fill="currentColor"><path d="M345 293.727C345 299.96 345 303.076 344.689 305.696C342.259 326.14 326.14 342.259 305.696 344.689C303.076 345 299.96 345 293.727 345H86.2732C80.0405 345 76.9242 345 74.3043 344.689C53.8596 342.259 37.7407 326.14 35.3113 305.696C35 303.076 35 299.96 35 293.727L35 190C35 104.396 104.396 35 190 35C275.604 35 345 104.396 345 190V293.727Z"/></svg>
             <span>Semantic HTML</span>
           </button>
         </div>

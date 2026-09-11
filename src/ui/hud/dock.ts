@@ -2,7 +2,14 @@ import type { InspectedElementData, PromptTarget, LLMConfig } from "../../lib/ty
 import { buildPromptForTarget } from "../../llm/prompts";
 import { streamCompletion } from "../../llm/gateway";
 import { getLLMConfig, setLLMConfig, saveRecentCapture, RECOMMENDED_MODELS, getUserPreferences } from "../../lib/storage";
-import { getM3ShapeSvg, getProviderShape } from "../../lib/shapes";
+import {
+  getM3ShapeSvg,
+  getCanonicalM3ShapeSvg,
+  getProviderShape,
+  getElementM3Shape,
+  getTargetM3Shape,
+  getActionM3Shape
+} from "../../lib/shapes";
 
 export class CopageDock {
   private container: HTMLElement;
@@ -164,13 +171,14 @@ export class CopageDock {
     if (!this.currentData) return;
     const d = this.currentData;
 
-    // Breadcrumbs items HTML with Material chevron separator
+    // Breadcrumbs items HTML with Material chevron separator and M3 semantic shapes
     const chevronSvg = `<svg viewBox="0 0 24 24" width="12" height="12" fill="rgba(255,255,255,0.38)" style="flex-shrink: 0;"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>`;
     const breadcrumbHtml = d.breadcrumbs
       .map(
         (b) => `
         <button class="copage-bc-btn" data-index="${b.index}" title="Select parent &lt;${b.tagName}&gt;">
-          &lt;${b.tagName}${b.className ? `.${b.className}` : ""}&gt;
+          ${getCanonicalM3ShapeSvg(getElementM3Shape(b.tagName), 11, "currentColor", "opacity: 0.85; margin-right: 2px;")}
+          <span>&lt;${b.tagName}${b.className ? `.${b.className}` : ""}&gt;</span>
         </button>
       `
       )
@@ -182,12 +190,13 @@ export class CopageDock {
         <div class="copage-dock-header">
           <div class="copage-badge-group">
             <span class="copage-brand-tag">
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="flex-shrink: 0;">
-                <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z"/>
-              </svg>
+              ${getCanonicalM3ShapeSvg("very-sunny", 12, "currentColor")}
               <span>Copage</span>
             </span>
-            <span class="copage-tag-badge">&lt;${d.tagName}&gt;</span>
+            <span class="copage-tag-badge">
+              ${getCanonicalM3ShapeSvg(getElementM3Shape(d.tagName), 12, "#a8c7fa", "vertical-align: -1px; margin-right: 3px;")}
+              <span>&lt;${d.tagName}&gt;</span>
+            </span>
             <span class="copage-dim-badge">${d.rect.width} × ${d.rect.height}px</span>
             ${d.classList.length > 0 ? `<span class="copage-class-badge">${d.classList.slice(0, 3).join(".")}</span>` : ""}
           </div>
@@ -204,30 +213,28 @@ export class CopageDock {
         <!-- Breadcrumbs Navigation -->
         ${d.breadcrumbs.length > 1 ? `<div class="copage-breadcrumbs-bar">${breadcrumbHtml}</div>` : ""}
 
-        <!-- Material 3 Segmented Toggle Group for Prompt Targets -->
+        <!-- Material 3 Segmented Toggle Group for Prompt Targets with M3 Shapes -->
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
           <div class="copage-segmented-group" id="copage-prompt-targets">
             <button class="copage-segmented-btn active" data-target="cursor" title="Copy production prompt for Cursor &amp; Windsurf">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              ${getCanonicalM3ShapeSvg("diamond", 13, "currentColor")}
               <span>Cursor</span>
             </button>
             <button class="copage-segmented-btn" data-target="claude" title="Copy detailed UI decomposition prompt for Claude">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              ${getCanonicalM3ShapeSvg("flower", 13, "currentColor")}
               <span>Claude</span>
             </button>
             <button class="copage-segmented-btn" data-target="v0" title="Copy Tailwind component prompt for v0 &amp; 21st.dev">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              ${getCanonicalM3ShapeSvg("arch", 13, "currentColor")}
               <span>v0 / 21st</span>
             </button>
             <button class="copage-segmented-btn" data-target="html-tailwind" title="Copy semantic HTML with mapped Tailwind utilities">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              ${getCanonicalM3ShapeSvg("sunny", 13, "currentColor")}
               <span>Tailwind HTML</span>
             </button>
           </div>
           <button id="copage-copy-prompt-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 5px 12px;">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-            </svg>
+            ${getCanonicalM3ShapeSvg("puffy-diamond", 13, "currentColor")}
             <span>Copy Prompt</span>
           </button>
         </div>
@@ -267,27 +274,39 @@ export class CopageDock {
               </button>
               <div id="copage-actions-menu" class="copage-actions-popover">
                 <div class="copage-menu-item" data-action="copy-html">
-                  <div class="copage-menu-item-text">
-                    <span class="copage-menu-item-title">Copy Clean HTML</span>
-                    <span class="copage-menu-item-desc">Pruned DOM without trackers</span>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="copage-action-badge">${getCanonicalM3ShapeSvg("arch", 15, "#a8c7fa")}</div>
+                    <div class="copage-menu-item-text">
+                      <span class="copage-menu-item-title">Copy Clean HTML</span>
+                      <span class="copage-menu-item-desc">Pruned DOM without trackers</span>
+                    </div>
                   </div>
                 </div>
                 <div class="copage-menu-item" data-action="copy-css">
-                  <div class="copage-menu-item-text">
-                    <span class="copage-menu-item-title">Copy Distilled CSS</span>
-                    <span class="copage-menu-item-desc">Layout &amp; box-model rules</span>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="copage-action-badge">${getCanonicalM3ShapeSvg("flower", 15, "#d0bcff")}</div>
+                    <div class="copage-menu-item-text">
+                      <span class="copage-menu-item-title">Copy Distilled CSS</span>
+                      <span class="copage-menu-item-desc">Layout &amp; box-model rules</span>
+                    </div>
                   </div>
                 </div>
                 <div class="copage-menu-item" data-action="copy-tailwind">
-                  <div class="copage-menu-item-text">
-                    <span class="copage-menu-item-title">Copy Tailwind Classes</span>
-                    <span class="copage-menu-item-desc">${d.tailwindClasses.length} mapped utility classes</span>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="copage-action-badge">${getCanonicalM3ShapeSvg("diamond", 15, "#78dc77")}</div>
+                    <div class="copage-menu-item-text">
+                      <span class="copage-menu-item-title">Copy Tailwind Classes</span>
+                      <span class="copage-menu-item-desc">${d.tailwindClasses.length} mapped utility classes</span>
+                    </div>
                   </div>
                 </div>
                 <div class="copage-menu-item" data-action="copy-svgs">
-                  <div class="copage-menu-item-text">
-                    <span class="copage-menu-item-title">Copy Inlined SVGs</span>
-                    <span class="copage-menu-item-desc">${d.svgAssets.length} sanitized vector assets</span>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="copage-action-badge">${getCanonicalM3ShapeSvg("burst", 15, "#ffdf99")}</div>
+                    <div class="copage-menu-item-text">
+                      <span class="copage-menu-item-title">Copy Inlined SVGs</span>
+                      <span class="copage-menu-item-desc">${d.svgAssets.length} sanitized vector assets</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -297,18 +316,17 @@ export class CopageDock {
           <!-- Code Preview Area -->
           <div class="copage-code-preview-wrap">
             <div class="copage-code-preview-header">
-              <span class="copage-code-title">Component Output (React TSX + Tailwind)</span>
+              <span class="copage-code-title">
+                ${getCanonicalM3ShapeSvg("gem", 12, "#a8c7fa", "margin-right: 4px; vertical-align: -1px;")}
+                <span>Component Output (React TSX + Tailwind)</span>
+              </span>
               <div style="display: flex; gap: 6px;">
                 <button id="copage-copy-code-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 3px 10px;">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                  </svg>
+                  ${getCanonicalM3ShapeSvg("diamond", 12, "currentColor")}
                   <span>Copy Code</span>
                 </button>
                 <button id="copage-download-code-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 3px 10px;">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                  </svg>
+                  ${getCanonicalM3ShapeSvg("gem", 12, "currentColor")}
                   <span>Download .tsx</span>
                 </button>
               </div>

@@ -301,6 +301,8 @@
 
     /* M3 Expressive Card (Squircle Paper) */
     .m3-card {
+      position: relative;
+      overflow: hidden;
       background-color: var(--m3-surface-container);
       border: 1px solid var(--m3-border);
       border-radius: 20px;
@@ -311,11 +313,26 @@
       gap: 8px;
       box-shadow: 0px 4px 12px -2px rgba(0,0,0,0.3);
     }
+    .m3-card-watermark {
+      position: absolute;
+      right: -24px;
+      bottom: -24px;
+      color: var(--m3-primary);
+      opacity: 0.045;
+      pointer-events: none;
+      transition: transform 0.45s var(--m3-spring), opacity 0.3s ease;
+    }
+    .m3-card:hover .m3-card-watermark {
+      transform: scale(1.15) rotate(15deg);
+      opacity: 0.085;
+    }
     .m3-card-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 12px;
+      position: relative;
+      z-index: 1;
     }
     .m3-card-label {
       color: var(--m3-text-secondary);
@@ -329,7 +346,27 @@
       gap: 6px;
     }
 
-    /* Status indicator dots */
+    /* M3 Expressive Status Beacons */
+    .m3-shape-beacon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s var(--m3-spring), filter 0.2s ease;
+    }
+    .m3-shape-beacon.ready {
+      color: var(--m3-success);
+      filter: drop-shadow(0 0 5px rgba(120, 220, 119, 0.5));
+      animation: m3BeaconPulse 2.4s ease-in-out infinite alternate;
+    }
+    .m3-shape-beacon.warning {
+      color: var(--m3-warning);
+      filter: drop-shadow(0 0 5px rgba(255, 223, 153, 0.5));
+    }
+    @keyframes m3BeaconPulse {
+      0% { transform: scale(0.92); opacity: 0.82; }
+      100% { transform: scale(1.08); opacity: 1; }
+    }
     .status-dot {
       display: inline-block;
       width: 8px;
@@ -439,10 +476,8 @@
 
   <!-- M3 Pill Action Button -->
   <button id="activate-btn" class="m3-btn-pill">
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-      <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-7 7H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4z"/>
-    </svg>
-    <span>Activate Inspector</span>
+    <span id="activate-icon" class="m3-shape-beacon"></span>
+    <span id="activate-btn-text">Activate Inspector</span>
   </button>
 
   <!-- Shortcut Hint -->
@@ -455,7 +490,6 @@
   <div class="m3-select-wrapper">
     <div id="popup-model-trigger" class="m3-select-trigger" tabindex="0" role="combobox" aria-expanded="false">
       <div class="m3-select-value">
-        <span class="status-dot dot-green"></span>
         <span id="popup-selected-model">Gemini 2.5 Flash</span>
       </div>
       <svg class="m3-select-arrow" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
@@ -469,13 +503,14 @@
 
   <!-- M3 Expressive Card -->
   <div class="m3-card">
+    <div id="popup-card-watermark" class="m3-card-watermark"></div>
     <div class="m3-card-row">
       <span class="m3-card-label">Provider</span>
       <span id="stat-provider" class="m3-card-value">OpenRouter</span>
     </div>
     <div class="m3-card-row">
       <span class="m3-card-label">API Key</span>
-      <span id="stat-key" class="m3-card-value"><span class="status-dot dot-amber"></span>Not configured</span>
+      <span id="stat-key" class="m3-card-value"><span class="m3-shape-beacon warning"></span>Not configured</span>
     </div>
     <div class="m3-switch-row">
       <span>Deep Shadow DOM</span>

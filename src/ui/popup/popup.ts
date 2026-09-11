@@ -1,13 +1,16 @@
 import { getLLMConfig, setLLMConfig, RECOMMENDED_MODELS, getUserPreferences, setUserPreferences } from "../../lib/storage";
 import type { ExtensionMessage } from "../../lib/types";
-import { getM3ShapeSvg, getProviderShape } from "../../lib/shapes";
+import { getM3ShapeSvg, getCanonicalM3ShapeSvg, getProviderShape, getCanonicalModelShape } from "../../lib/shapes";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const activateBtn = document.getElementById("activate-btn") as HTMLButtonElement;
+  const activateIcon = document.getElementById("activate-icon") as HTMLElement;
+  const activateBtnText = document.getElementById("activate-btn-text") as HTMLElement;
   const optionsLink = document.getElementById("open-options-link");
   const optionsFooterLink = document.getElementById("options-footer-link");
   const statProvider = document.getElementById("stat-provider");
   const statKey = document.getElementById("stat-key");
+  const cardWatermark = document.getElementById("popup-card-watermark");
 
   const modelTrigger = document.getElementById("popup-model-trigger") as HTMLElement;
   const modelMenu = document.getElementById("popup-model-menu") as HTMLElement;
@@ -18,13 +21,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   const config = await getLLMConfig();
   const prefs = await getUserPreferences();
 
+  // Set action button icon
+  if (activateIcon) {
+    activateIcon.innerHTML = getCanonicalM3ShapeSvg("burst", 16, "currentColor");
+  }
+
+  // Set watermark shape for active model
+  if (cardWatermark) {
+    cardWatermark.innerHTML = getCanonicalM3ShapeSvg(getCanonicalModelShape(config.model), 130, "currentColor");
+  }
+
   if (statProvider) statProvider.textContent = config.provider === "openrouter" ? "OpenRouter" : "Custom OpenAI";
 
   if (statKey) {
     if (config.apiKey || config.provider === "openai-compatible") {
-      statKey.innerHTML = `<span class="status-dot dot-green"></span>Ready`;
+      statKey.innerHTML = `<span class="m3-shape-beacon ready">${getCanonicalM3ShapeSvg("gem", 12, "currentColor")}</span><span>Ready</span>`;
     } else {
-      statKey.innerHTML = `<span class="status-dot dot-amber"></span>Missing Key`;
+      statKey.innerHTML = `<span class="m3-shape-beacon warning">${getCanonicalM3ShapeSvg("diamond", 12, "currentColor")}</span><span>Missing Key</span>`;
     }
   }
 
@@ -40,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     modelMenu.innerHTML = "";
     RECOMMENDED_MODELS.forEach((preset) => {
       const isSelected = config.model === preset.id;
-      const shapeSvg = getM3ShapeSvg(getProviderShape(preset.id), 14, "#a8c7fa");
+      const shapeSvg = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 15, "var(--m3-primary)");
       const item = document.createElement("div");
       item.className = `m3-menu-item ${isSelected ? "selected" : ""}`;
       item.setAttribute("role", "option");
@@ -61,8 +74,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       item.addEventListener("click", async () => {
         config.model = preset.id;
         await setLLMConfig({ model: preset.id });
-        const newShape = getM3ShapeSvg(getProviderShape(preset.id), 14, "#a8c7fa");
+        const newShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 15, "var(--m3-primary)");
         selectedModelLabel.innerHTML = `<span style="display:inline-flex; align-items:center; gap:6px;">${newShape} <span>${preset.name}</span></span>`;
+        if (cardWatermark) {
+          cardWatermark.innerHTML = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 130, "currentColor");
+        }
         document.querySelectorAll("#popup-model-menu .m3-menu-item").forEach((it) => {
           it.classList.remove("selected");
           it.setAttribute("aria-selected", "false");
@@ -76,7 +92,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === config.model);
-    const activeShape = getM3ShapeSvg(getProviderShape(config.model), 14, "#a8c7fa");
+    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(config.model), 15, "var(--m3-primary)");
     selectedModelLabel.innerHTML = activePreset
       ? `<span style="display:inline-flex; align-items:center; gap:6px;">${activeShape} <span>${activePreset.name}</span></span>`
       : `<span style="display:inline-flex; align-items:center; gap:6px;">${activeShape} <span>${config.model.split("/").pop() || config.model}</span></span>`;
@@ -116,7 +132,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (isRestricted && activateBtn) {
     activateBtn.disabled = true;
-    activateBtn.textContent = "Unavailable on this page";
+    if (activateBtnText) activateBtnText.textContent = "Unavailable on this page";
     activateBtn.style.opacity = "0.5";
     activateBtn.style.cursor = "not-allowed";
   }
@@ -128,7 +144,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!tab || typeof tab.id !== "number") return;
     const tabId = tab.id;
 
-    activateBtn.textContent = "Activating...";
+    if (activateIcon) {
+      activateIcon.innerHTML = getCanonicalM3ShapeSvg("sunny", 16, "currentColor", "animation: spin 1s linear infinite;");
+    }
+    if (activateBtnText) {
+      activateBtnText.textContent = "Activating...";
+    }
 
     try {
       await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
@@ -143,7 +164,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
         window.close();
       } catch {
-        activateBtn.textContent = "Cannot inspect this page";
+        if (activateBtnText) activateBtnText.textContent = "Cannot inspect this page";
         activateBtn.style.backgroundColor = "#982e3b";
       }
     }

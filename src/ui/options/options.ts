@@ -9,7 +9,13 @@ import {
 } from "../../lib/storage";
 import { testConnection } from "../../llm/gateway";
 import type { LLMProvider, UserPreferences, RecentCapture } from "../../lib/types";
-import { getM3ShapeSvg, getProviderShape } from "../../lib/shapes";
+import {
+  getM3ShapeSvg,
+  getCanonicalM3ShapeSvg,
+  getProviderShape,
+  getCanonicalModelShape,
+  getElementM3Shape
+} from "../../lib/shapes";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Tabs
@@ -110,20 +116,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       : `<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>`;
   });
 
-  // Render Preset Cards
+  // Render Preset Cards with M3 Expressive Watermark and Silhouette Badges
   function renderPresets() {
     modelPresetsContainer.innerHTML = "";
     RECOMMENDED_MODELS.forEach((preset) => {
       const isSelected = customModelInput.value === preset.id;
-      const shapeSvg = getM3ShapeSvg(getProviderShape(preset.id), 15, isSelected ? "var(--m3-on-primary)" : "var(--m3-primary)");
+      const shapeName = getCanonicalModelShape(preset.id);
+      const watermarkSvg = getCanonicalM3ShapeSvg(shapeName, 90, "currentColor");
+      const shapeSvg = getCanonicalM3ShapeSvg(shapeName, 15, isSelected ? "var(--m3-on-primary)" : "var(--m3-primary)");
       const card = document.createElement("div");
       card.className = `m3-action-card ${isSelected ? "selected" : ""}`;
       card.innerHTML = `
-        <div class="m3-card-top">
+        <div class="m3-action-card-watermark">${watermarkSvg}</div>
+        <div class="m3-card-top" style="position: relative; z-index: 1;">
           <div class="m3-card-name">${preset.name}</div>
           <div class="m3-card-badge">${shapeSvg}</div>
         </div>
-        <div class="m3-card-meta">
+        <div class="m3-card-meta" style="position: relative; z-index: 1;">
           <span class="m3-card-tag">${preset.provider}</span>
           <span>${preset.speed} • ${preset.cost}</span>
         </div>
@@ -135,12 +144,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Model Dropdown Menu
+  // Model Dropdown Menu with M3 Shapes
   function renderModelDropdown() {
     modelDropdownMenu.innerHTML = "";
     RECOMMENDED_MODELS.forEach((preset) => {
       const isSelected = customModelInput.value === preset.id;
-      const shapeSvg = getM3ShapeSvg(getProviderShape(preset.id), 16, "var(--m3-primary)");
+      const shapeName = getCanonicalModelShape(preset.id);
+      const shapeSvg = getCanonicalM3ShapeSvg(shapeName, 16, "var(--m3-primary)");
       const item = document.createElement("div");
       item.className = `m3-menu-item ${isSelected ? "selected" : ""}`;
       item.setAttribute("role", "option");
@@ -165,7 +175,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === customModelInput.value);
-    const activeShape = getM3ShapeSvg(getProviderShape(customModelInput.value), 16, "var(--m3-primary)");
+    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(customModelInput.value), 16, "var(--m3-primary)");
     selectedModelText.innerHTML = activePreset
       ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${activePreset.name} (${activePreset.provider})</span></span>`
       : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${customModelInput.value}</span></span>`;
@@ -174,7 +184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function selectModel(modelId: string, modelName: string) {
     customModelInput.value = modelId;
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === modelId);
-    const activeShape = getM3ShapeSvg(getProviderShape(modelId), 16, "var(--m3-primary)");
+    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(modelId), 16, "var(--m3-primary)");
     selectedModelText.innerHTML = activePreset
       ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${activePreset.name} (${activePreset.provider})</span></span>`
       : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${modelName}</span></span>`;
@@ -216,7 +226,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   customModelInput.addEventListener("input", () => {
     const matched = RECOMMENDED_MODELS.find((m) => m.id === customModelInput.value);
-    const activeShape = getM3ShapeSvg(getProviderShape(customModelInput.value), 16, "var(--m3-primary)");
+    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(customModelInput.value), 16, "var(--m3-primary)");
     selectedModelText.innerHTML = matched
       ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${matched.name} (${matched.provider})</span></span>`
       : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${customModelInput.value}</span></span>`;
@@ -234,9 +244,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     testBtn.disabled = true;
     testBtn.classList.add("testing");
     testBtn.innerHTML = `
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="animation: spin 1s linear infinite;">
-        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-      </svg>
+      <span class="m3-shape-beacon" style="display: inline-flex; animation: spin 1s linear infinite;">
+        ${getCanonicalM3ShapeSvg("very-sunny", 16, "currentColor")}
+      </span>
       <span>Testing...</span>
     `;
     testResultBox.className = "m3-alert";
@@ -264,17 +274,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (res.success) {
         testResultBox.className = "m3-alert m3-alert-success";
         testResultBox.innerHTML = `
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink: 0;">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
+          <span class="m3-shape-beacon ready">
+            ${getCanonicalM3ShapeSvg("gem", 18, "#78dc77")}
+          </span>
           <span>${res.message}</span>
         `;
       } else {
         testResultBox.className = "m3-alert m3-alert-error";
         testResultBox.innerHTML = `
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink: 0;">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
+          <span class="m3-shape-beacon warning">
+            ${getCanonicalM3ShapeSvg("boom", 18, "#ffb4ab")}
+          </span>
           <span>${res.message}</span>
         `;
       }
@@ -387,9 +397,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       const card = document.createElement("div");
       card.className = "m3-history-card";
       const timeStr = new Date(cap.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      const shapeName = getElementM3Shape(cap.tagName);
+      const shapeSvg = getCanonicalM3ShapeSvg(shapeName, 13, "var(--m3-primary)");
       card.innerHTML = `
         <div class="m3-history-info">
           <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="m3-history-shape" title="Element type: <${cap.tagName}>">${shapeSvg}</span>
             <span class="m3-history-tag">&lt;${cap.tagName}&gt;</span>
             <span style="font-size: 11px; color: var(--m3-text-secondary);">${cap.dimensions}</span>
             <span style="font-size: 10px; background: rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 9999px; color: var(--m3-primary); font-weight: 500;">${timeStr}</span>
@@ -398,9 +411,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
         <div class="m3-history-actions">
           <button class="m3-icon-btn copy-hist-btn" title="Copy Reproduction Prompt">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-            </svg>
+            ${getCanonicalM3ShapeSvg("diamond", 14, "currentColor")}
           </button>
         </div>
       `;
@@ -408,17 +419,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const copyBtn = card.querySelector(".copy-hist-btn") as HTMLButtonElement;
       copyBtn?.addEventListener("click", async () => {
         await navigator.clipboard.writeText(cap.reproductionPrompt || cap.cleanHtml);
-        copyBtn.innerHTML = `
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="#78dc77">
-            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-          </svg>
-        `;
+        copyBtn.innerHTML = getCanonicalM3ShapeSvg("gem", 14, "#78dc77");
         setTimeout(() => {
-          copyBtn.innerHTML = `
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-            </svg>
-          `;
+          copyBtn.innerHTML = getCanonicalM3ShapeSvg("diamond", 14, "currentColor");
         }, 1500);
       });
 
