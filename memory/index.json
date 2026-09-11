@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T10:38:12.686Z",
-  "count": 39,
+  "generatedAt": "2026-09-11T10:38:13.234Z",
+  "count": 40,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -86,6 +86,18 @@
       "commit": "chore(memory): sync memory index for advanced MUI components",
       "tags": [
         "ui",
+        "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_440dfd7_chore-sync-memory-index.md",
+      "hash": "440dfd7c62bd47d739fbace5805e59684f0c79e3",
+      "short": "440dfd7",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore: sync memory index",
+      "tags": [
         "memory"
       ]
     },
