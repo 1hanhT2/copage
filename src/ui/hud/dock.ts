@@ -1,7 +1,17 @@
 import type { InspectedElementData, PromptTarget, LLMConfig } from "../../lib/types";
 import { buildPromptForTarget } from "../../llm/prompts";
 import { streamCompletion } from "../../llm/gateway";
-import { getLLMConfig, setLLMConfig, saveRecentCapture, RECOMMENDED_MODELS, getUserPreferences } from "../../lib/storage";
+import {
+  getLLMConfig,
+  setLLMConfig,
+  saveRecentCapture,
+  RECOMMENDED_MODELS,
+  getUserPreferences,
+  isElementInLibrary,
+  saveLibraryItem,
+  createLibraryItemFromElement,
+  updateLibraryItem
+} from "../../lib/storage";
 import {
   getM3ShapeSvg,
   getCanonicalM3ShapeSvg,
@@ -30,11 +40,27 @@ export class CopageDock {
     this.onSelectBreadcrumb = callbacks.onSelectBreadcrumb;
   }
 
-  public show(data: InspectedElementData) {
+  public async show(data: InspectedElementData) {
     this.currentData = data;
     this.generatedCode = "";
     this.isStreaming = false;
     this.render();
+
+    const prefs = await getUserPreferences();
+    if (prefs.autoSaveToLibrary) {
+      const item = createLibraryItemFromElement(data);
+      await saveLibraryItem(item);
+      const saveBtn = this.container.querySelector("#copage-save-library-btn") as HTMLButtonElement;
+      if (saveBtn) {
+        saveBtn.classList.add("saved");
+        saveBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="#78dc77">
+            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+          </svg>
+          <span style="color: #78dc77; font-weight: 600;">Auto-Saved</span>
+        `;
+      }
+    }
   }
 
   public hide() {
@@ -146,6 +172,15 @@ export class CopageDock {
         reproductionPrompt: this.generatedCode
       });
 
+      // Update library item if saved
+      const existingInLib = await isElementInLibrary(this.currentData.pageUrl, this.currentData.cleanHtml);
+      if (existingInLib) {
+        await updateLibraryItem(existingInLib.id, {
+          generatedCode: this.generatedCode,
+          reproductionPrompt: this.generatedCode
+        });
+      }
+
       // Auto-copy preference check
       const prefs = await getUserPreferences();
       if (prefs.autoCopy && this.generatedCode) {
@@ -206,6 +241,12 @@ export class CopageDock {
             ${d.classList.length > 0 ? `<span class="copage-class-badge">${d.classList.slice(0, 3).join(".")}</span>` : ""}
           </div>
           <div class="copage-header-actions">
+            <button id="copage-save-library-btn" class="copage-btn-secondary copage-save-btn" title="Save selected element to Component Library">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/>
+              </svg>
+              <span class="copage-save-btn-label">Save to Library</span>
+            </button>
             <button id="copage-unlock-btn" class="copage-btn-secondary" title="Resume hover inspection (Esc)">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
                 <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>
@@ -316,6 +357,15 @@ export class CopageDock {
                     </div>
                   </div>
                 </div>
+                <div class="copage-menu-item" data-action="save-library">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="copage-action-badge">${getCanonicalM3ShapeSvg("gem", 15, "#78dc77")}</div>
+                    <div class="copage-menu-item-text">
+                      <span class="copage-menu-item-title">Save to Component Library</span>
+                      <span class="copage-menu-item-desc">Store element in local library</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -347,6 +397,50 @@ export class CopageDock {
     // Unlock button
     const unlockBtn = this.container.querySelector("#copage-unlock-btn");
     unlockBtn?.addEventListener("click", () => this.onUnlock());
+
+    // Save to Library button
+    const saveLibraryBtn = this.container.querySelector("#copage-save-library-btn") as HTMLButtonElement;
+    isElementInLibrary(d.pageUrl, d.cleanHtml).then((saved) => {
+      if (saved && saveLibraryBtn) {
+        saveLibraryBtn.classList.add("saved");
+        saveLibraryBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="#78dc77">
+            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+          </svg>
+          <span style="color: #78dc77; font-weight: 600;">Saved in Library</span>
+        `;
+      }
+    });
+
+    const triggerSaveToLibrary = async () => {
+      if (!this.currentData) return;
+      saveLibraryBtn.disabled = true;
+      const { prompt } = buildPromptForTarget(this.currentData, "cursor");
+      const item = createLibraryItemFromElement(this.currentData, {
+        generatedCode: this.generatedCode,
+        reproductionPrompt: this.generatedCode || prompt
+      });
+      await saveLibraryItem(item);
+
+      saveLibraryBtn.classList.add("saved");
+      saveLibraryBtn.disabled = false;
+      saveLibraryBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="#78dc77">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        <span style="color: #78dc77; font-weight: 600;">Saved to Library!</span>
+      `;
+      setTimeout(() => {
+        saveLibraryBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="#78dc77">
+            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+          </svg>
+          <span style="color: #78dc77; font-weight: 600;">Saved in Library</span>
+        `;
+      }, 1600);
+    };
+
+    saveLibraryBtn?.addEventListener("click", triggerSaveToLibrary);
 
     // Breadcrumb clicks
     this.container.querySelectorAll(".copage-bc-btn").forEach((btn) => {
@@ -492,6 +586,8 @@ export class CopageDock {
         } else if (action === "copy-svgs") {
           const svgs = this.currentData.svgAssets.map((s, i) => `<!-- SVG Asset ${i + 1} (${s.suggestedLucideIcon || "icon"}) -->\n${s.svgString}`).join("\n\n");
           this.copyToClipboard(svgs || "No SVGs found in this element.", splitArrow, "SVGs Copied!");
+        } else if (action === "save-library") {
+          triggerSaveToLibrary();
         }
       });
     });

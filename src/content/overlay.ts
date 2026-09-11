@@ -677,6 +677,22 @@ export class InspectorOverlay {
       .copage-btn-secondary:active {
         animation: copageJelly 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
+      .copage-btn-secondary.copage-save-btn {
+        background: rgba(168, 199, 250, 0.08);
+        border-color: rgba(168, 199, 250, 0.4);
+      }
+      .copage-btn-secondary.copage-save-btn:hover {
+        background: rgba(168, 199, 250, 0.18);
+        border-color: #a8c7fa;
+      }
+      .copage-btn-secondary.copage-save-btn.saved {
+        background: rgba(120, 220, 119, 0.16);
+        border-color: #78dc77;
+        color: #78dc77;
+      }
+      .copage-btn-secondary.copage-save-btn.saved:hover {
+        background: rgba(120, 220, 119, 0.24);
+      }
 
       .copage-code-preview-wrap {
         display: flex;

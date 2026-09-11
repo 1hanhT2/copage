@@ -65,6 +65,7 @@ export interface UserPreferences {
   autoCopy: boolean;
   deepShadow: boolean;
   frameworkTarget: "react" | "vue" | "svelte" | "html";
+  autoSaveToLibrary?: boolean;
 }
 
 export interface LLMConfig {
@@ -87,7 +88,11 @@ export type MessageType =
   | "INSPECTOR_STATE_CHANGED"
   | "ELEMENT_SELECTED"
   | "GET_INSPECTOR_STATE"
-  | "SAVE_CAPTURE";
+  | "SAVE_CAPTURE"
+  | "SAVE_TO_LIBRARY"
+  | "GET_LIBRARY_ITEMS"
+  | "LIBRARY_UPDATED"
+  | "OPEN_LIBRARY";
 
 export interface ExtensionMessage<T = unknown> {
   type: MessageType;
@@ -105,3 +110,25 @@ export interface RecentCapture {
   cleanHtml: string;
   reproductionPrompt: string;
 }
+
+export interface LibraryItem {
+  id: string;
+  timestamp: number;
+  url: string;
+  pageTitle: string;
+  name: string;
+  tagName: string;
+  classList: string[];
+  dimensions: string;
+  summary: string;
+  cleanHtml: string;
+  distilledStyles?: DistilledStyles;
+  tailwindClasses?: string[];
+  svgAssets?: SvgAsset[];
+  reproductionPrompt?: string;
+  generatedCode?: string;
+  tags: string[];
+  notes?: string;
+  favorite?: boolean;
+}
+

@@ -700,6 +700,413 @@
       background-color: var(--m3-primary);
     }
 
+    /* Component Library & History Styles */
+    .m3-chip-count {
+      font-size: 10px;
+      font-weight: 700;
+      background-color: rgba(168, 199, 250, 0.2);
+      color: var(--m3-primary);
+      padding: 2px 7px;
+      border-radius: 9999px;
+      margin-left: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .m3-tab.active .m3-chip-count {
+      background-color: var(--m3-primary);
+      color: var(--m3-on-primary);
+    }
+    .m3-lib-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .m3-lib-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .m3-btn-outlined.danger {
+      border-color: rgba(255, 180, 171, 0.4);
+      color: var(--m3-error);
+    }
+    .m3-btn-outlined.danger:hover {
+      background-color: var(--m3-error-bg);
+      border-color: var(--m3-error);
+    }
+    .m3-library-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .m3-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border);
+      border-radius: 9999px;
+      padding: 8px 16px;
+      flex: 1;
+      min-width: 260px;
+      color: var(--m3-text-secondary);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .m3-search-bar:focus-within {
+      border-color: var(--m3-primary);
+      box-shadow: 0 0 0 1px var(--m3-primary);
+      color: var(--m3-primary);
+    }
+    .m3-search-bar input {
+      background: transparent;
+      border: none;
+      color: var(--m3-text-primary);
+      font-size: 12.5px;
+      font-family: inherit;
+      width: 100%;
+      outline: none;
+    }
+    .m3-search-bar input::placeholder {
+      color: var(--m3-text-disabled);
+    }
+    .m3-lib-sort-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .m3-lib-sort-label {
+      font-size: 11.5px;
+      color: var(--m3-text-secondary);
+    }
+    .m3-select-compact {
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border);
+      border-radius: 9999px;
+      color: var(--m3-text-primary);
+      padding: 6px 14px;
+      font-size: 11.5px;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+    }
+    .m3-select-compact:focus {
+      border-color: var(--m3-primary);
+    }
+    .m3-tag-filters {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .m3-tag-filter-chip {
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border);
+      border-radius: 9999px;
+      color: var(--m3-text-secondary);
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.2s var(--m3-spring), background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .m3-tag-filter-chip:hover {
+      background-color: rgba(168, 199, 250, 0.12);
+      color: var(--m3-text-primary);
+      transform: translateY(-1px);
+    }
+    .m3-tag-filter-chip.active {
+      background-color: var(--m3-primary-container);
+      border-color: var(--m3-primary);
+      color: var(--m3-on-primary-container);
+      font-weight: 600;
+    }
+    .m3-library-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .m3-lib-card {
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border);
+      border-radius: 22px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      transition: transform 0.2s var(--m3-spring), border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .m3-lib-card:hover {
+      border-color: rgba(168, 199, 250, 0.35);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      transform: translateY(-2px);
+    }
+    .m3-lib-card.favorite {
+      border-left: 3px solid #ffdf99;
+    }
+    .m3-lib-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .m3-lib-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 220px;
+    }
+    .m3-lib-shape-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px 6px 10px 6px;
+      background: rgba(168, 199, 250, 0.14);
+      color: var(--m3-primary);
+      flex-shrink: 0;
+    }
+    .m3-lib-title-edit {
+      font-family: 'Lexend', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--m3-text-primary);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 3px 8px;
+      outline: none;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+      cursor: text;
+    }
+    .m3-lib-title-edit:hover {
+      border-color: var(--m3-border);
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+    .m3-lib-title-edit:focus {
+      border-color: var(--m3-primary);
+      background-color: var(--m3-surface);
+      box-shadow: 0 0 0 1px var(--m3-primary);
+    }
+    .m3-lib-meta-tags {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .m3-lib-dim-chip {
+      font-size: 10.5px;
+      font-family: 'JetBrains Mono', monospace;
+      background-color: rgba(255, 223, 153, 0.12);
+      color: var(--m3-warning);
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+    .m3-lib-tag-chip {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--m3-primary);
+      background-color: rgba(168, 199, 250, 0.12);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+    .m3-lib-date {
+      font-size: 10.5px;
+      color: var(--m3-text-secondary);
+    }
+    .m3-lib-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .m3-star-btn {
+      color: var(--m3-text-secondary);
+      transition: color 0.15s ease, transform 0.2s var(--m3-spring);
+    }
+    .m3-star-btn:hover {
+      transform: scale(1.15);
+      color: #ffdf99;
+    }
+    .m3-star-btn.favorited {
+      color: #ffdf99;
+    }
+    .m3-lib-source-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--m3-text-secondary);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .m3-lib-link {
+      color: var(--m3-secondary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      max-width: 480px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .m3-lib-link:hover {
+      text-decoration: underline;
+      color: var(--m3-primary);
+    }
+    .m3-lib-tags-list {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .m3-badge-pill {
+      font-size: 10.5px;
+      background-color: rgba(255, 255, 255, 0.08);
+      color: var(--m3-text-primary);
+      padding: 2px 9px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .m3-badge-pill .tag-remove-btn {
+      cursor: pointer;
+      opacity: 0.6;
+      border: none;
+      background: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+      padding: 0;
+    }
+    .m3-badge-pill .tag-remove-btn:hover {
+      opacity: 1;
+      color: var(--m3-error);
+    }
+    .m3-add-tag-btn {
+      font-size: 10px;
+      border: 1px dashed var(--m3-border);
+      background: transparent;
+      color: var(--m3-text-secondary);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    .m3-add-tag-btn:hover {
+      border-color: var(--m3-primary);
+      color: var(--m3-primary);
+    }
+    .m3-lib-notes-row {
+      font-size: 11.5px;
+      color: var(--m3-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .m3-lib-notes-input {
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: var(--m3-text-secondary);
+      font-size: 11.5px;
+      font-family: inherit;
+      padding: 2px 6px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+    }
+    .m3-lib-notes-input:hover {
+      border-color: var(--m3-border);
+      background-color: rgba(255, 255, 255, 0.04);
+      color: var(--m3-text-primary);
+    }
+    .m3-lib-notes-input:focus {
+      border-color: var(--m3-primary);
+      background-color: var(--m3-surface);
+      color: var(--m3-text-primary);
+    }
+    .m3-lib-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--m3-border);
+      flex-wrap: wrap;
+    }
+    .m3-lib-button-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .m3-lib-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--m3-border);
+      color: var(--m3-text-primary);
+      font-size: 11px;
+      font-family: inherit;
+      padding: 4px 11px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.2s var(--m3-spring);
+    }
+    .m3-lib-btn:hover {
+      background-color: rgba(168, 199, 250, 0.16);
+      border-color: var(--m3-primary);
+      transform: translateY(-1px);
+    }
+    .m3-lib-btn.primary {
+      background-color: var(--m3-primary);
+      color: var(--m3-on-primary);
+      border: none;
+      font-weight: 600;
+    }
+    .m3-lib-btn.primary:hover {
+      background-color: #7cacf8;
+    }
+    .m3-lib-drawer {
+      display: none;
+      margin-top: 6px;
+      background-color: #0f0f12;
+      border: 1px solid var(--m3-border);
+      border-radius: 16px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.88);
+      max-height: 240px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    .m3-lib-drawer.open {
+      display: block;
+      animation: m3MenuSpring 0.25s var(--m3-spring);
+    }
+
     /* History capture cards */
     .m3-history-list {
       display: flex;
@@ -707,6 +1114,7 @@
       gap: 12px;
       margin-top: 14px;
     }
+
     .m3-history-empty {
       padding: 40px 16px;
       text-align: center;
@@ -969,11 +1377,12 @@
         </svg>
         <span>Engine &amp; Extraction</span>
       </button>
-      <button class="m3-tab" data-tab="history" role="tab" aria-selected="false">
+      <button class="m3-tab" data-tab="library" id="tab-btn-library" role="tab" aria-selected="false">
         <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
-          <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+          <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/>
         </svg>
-        <span>Recent Captures</span>
+        <span>Component Library</span>
+        <span class="m3-chip-count" id="library-tab-count">0</span>
       </button>
     </nav>
 
@@ -1145,6 +1554,17 @@
         </div>
       </label>
 
+      <label class="m3-switch-row" for="switch-auto-library">
+        <div class="m3-switch-label-wrap">
+          <span class="m3-switch-title">Auto-Save Selected Elements to Library</span>
+          <span class="m3-switch-desc">Automatically save every element you select and lock in the inspector directly into your local Component Library.</span>
+        </div>
+        <div class="m3-switch">
+          <input type="checkbox" id="switch-auto-library" />
+          <span class="m3-switch-track"><span class="m3-switch-thumb"></span></span>
+        </div>
+      </label>
+
       <div class="m3-actions-bar">
         <button id="save-prefs-btn" class="m3-btn-contained">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
@@ -1155,21 +1575,67 @@
       </div>
     </div>
 
-    <!-- Tab 3: Recent Captures History -->
-    <div id="tab-history" class="m3-tab-panel">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-        <div class="m3-section-title" style="margin-bottom: 0;">Captured Elements (Local Storage)</div>
-        <button id="clear-history-btn" class="m3-btn-outlined" style="font-size: 11px; padding: 5px 14px;">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-          </svg>
-          <span>Clear History</span>
-        </button>
+    <!-- Tab 3: Component Library -->
+    <div id="tab-library" class="m3-tab-panel">
+      <!-- Top header with actions -->
+      <div class="m3-lib-topbar">
+        <div>
+          <div class="m3-section-title" style="margin-bottom: 2px;">Saved Component Library</div>
+          <p class="m3-helper-text" style="margin-bottom: 0;">Inspected UI components saved locally with clean HTML, styles, SVGs, and synthesized code.</p>
+        </div>
+        <div class="m3-lib-top-actions">
+          <input type="file" id="library-import-file" accept=".json" style="display: none;" />
+          <button id="import-library-btn" class="m3-btn-outlined" style="font-size: 11.5px; padding: 6px 14px;" title="Import components from JSON">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+              <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/>
+            </svg>
+            <span>Import JSON</span>
+          </button>
+          <button id="export-library-btn" class="m3-btn-outlined" style="font-size: 11.5px; padding: 6px 14px;" title="Export entire library as JSON">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            <span>Export JSON</span>
+          </button>
+          <button id="clear-library-btn" class="m3-btn-outlined danger" style="font-size: 11.5px; padding: 6px 14px;" title="Clear all components in library">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+            </svg>
+            <span>Clear Library</span>
+          </button>
+        </div>
       </div>
-      <div id="history-container" class="m3-history-list">
+
+      <!-- Search, Filter & Sort Toolbar -->
+      <div class="m3-library-toolbar">
+        <div class="m3-search-bar">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+          <input type="text" id="library-search-input" placeholder="Search saved components by name, tag, class, or URL..." />
+        </div>
+        <div class="m3-lib-sort-wrap">
+          <label for="library-sort-select" class="m3-lib-sort-label">Sort:</label>
+          <select id="library-sort-select" class="m3-select-compact">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="name">Name A-Z</option>
+            <option value="favorites">Favorites first</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tag Filter Pills Bar -->
+      <div class="m3-tag-filters" id="library-tag-filters">
+        <!-- Injected via options.ts -->
+      </div>
+
+      <!-- Library Items Container -->
+      <div id="library-container" class="m3-library-list">
         <!-- Rendered via options.ts -->
       </div>
     </div>
+
 
     <div class="m3-security-banner">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">

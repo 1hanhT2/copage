@@ -5,10 +5,18 @@ import {
   getUserPreferences,
   setUserPreferences,
   getRecentCaptures,
-  clearRecentCaptures
+  clearRecentCaptures,
+  getLibraryItems,
+  saveLibraryItem,
+  deleteLibraryItem,
+  updateLibraryItem,
+  toggleFavoriteLibraryItem,
+  clearLibrary,
+  exportLibraryJson,
+  importLibraryJson
 } from "../../lib/storage";
 import { testConnection } from "../../llm/gateway";
-import type { LLMProvider, UserPreferences, RecentCapture } from "../../lib/types";
+import type { LLMProvider, UserPreferences, RecentCapture, LibraryItem } from "../../lib/types";
 import {
   getM3ShapeSvg,
   getCanonicalM3ShapeSvg,
@@ -26,25 +34,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tabButtons = document.querySelectorAll<HTMLButtonElement>(".m3-tab");
   const tabPanels = document.querySelectorAll<HTMLElement>(".m3-tab-panel");
 
+  function activateTab(tabName: string) {
+    tabButtons.forEach((b) => {
+      const match = b.dataset.tab === tabName || (tabName === "library" && b.dataset.tab === "history");
+      b.classList.toggle("active", match);
+      b.setAttribute("aria-selected", match ? "true" : "false");
+    });
+    tabPanels.forEach((p) => {
+      const match = p.id === `tab-${tabName}` || (tabName === "library" && (p.id === "tab-library" || p.id === "tab-history"));
+      p.classList.toggle("active", match);
+    });
+
+    if (tabName === "library" || tabName === "history") {
+      renderLibrary();
+    }
+  }
+
   tabButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const targetTab = btn.dataset.tab;
-      tabButtons.forEach((b) => {
-        b.classList.remove("active");
-        b.setAttribute("aria-selected", "false");
-      });
-      tabPanels.forEach((p) => p.classList.remove("active"));
-
-      btn.classList.add("active");
-      btn.setAttribute("aria-selected", "true");
-      const targetPanel = document.getElementById(`tab-${targetTab}`);
-      if (targetPanel) targetPanel.classList.add("active");
-
-      if (targetTab === "history") {
-        renderHistory();
-      }
+      const targetTab = btn.dataset.tab || "inference";
+      activateTab(targetTab);
     });
   });
+
+  if (window.location.hash === "#library" || window.location.hash === "#history") {
+    activateTab("library");
+  }
 
   // Tab 1: Inference & Provider Form Elements
   const providerToggleGroup = document.getElementById("provider-toggle-group") as HTMLElement;
@@ -367,6 +382,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   switchSvg.checked = prefs.extractSvgs;
   switchDeepShadow.checked = prefs.deepShadow;
   switchAutoCopy.checked = prefs.autoCopy;
+  const switchAutoLibrary = document.getElementById("switch-auto-library") as HTMLInputElement;
+  if (switchAutoLibrary) {
+    switchAutoLibrary.checked = !!prefs.autoSaveToLibrary;
+  }
 
   let activeFramework = prefs.frameworkTarget || "react";
   frameworkToggleGroup.querySelectorAll(".m3-toggle-button").forEach((btn) => {
@@ -387,6 +406,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       extractSvgs: switchSvg.checked,
       deepShadow: switchDeepShadow.checked,
       autoCopy: switchAutoCopy.checked,
+      autoSaveToLibrary: switchAutoLibrary ? switchAutoLibrary.checked : false,
       frameworkTarget: activeFramework
     });
 
@@ -411,60 +431,423 @@ document.addEventListener("DOMContentLoaded", async () => {
     }, 1600);
   });
 
-  // Tab 3: History renderer
-  async function renderHistory() {
-    const captures = await getRecentCaptures();
-    if (captures.length === 0) {
-      historyContainer.innerHTML = `
-        <div class="m3-history-empty">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="rgba(255,255,255,0.25)" style="margin-bottom: 8px;">
-            <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+  // Tab 3: Component Library State & Elements
+  let searchQuery = "";
+  let activeTagFilter = "all";
+  let activeSort = "newest";
+
+  const libraryContainer = (document.getElementById("library-container") || document.getElementById("history-container")) as HTMLElement;
+  const libraryTabCount = document.getElementById("library-tab-count") as HTMLElement;
+  const librarySearchInput = document.getElementById("library-search-input") as HTMLInputElement;
+  const librarySortSelect = document.getElementById("library-sort-select") as HTMLSelectElement;
+  const libraryTagFilters = document.getElementById("library-tag-filters") as HTMLElement;
+  const exportLibraryBtn = document.getElementById("export-library-btn") as HTMLButtonElement;
+  const importLibraryBtn = document.getElementById("import-library-btn") as HTMLButtonElement;
+  const importFileInput = document.getElementById("library-import-file") as HTMLInputElement;
+  const clearLibraryBtn = (document.getElementById("clear-library-btn") || document.getElementById("clear-history-btn")) as HTMLButtonElement;
+
+  function copyTextToClipboard(text: string, button?: HTMLElement, successLabel?: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (button && successLabel) {
+        const originalHtml = button.innerHTML;
+        button.innerHTML = `
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="#78dc77">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
           </svg>
-          <div>No elements captured yet. Inspect elements with <code>Alt+C</code> to populate history.</div>
-        </div>
-      `;
-      return;
-    }
-
-    historyContainer.innerHTML = "";
-    captures.forEach((cap: RecentCapture) => {
-      const card = document.createElement("div");
-      card.className = "m3-history-card";
-      const timeStr = new Date(cap.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-      const shapeName = getElementM3Shape(cap.tagName);
-      const shapeSvg = getCanonicalM3ShapeSvg(shapeName, 13, "var(--m3-primary)");
-      card.innerHTML = `
-        <div class="m3-history-info">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="m3-history-shape" title="Element type: <${cap.tagName}>">${shapeSvg}</span>
-            <span class="m3-history-tag">&lt;${cap.tagName}&gt;</span>
-            <span style="font-size: 11px; color: var(--m3-text-secondary);">${cap.dimensions}</span>
-            <span style="font-size: 10px; background: rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 9999px; color: var(--m3-primary); font-weight: 500;">${timeStr}</span>
-          </div>
-          <div class="m3-history-meta">${cap.title || cap.url}</div>
-        </div>
-        <div class="m3-history-actions">
-          <button class="m3-icon-btn copy-hist-btn" title="Copy Reproduction Prompt">
-            ${getCanonicalM3ShapeSvg("diamond", 14, "currentColor")}
-          </button>
-        </div>
-      `;
-
-      const copyBtn = card.querySelector(".copy-hist-btn") as HTMLButtonElement;
-      copyBtn?.addEventListener("click", async () => {
-        await navigator.clipboard.writeText(cap.reproductionPrompt || cap.cleanHtml);
-        copyBtn.innerHTML = getCanonicalM3ShapeSvg("gem", 14, "#78dc77");
+          <span style="color: #78dc77;">${successLabel}</span>
+        `;
         setTimeout(() => {
-          copyBtn.innerHTML = getCanonicalM3ShapeSvg("diamond", 14, "currentColor");
+          button.innerHTML = originalHtml;
         }, 1500);
-      });
-
-      historyContainer.appendChild(card);
+      }
     });
   }
 
-  clearHistoryBtn?.addEventListener("click", async () => {
-    await clearRecentCaptures();
-    renderHistory();
+  async function updateTabBadge() {
+    const items = await getLibraryItems();
+    if (libraryTabCount) {
+      libraryTabCount.textContent = String(items.length);
+      libraryTabCount.style.display = items.length > 0 ? "inline-block" : "none";
+    }
+  }
+
+  // Initial tab count badge sync
+  updateTabBadge();
+
+  // Component Library Renderer
+  async function renderLibrary() {
+    await updateTabBadge();
+    const allItems = await getLibraryItems();
+
+    if (allItems.length === 0) {
+      if (libraryContainer) {
+        libraryContainer.innerHTML = `
+          <div class="m3-history-empty">
+            <div style="display: flex; justify-content: center; margin-bottom: 14px;">
+              <div class="m3-lib-shape-badge" style="width: 44px; height: 44px;">
+                ${getCanonicalM3ShapeSvg("gem", 22, "#a8c7fa")}
+              </div>
+            </div>
+            <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px; color: var(--m3-text-primary);">
+              Your Component Library is Empty
+            </div>
+            <p style="max-width: 440px; margin: 0 auto; line-height: 1.5; color: var(--m3-text-secondary); font-size: 12px;">
+              Inspect elements on any webpage using <kbd>Alt + C</kbd>, then click <strong>"Save to Library"</strong> in the floating inspection dock.
+            </p>
+          </div>
+        `;
+      }
+      if (libraryTagFilters) libraryTagFilters.innerHTML = "";
+      return;
+    }
+
+    // Collect all tags across library items
+    const tagSet = new Set<string>();
+    allItems.forEach((it) => {
+      (it.tags || []).forEach((t) => tagSet.add(t));
+    });
+
+    // Render tag filter chips
+    if (libraryTagFilters) {
+      libraryTagFilters.innerHTML = "";
+
+      const createTagChip = (label: string, value: string) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = `m3-tag-filter-chip ${activeTagFilter === value ? "active" : ""}`;
+        chip.textContent = label;
+        chip.addEventListener("click", () => {
+          activeTagFilter = value;
+          renderLibrary();
+        });
+        return chip;
+      };
+
+      libraryTagFilters.appendChild(createTagChip(`All (${allItems.length})`, "all"));
+      const favCount = allItems.filter((it) => it.favorite).length;
+      if (favCount > 0) {
+        libraryTagFilters.appendChild(createTagChip(`Favorites (${favCount})`, "favorites"));
+      }
+
+      Array.from(tagSet).sort().forEach((tag) => {
+        const count = allItems.filter((it) => it.tags && it.tags.includes(tag)).length;
+        libraryTagFilters.appendChild(createTagChip(`${tag} (${count})`, tag));
+      });
+    }
+
+    // Filter items
+    const filtered = allItems.filter((item) => {
+      if (activeTagFilter === "favorites") {
+        if (!item.favorite) return false;
+      } else if (activeTagFilter !== "all") {
+        if (!item.tags || !item.tags.includes(activeTagFilter)) return false;
+      }
+
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchesName = (item.name || "").toLowerCase().includes(q);
+        const matchesTag = (item.tagName || "").toLowerCase().includes(q);
+        const matchesClass = (item.classList || []).some((c) => c.toLowerCase().includes(q));
+        const matchesUrl = (item.url || "").toLowerCase().includes(q) || (item.pageTitle || "").toLowerCase().includes(q);
+        const matchesNotes = (item.notes || "").toLowerCase().includes(q);
+        const matchesHtml = (item.cleanHtml || "").toLowerCase().includes(q);
+        const matchesTags = (item.tags || []).some((t) => t.toLowerCase().includes(q));
+        if (!matchesName && !matchesTag && !matchesClass && !matchesUrl && !matchesNotes && !matchesHtml && !matchesTags) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    // Sort items
+    if (activeSort === "newest") {
+      filtered.sort((a, b) => b.timestamp - a.timestamp);
+    } else if (activeSort === "oldest") {
+      filtered.sort((a, b) => a.timestamp - b.timestamp);
+    } else if (activeSort === "name") {
+      filtered.sort((a, b) => (a.name || a.tagName).localeCompare(b.name || b.tagName));
+    } else if (activeSort === "favorites") {
+      filtered.sort((a, b) => (b.favorite ? 1 : 0) - (a.favorite ? 1 : 0) || b.timestamp - a.timestamp);
+    }
+
+    if (filtered.length === 0) {
+      if (libraryContainer) {
+        libraryContainer.innerHTML = `
+          <div class="m3-history-empty">
+            <div style="color: var(--m3-text-secondary); font-size: 13px;">No components match your search and filter criteria.</div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    if (libraryContainer) {
+      libraryContainer.innerHTML = "";
+
+      filtered.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = `m3-lib-card ${item.favorite ? "favorite" : ""}`;
+
+        const timeStr = new Date(item.timestamp).toLocaleDateString([], {
+          month: "short",
+          day: "numeric"
+        }) + " • " + new Date(item.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+        const shapeName = getElementM3Shape(item.tagName);
+        const shapeSvg = getCanonicalM3ShapeSvg(shapeName, 16, "var(--m3-primary)");
+
+        const starSvg = item.favorite
+          ? `<svg viewBox="0 0 24 24" width="16" height="16" fill="#ffdf99"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`
+          : `<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>`;
+
+        const tagsHtml = (item.tags || [])
+          .map(
+            (t) => `
+            <span class="m3-badge-pill" data-tag="${t}">
+              <span>${t}</span>
+              <button class="tag-remove-btn" title="Remove tag">&times;</button>
+            </span>
+          `
+          )
+          .join("");
+
+        card.innerHTML = `
+          <div class="m3-lib-header-row">
+            <div class="m3-lib-title-group">
+              <span class="m3-lib-shape-badge" title="Element type: <${item.tagName}>">${shapeSvg}</span>
+              <input type="text" class="m3-lib-title-edit" value="${item.name || item.tagName}" title="Click to rename component" />
+              <span class="m3-lib-tag-chip">&lt;${item.tagName}&gt;</span>
+              <span class="m3-lib-dim-chip">${item.dimensions}</span>
+            </div>
+            <div class="m3-lib-controls">
+              <span class="m3-lib-date">${timeStr}</span>
+              <button class="m3-icon-btn m3-star-btn ${item.favorite ? "favorited" : ""}" title="${item.favorite ? "Unfavorite" : "Mark as favorite"}">
+                ${starSvg}
+              </button>
+              <button class="m3-icon-btn m3-del-btn" title="Delete from library">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="m3-lib-source-row">
+            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="m3-lib-link" title="${item.url}">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+              </svg>
+              <span>${item.pageTitle || item.url}</span>
+            </a>
+            <div class="m3-lib-tags-list">
+              ${tagsHtml}
+              <button class="m3-add-tag-btn" title="Add tag">+ Tag</button>
+            </div>
+          </div>
+
+          <div class="m3-lib-notes-row">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="rgba(255,255,255,0.4)" style="flex-shrink:0;">
+              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+            </svg>
+            <input type="text" class="m3-lib-notes-input" placeholder="+ Add a note..." value="${item.notes || ""}" />
+          </div>
+
+          <div class="m3-lib-actions-row">
+            <div class="m3-lib-button-group">
+              <button class="m3-lib-btn primary copy-code-btn" title="Copy React component or AI prompt">
+                ${getCanonicalM3ShapeSvg("gem", 12, "currentColor")}
+                <span>${item.generatedCode ? "Copy React TSX" : "Copy Prompt"}</span>
+              </button>
+              <button class="m3-lib-btn copy-html-btn" title="Copy clean sanitized HTML">
+                ${getCanonicalM3ShapeSvg("arch", 12, "currentColor")}
+                <span>HTML</span>
+              </button>
+              <button class="m3-lib-btn copy-tw-btn" title="Copy mapped Tailwind utilities">
+                ${getCanonicalM3ShapeSvg("diamond", 12, "currentColor")}
+                <span>Tailwind</span>
+              </button>
+              <button class="m3-lib-btn copy-css-btn" title="Copy computed CSS styles">
+                ${getCanonicalM3ShapeSvg("flower", 12, "currentColor")}
+                <span>CSS</span>
+              </button>
+            </div>
+            <button class="m3-lib-btn toggle-drawer-btn" title="Inspect clean HTML and code details">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3 3-3-3z"/>
+              </svg>
+              <span>Preview</span>
+            </button>
+          </div>
+
+          <pre class="m3-lib-drawer">${item.generatedCode || item.cleanHtml}</pre>
+        `;
+
+        // Rename title
+        const titleInput = card.querySelector(".m3-lib-title-edit") as HTMLInputElement;
+        titleInput?.addEventListener("change", async () => {
+          const newName = titleInput.value.trim() || item.tagName;
+          await updateLibraryItem(item.id, { name: newName });
+          item.name = newName;
+        });
+
+        // Notes
+        const notesInput = card.querySelector(".m3-lib-notes-input") as HTMLInputElement;
+        notesInput?.addEventListener("change", async () => {
+          const newNotes = notesInput.value.trim();
+          await updateLibraryItem(item.id, { notes: newNotes });
+          item.notes = newNotes;
+        });
+
+        // Favorite toggle
+        const starBtn = card.querySelector(".m3-star-btn") as HTMLButtonElement;
+        starBtn?.addEventListener("click", async () => {
+          const updated = await toggleFavoriteLibraryItem(item.id);
+          const refreshed = updated.find((it) => it.id === item.id);
+          if (refreshed) {
+            item.favorite = refreshed.favorite;
+          }
+          renderLibrary();
+        });
+
+        // Delete item
+        const delBtn = card.querySelector(".m3-del-btn") as HTMLButtonElement;
+        delBtn?.addEventListener("click", async () => {
+          await deleteLibraryItem(item.id);
+          card.style.opacity = "0";
+          card.style.transform = "scale(0.95)";
+          setTimeout(() => {
+            renderLibrary();
+          }, 180);
+        });
+
+        // Remove tag
+        card.querySelectorAll(".tag-remove-btn").forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            const pill = (e.currentTarget as HTMLElement).closest(".m3-badge-pill") as HTMLElement;
+            const tag = pill?.dataset.tag;
+            if (tag) {
+              const nextTags = (item.tags || []).filter((t) => t !== tag);
+              await updateLibraryItem(item.id, { tags: nextTags });
+              item.tags = nextTags;
+              renderLibrary();
+            }
+          });
+        });
+
+        // Add tag
+        const addTagBtn = card.querySelector(".m3-add-tag-btn") as HTMLButtonElement;
+        addTagBtn?.addEventListener("click", async () => {
+          const newTag = prompt("Enter a tag for this component (e.g. Navigation, Hero, Modal):");
+          if (newTag && newTag.trim()) {
+            const formatted = newTag.trim().charAt(0).toUpperCase() + newTag.trim().slice(1);
+            const nextTags = Array.from(new Set([...(item.tags || []), formatted]));
+            await updateLibraryItem(item.id, { tags: nextTags });
+            item.tags = nextTags;
+            renderLibrary();
+          }
+        });
+
+        // Copy Code / Prompt
+        const copyCodeBtn = card.querySelector(".copy-code-btn") as HTMLElement;
+        copyCodeBtn?.addEventListener("click", () => {
+          const text = item.generatedCode || item.reproductionPrompt || item.cleanHtml;
+          copyTextToClipboard(text, copyCodeBtn, "Copied!");
+        });
+
+        // Copy HTML
+        const copyHtmlBtn = card.querySelector(".copy-html-btn") as HTMLElement;
+        copyHtmlBtn?.addEventListener("click", () => {
+          copyTextToClipboard(item.cleanHtml, copyHtmlBtn, "HTML Copied!");
+        });
+
+        // Copy Tailwind
+        const copyTwBtn = card.querySelector(".copy-tw-btn") as HTMLElement;
+        copyTwBtn?.addEventListener("click", () => {
+          const tw = item.tailwindClasses && item.tailwindClasses.length > 0
+            ? item.tailwindClasses.join(" ")
+            : "No tailwind classes mapped.";
+          copyTextToClipboard(tw, copyTwBtn, "TW Copied!");
+        });
+
+        // Copy CSS
+        const copyCssBtn = card.querySelector(".copy-css-btn") as HTMLElement;
+        copyCssBtn?.addEventListener("click", () => {
+          let css = "";
+          if (item.distilledStyles) {
+            css = Object.entries(item.distilledStyles)
+              .map(([group, styles]) => `/* ${group} */\n` + Object.entries(styles).map(([k, v]) => `  ${k}: ${v};`).join("\n"))
+              .join("\n\n");
+          } else {
+            css = "/* No computed styles recorded */";
+          }
+          copyTextToClipboard(css, copyCssBtn, "CSS Copied!");
+        });
+
+        // Toggle drawer
+        const drawerBtn = card.querySelector(".toggle-drawer-btn") as HTMLElement;
+        const drawer = card.querySelector(".m3-lib-drawer") as HTMLElement;
+        drawerBtn?.addEventListener("click", () => {
+          const isOpen = drawer.classList.toggle("open");
+          drawerBtn.classList.toggle("active", isOpen);
+        });
+
+        libraryContainer.appendChild(card);
+      });
+    }
+  }
+
+  // Toolbar Event Listeners
+  librarySearchInput?.addEventListener("input", () => {
+    searchQuery = librarySearchInput.value;
+    renderLibrary();
+  });
+
+  librarySortSelect?.addEventListener("change", () => {
+    activeSort = librarySortSelect.value;
+    renderLibrary();
+  });
+
+  exportLibraryBtn?.addEventListener("click", async () => {
+    const jsonStr = await exportLibraryJson();
+    const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `copage-library-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  importLibraryBtn?.addEventListener("click", () => {
+    if (importFileInput) {
+      importFileInput.value = "";
+      importFileInput.click();
+    }
+  });
+
+  importFileInput?.addEventListener("change", async () => {
+    const file = importFileInput.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const res = await importLibraryJson(text);
+      alert(`Successfully imported ${res.added} component(s) into your library.`);
+      renderLibrary();
+    } catch (err) {
+      alert("Failed to import library: " + (err instanceof Error ? err.message : String(err)));
+    }
+  });
+
+  clearLibraryBtn?.addEventListener("click", async () => {
+    if (confirm("Are you sure you want to clear all saved components in your library? This action cannot be undone.")) {
+      await clearLibrary();
+      await clearRecentCaptures();
+      renderLibrary();
+    }
   });
 });
+

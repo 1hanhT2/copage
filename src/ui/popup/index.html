@@ -599,11 +599,27 @@
         <span class="m3-switch-track"><span class="m3-switch-thumb"></span></span>
       </label>
     </div>
+    <div class="m3-card-row" style="cursor: pointer; padding-top: 6px; border-top: 1px solid var(--m3-border);" id="popup-library-row" title="Open Component Library">
+      <span class="m3-card-label" style="display: flex; align-items: center; gap: 6px;">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--m3-primary)">
+          <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/>
+        </svg>
+        <span>Library</span>
+      </span>
+      <span id="popup-library-count" class="m3-card-value">
+        <span class="m3-chip-version" style="font-size: 10px; padding: 2px 7px;">0 items</span>
+      </span>
+    </div>
   </div>
 
   <!-- Footer Links -->
   <footer class="m3-footer">
-    <span>BYOK Client-Side</span>
+    <a href="#" id="open-library-link" class="m3-link" title="Open Component Library">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+        <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/>
+      </svg>
+      <span>Library</span>
+    </a>
     <a href="#" id="options-footer-link" class="m3-link">All Settings</a>
   </footer>
 

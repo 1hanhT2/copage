@@ -1,4 +1,4 @@
-import { getLLMConfig, setLLMConfig, RECOMMENDED_MODELS, getUserPreferences, setUserPreferences } from "../../lib/storage";
+import { getLLMConfig, setLLMConfig, RECOMMENDED_MODELS, getUserPreferences, setUserPreferences, getLibraryItems } from "../../lib/storage";
 import type { ExtensionMessage } from "../../lib/types";
 import {
   getM3ShapeSvg,
@@ -198,6 +198,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  // Library items count sync
+  const libraryItems = await getLibraryItems();
+  const popupLibraryCount = document.getElementById("popup-library-count");
+  if (popupLibraryCount) {
+    popupLibraryCount.innerHTML = `<span class="m3-chip-version" style="font-size: 10px; padding: 2px 7px;">${libraryItems.length} saved</span>`;
+  }
+
   const openOptions = (e: Event) => {
     e.preventDefault();
     if (chrome.runtime.openOptionsPage) {
@@ -207,6 +214,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
+  const openLibrary = (e: Event) => {
+    e.preventDefault();
+    const url = chrome.runtime.getURL("options.html#library");
+    window.open(url);
+  };
+
   optionsLink?.addEventListener("click", openOptions);
   optionsFooterLink?.addEventListener("click", openOptions);
+  document.getElementById("popup-library-row")?.addEventListener("click", openLibrary);
+  document.getElementById("open-library-link")?.addEventListener("click", openLibrary);
 });
+
