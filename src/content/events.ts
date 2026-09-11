@@ -15,7 +15,7 @@ export class EventManager {
   private keydownInterceptor: (e: KeyboardEvent) => void;
   private navHandlers: KeyboardNavHandlers;
 
-  constructor(onSelect: (target: HTMLElement) => void, navHandlers: KeyboardNavHandlers) {
+  constructor(onSelect: (target: Element) => void, navHandlers: KeyboardNavHandlers) {
     this.navHandlers = navHandlers;
 
     this.clickInterceptor = (e: Event) => {
@@ -24,7 +24,7 @@ export class EventManager {
       // Ignore clicks originating from inside Copage Shadow DOM
       const path = e.composedPath();
       for (const el of path) {
-        if (el instanceof HTMLElement && el.tagName.toLowerCase() === "copage-inspector-root") {
+        if (el instanceof Element && (el.tagName.toLowerCase() === "copage-inspector-root" || el.id === "copage-inspector-root")) {
           return;
         }
       }
@@ -33,7 +33,7 @@ export class EventManager {
       e.stopPropagation();
       e.stopImmediatePropagation();
 
-      if (e.type === "click" && e.target instanceof HTMLElement) {
+      if (e.type === "click" && e.target instanceof Element) {
         onSelect(e.target);
       }
     };
@@ -41,13 +41,15 @@ export class EventManager {
     this.keydownInterceptor = (e: KeyboardEvent) => {
       if (!this.isCapturing) return;
 
-      // If typing inside an input/textarea inside our dock, do not intercept navigation keys
-      const active = document.activeElement;
-      if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.tagName === "SELECT")) {
-        if (e.key === "Escape") {
-          this.navHandlers.onCancel();
+      // If typing inside an input/textarea/select inside our dock, do not intercept navigation keys
+      const path = e.composedPath();
+      for (const el of path) {
+        if (el instanceof Element && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT")) {
+          if (e.key === "Escape") {
+            this.navHandlers.onCancel();
+          }
+          return;
         }
-        return;
       }
 
       switch (e.key) {

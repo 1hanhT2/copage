@@ -3,27 +3,30 @@ import { EventManager } from "./events";
 import { extractElementData } from "../extractor";
 import type { InspectedElementData } from "../lib/types";
 
-export function getDeepElementFromPoint(x: number, y: number): HTMLElement | null {
+export function getDeepElementFromPoint(x: number, y: number): Element | null {
   let el = document.elementFromPoint(x, y);
   while (el && (el as Element).shadowRoot) {
     const nested = (el as Element).shadowRoot!.elementFromPoint(x, y);
     if (!nested || nested === el) break;
     el = nested;
   }
-  if (!el || el.tagName.toLowerCase() === "copage-inspector-root") return null;
-  return el as HTMLElement;
+  if (!el) return null;
+  const tag = el.tagName.toLowerCase();
+  if (tag === "copage-inspector-root" || el.id === "copage-inspector-root") return null;
+  return el;
 }
 
 export class ElementInspector {
   private overlay: InspectorOverlay;
   private eventManager: EventManager;
-  private currentHoverTarget: HTMLElement | null = null;
-  private currentLockedTarget: HTMLElement | null = null;
+  private currentHoverTarget: Element | null = null;
+  private currentLockedTarget: Element | null = null;
   private currentElementData: InspectedElementData | null = null;
   private rafId: number | null = null;
   private isActive = false;
   private isLocked = false;
   private pointerMoveHandler: (e: PointerEvent) => void;
+  private scrollHandler: () => void;
 
   constructor() {
     this.overlay = new InspectorOverlay({
@@ -69,6 +72,15 @@ export class ElementInspector {
         });
       }
     };
+
+    this.scrollHandler = () => {
+      if (!this.isActive) return;
+      if (this.isLocked && this.currentLockedTarget) {
+        this.overlay.updateLockedPosition(this.currentLockedTarget.getBoundingClientRect());
+      } else if (this.currentHoverTarget) {
+        this.overlay.updateHover(this.currentHoverTarget);
+      }
+    };
   }
 
   public activate() {
@@ -77,6 +89,7 @@ export class ElementInspector {
     this.isLocked = false;
     this.eventManager.enable();
     window.addEventListener("pointermove", this.pointerMoveHandler, { passive: true });
+    window.addEventListener("scroll", this.scrollHandler, { capture: true, passive: true });
   }
 
   public deactivate() {
@@ -85,6 +98,7 @@ export class ElementInspector {
     this.unlock();
     this.eventManager.disable();
     window.removeEventListener("pointermove", this.pointerMoveHandler);
+    window.removeEventListener("scroll", this.scrollHandler);
     this.overlay.clearHover();
   }
 
@@ -98,10 +112,11 @@ export class ElementInspector {
     }
   }
 
-  public lock(target: HTMLElement) {
+  public lock(target: Element) {
     this.isLocked = true;
     this.currentLockedTarget = target;
-    this.currentElementData = extractElementData(target);
+    const el = target instanceof HTMLElement ? target : target.parentElement || (target as unknown as HTMLElement);
+    this.currentElementData = extractElementData(el);
     this.overlay.lock(this.currentElementData);
   }
 
@@ -114,7 +129,7 @@ export class ElementInspector {
 
   private selectBreadcrumbIndex(targetIndex: number) {
     if (!this.currentLockedTarget || !this.currentElementData) return;
-    let node: HTMLElement | null = this.currentLockedTarget;
+    let node: Element | null = this.currentLockedTarget;
     let steps = 0;
     while (node && steps < targetIndex) {
       if (node.parentElement && node.parentElement !== document.body) {
@@ -143,7 +158,7 @@ export class ElementInspector {
 
   private traverseChild() {
     const target = this.currentLockedTarget || this.currentHoverTarget;
-    if (target && target.firstElementChild instanceof HTMLElement) {
+    if (target && target.firstElementChild) {
       if (this.isLocked) {
         this.lock(target.firstElementChild);
       } else {
@@ -155,7 +170,7 @@ export class ElementInspector {
 
   private traversePrevSibling() {
     const target = this.currentLockedTarget || this.currentHoverTarget;
-    if (target && target.previousElementSibling instanceof HTMLElement) {
+    if (target && target.previousElementSibling) {
       if (this.isLocked) {
         this.lock(target.previousElementSibling);
       } else {
@@ -167,7 +182,7 @@ export class ElementInspector {
 
   private traverseNextSibling() {
     const target = this.currentLockedTarget || this.currentHoverTarget;
-    if (target && target.nextElementSibling instanceof HTMLElement) {
+    if (target && target.nextElementSibling) {
       if (this.isLocked) {
         this.lock(target.nextElementSibling);
       } else {

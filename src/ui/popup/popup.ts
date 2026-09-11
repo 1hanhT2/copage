@@ -22,15 +22,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Activate Inspector button
+  // Activate Inspector button with automatic injection fallback
   activateBtn?.addEventListener("click", async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (tab && tab.id) {
+    if (!tab || typeof tab.id !== "number") return;
+    const tabId = tab.id;
+
+    activateBtn.textContent = "Activating...";
+
+    try {
+      await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
+      window.close();
+    } catch {
+      // Content script was not present in this tab; inject it dynamically
       try {
-        await chrome.tabs.sendMessage(tab.id, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
-        window.close();
-      } catch {
-        activateBtn.textContent = "Cannot inspect this tab";
+        await chrome.scripting.executeScript({
+          target: { tabId },
+          files: ["content.js"]
+        });
+        setTimeout(async () => {
+          try {
+            await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
+          } catch {}
+          window.close();
+        }, 60);
+      } catch (err) {
+        activateBtn.textContent = "Cannot inspect this page";
         activateBtn.style.backgroundColor = "#982e3b";
       }
     }

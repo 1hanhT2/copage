@@ -11,17 +11,33 @@ export class InspectorOverlay {
   private isLocked = false;
 
   constructor(callbacks: { onUnlock: () => void; onSelectBreadcrumb: (index: number) => void }) {
-    // 1. Create isolated custom host on documentElement
-    this.hostEl = document.createElement("copage-inspector-root");
+    // 1. Create custom host element and apply inline styles
+    this.hostEl = document.createElement("div");
+    this.hostEl.id = "copage-inspector-root";
+    this.hostEl.style.cssText = `
+      all: initial !important;
+      display: block !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      pointer-events: none !important;
+      z-index: 2147483647 !important;
+    `;
+
+    // 2. Attach isolated ShadowRoot
     this.shadow = this.hostEl.attachShadow({ mode: "open" });
 
-    // 2. Inject scoped CSS
+    // 3. Inject scoped CSS
     const style = document.createElement("style");
     style.textContent = `
       :host {
         all: initial !important;
+        display: block !important;
         position: fixed !important;
-        inset: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
         width: 100vw !important;
         height: 100vh !important;
         pointer-events: none !important;
@@ -35,43 +51,48 @@ export class InspectorOverlay {
 
       /* Bounding Box Highlight */
       .copage-bbox {
-        position: fixed;
-        pointer-events: none;
-        border: 1.5px solid #38bdf8;
-        background-color: rgba(56, 189, 248, 0.08);
-        border-radius: 2px;
-        transition: transform 0.04s ease-out, width 0.04s ease-out, height 0.04s ease-out;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        pointer-events: none !important;
+        border: 2px solid #38bdf8 !important;
+        background-color: rgba(56, 189, 248, 0.1) !important;
+        border-radius: 3px !important;
+        transition: transform 0.03s linear, width 0.03s linear, height 0.03s linear;
         will-change: transform, width, height;
         display: none;
-        z-index: 10;
+        z-index: 2147483640 !important;
       }
       .copage-bbox.locked {
-        border-color: #22c55e;
-        background-color: rgba(34, 197, 94, 0.06);
-        box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.3), 0 0 16px rgba(34, 197, 94, 0.15);
+        border-color: #22c55e !important;
+        background-color: rgba(34, 197, 94, 0.08) !important;
+        box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4), 0 0 20px rgba(34, 197, 94, 0.2) !important;
       }
 
       /* Floating Tooltip */
       .copage-tooltip {
-        position: fixed;
-        pointer-events: none;
-        background-color: #0f172a;
-        color: #f8fafc;
-        border: 1px solid #334155;
-        border-radius: 6px;
-        padding: 4px 8px;
-        font-size: 11px;
-        line-height: 1.2;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        pointer-events: none !important;
+        background-color: #0f172a !important;
+        color: #f8fafc !important;
+        border: 1px solid #334155 !important;
+        border-radius: 6px !important;
+        padding: 4px 8px !important;
+        font-size: 11px !important;
+        line-height: 1.2 !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6) !important;
         display: none;
         align-items: center;
         gap: 6px;
         white-space: nowrap;
-        z-index: 20;
+        z-index: 2147483645 !important;
       }
       .copage-tt-tag {
         color: #38bdf8;
         font-weight: 700;
+        font-family: monospace;
       }
       .copage-tt-dim {
         color: #fbbf24;
@@ -79,7 +100,7 @@ export class InspectorOverlay {
       }
       .copage-tt-class {
         color: #c084fc;
-        max-width: 180px;
+        max-width: 200px;
         overflow: hidden;
         text-overflow: ellipsis;
       }
@@ -96,9 +117,9 @@ export class InspectorOverlay {
         border: 1px solid #334155;
         border-radius: 12px;
         padding: 14px 16px;
-        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
         pointer-events: auto !important;
-        z-index: 100;
+        z-index: 2147483646 !important;
         display: flex;
         flex-direction: column;
         gap: 12px;
@@ -296,7 +317,7 @@ export class InspectorOverlay {
       }
     `;
 
-    // 3. Create elements
+    // 4. Create and attach elements
     this.bbox = document.createElement("div");
     this.bbox.className = "copage-bbox";
 
@@ -311,10 +332,12 @@ export class InspectorOverlay {
     this.shadow.appendChild(this.tooltip);
     this.shadow.appendChild(this.dockContainer);
 
-    document.documentElement.appendChild(this.hostEl);
+    // Mount to body or documentElement
+    const mountPoint = document.body || document.documentElement;
+    mountPoint.appendChild(this.hostEl);
   }
 
-  public updateHover(target: HTMLElement) {
+  public updateHover(target: Element) {
     if (this.isLocked) return;
 
     const r = target.getBoundingClientRect();
@@ -323,34 +346,50 @@ export class InspectorOverlay {
       return;
     }
 
-    // Position bounding box via GPU translate
+    // Position bounding box via GPU translate from (0,0)
     this.bbox.style.display = "block";
     this.bbox.style.transform = `translate3d(${r.left}px, ${r.top}px, 0)`;
     this.bbox.style.width = `${r.width}px`;
     this.bbox.style.height = `${r.height}px`;
     this.bbox.classList.remove("locked");
 
-    // Position & update tooltip
+    // Build tooltip safely without innerHTML (Trusted Types safe)
     const tag = target.tagName.toLowerCase();
-    const className = typeof target.className === "string" ? target.className.split(/\s+/).filter(Boolean).slice(0, 2).join(".") : "";
+    const rawClass = typeof target.className === "string" ? target.className : (target.getAttribute("class") || "");
+    const className = rawClass.split(/\s+/).filter(Boolean).slice(0, 2).join(".");
     const dim = `${Math.round(r.width)} × ${Math.round(r.height)}`;
 
-    this.tooltip.innerHTML = `
-      <span class="copage-tt-tag">&lt;${tag}&gt;</span>
-      <span class="copage-tt-dim">${dim}</span>
-      ${className ? `<span class="copage-tt-class">.${className}</span>` : ""}
-    `;
+    this.tooltip.textContent = "";
+
+    const tagSpan = document.createElement("span");
+    tagSpan.className = "copage-tt-tag";
+    tagSpan.textContent = `<${tag}>`;
+
+    const dimSpan = document.createElement("span");
+    dimSpan.className = "copage-tt-dim";
+    dimSpan.textContent = dim;
+
+    this.tooltip.appendChild(tagSpan);
+    this.tooltip.appendChild(dimSpan);
+
+    if (className) {
+      const classSpan = document.createElement("span");
+      classSpan.className = "copage-tt-class";
+      classSpan.textContent = `.${className}`;
+      this.tooltip.appendChild(classSpan);
+    }
+
     this.tooltip.style.display = "flex";
 
-    // Position clamping
-    const ttHeight = 26;
+    // Viewport clamping
+    const ttHeight = 28;
     const offset = 6;
     let top = r.top - ttHeight - offset;
     if (top < 8) {
       top = r.bottom + offset; // Flip below
     }
     let left = r.left;
-    const maxLeft = window.innerWidth - 220;
+    const maxLeft = window.innerWidth - 240;
     if (left > maxLeft) left = maxLeft;
     if (left < 8) left = 8;
 
@@ -376,6 +415,13 @@ export class InspectorOverlay {
 
     // Show floating action dock
     this.dock.show(data);
+  }
+
+  public updateLockedPosition(r: DOMRect) {
+    if (!this.isLocked) return;
+    this.bbox.style.transform = `translate3d(${r.left}px, ${r.top}px, 0)`;
+    this.bbox.style.width = `${r.width}px`;
+    this.bbox.style.height = `${r.height}px`;
   }
 
   public unlock() {
