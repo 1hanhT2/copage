@@ -151,12 +151,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Render Preset Cards with M3 Expressive Watermark and Silhouette Badges
   function getModelCardShapeClass(modelId: string): string {
     const lower = modelId.toLowerCase();
+    if (lower.includes("gemma")) return "card-shape-gemma";
+    if (lower.includes("poolside") || lower.includes("laguna")) return "card-shape-poolside";
+    if (lower.includes("thinking") || lower.includes("inkling")) return "card-shape-thinking";
+    if (lower.includes("nemotron") || lower.includes("nvidia")) return "card-shape-nemotron";
     if (lower.includes("google") || lower.includes("gemini")) return "card-shape-gemini";
     if (lower.includes("deepseek")) return "card-shape-deepseek";
     if (lower.includes("qwen")) return "card-shape-qwen";
     if (lower.includes("meta") || lower.includes("llama")) return "card-shape-llama";
     if (lower.includes("anthropic") || lower.includes("claude")) return "card-shape-claude";
-    return "card-shape-gemini";
+    return "card-shape-gemma";
   }
 
   // Render Preset Cards with M3 Expressive Watermark and Silhouette Badges

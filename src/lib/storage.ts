@@ -11,36 +11,36 @@ export interface ModelPreset {
 
 export const RECOMMENDED_MODELS: ModelPreset[] = [
   {
-    id: "google/gemini-2.5-flash",
-    name: "Gemini 2.5 Flash",
+    id: "google/gemma-4-26b-a4b-it:free",
+    name: "Gemma 4 26B A4B",
     provider: "Google",
     speed: "blazing",
-    cost: "ultra-low",
-    description: "Sub-second TTFT, instant in-page streaming, ultra-low cost."
-  },
-  {
-    id: "deepseek/deepseek-chat",
-    name: "DeepSeek V3 / V4 Flash",
-    provider: "DeepSeek",
-    speed: "fast",
     cost: "near-free",
-    description: "Fractions of a cent, exceptional UI & Tailwind code generation."
+    description: "Instruction-tuned MoE from Google DeepMind with sub-second response and fast inference."
   },
   {
-    id: "qwen/qwen-2.5-coder-32b-instruct",
-    name: "Qwen 2.5 Coder 32B",
-    provider: "Qwen",
+    id: "poolside/laguna-s-2.1:free",
+    name: "Laguna S 2.1",
+    provider: "Poolside",
     speed: "blazing",
     cost: "near-free",
-    description: "Specialized for fast code synthesis and idiomatic React."
+    description: "Specialized coding agent model from Poolside optimized for software engineering and component synthesis."
   },
   {
-    id: "meta-llama/llama-3.3-70b-instruct",
-    name: "Llama 3.3 70B Turbo",
-    provider: "Meta",
+    id: "thinkingmachines/inkling-small:free",
+    name: "Inkling Small",
+    provider: "Thinking Machines",
     speed: "fast",
-    cost: "ultra-low",
-    description: "Top-tier open model, fast inference and strong layout reasoning."
+    cost: "near-free",
+    description: "Reasoning-enabled multimodal MoE with 1M context window and deep architectural reasoning."
+  },
+  {
+    id: "nvidia/nemotron-3.5-lightning:free",
+    name: "Nemotron 3.5 Lightning",
+    provider: "NVIDIA",
+    speed: "blazing",
+    cost: "near-free",
+    description: "Ultra-fast 3B active MoE with lightning TTFT and 1M context length."
   }
 ];
 
@@ -58,7 +58,7 @@ export const DEFAULT_LLM_CONFIG: LLMConfig = {
   provider: "openrouter",
   apiKey: "",
   baseUrl: "https://openrouter.ai/api/v1",
-  model: "google/gemini-2.5-flash"
+  model: "google/gemma-4-26b-a4b-it:free"
 };
 
 const STORAGE_KEY_CONFIG = "copage_llm_config";

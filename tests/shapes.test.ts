@@ -28,6 +28,10 @@ describe("Material 3 Expressive Shapes", () => {
   });
 
   it("resolves model providers to M3 Expressive shape identities", () => {
+    expect(getProviderShape("google/gemma-4-26b-a4b-it:free")).toBe("sparkle");
+    expect(getProviderShape("poolside/laguna-s-2.1:free")).toBe("flower");
+    expect(getProviderShape("thinkingmachines/inkling-small:free")).toBe("squircle");
+    expect(getProviderShape("nvidia/nemotron-3.5-lightning:free")).toBe("sunburst");
     expect(getProviderShape("google/gemini-2.5-flash")).toBe("sparkle");
     expect(getProviderShape("deepseek/deepseek-r1")).toBe("flower");
     expect(getProviderShape("qwen/qwen-2.5-coder-32b")).toBe("diamond");
@@ -95,6 +99,10 @@ describe("Material 3 Expressive Shapes", () => {
     expect(getActionM3Shape("copy-svgs")).toBe("burst");
     expect(getActionM3Shape("download-tsx")).toBe("gem");
 
+    expect(getCanonicalModelShape("google/gemma-4-26b-a4b-it:free")).toBe("very-sunny");
+    expect(getCanonicalModelShape("poolside/laguna-s-2.1:free")).toBe("flower");
+    expect(getCanonicalModelShape("thinkingmachines/inkling-small:free")).toBe("arch");
+    expect(getCanonicalModelShape("nvidia/nemotron-3.5-lightning:free")).toBe("burst");
     expect(getCanonicalModelShape("google/gemini-2.5-flash")).toBe("very-sunny");
     expect(getCanonicalModelShape("deepseek/deepseek-r1")).toBe("flower");
     expect(getCanonicalModelShape("qwen/qwen-2.5-coder-32b")).toBe("diamond");
@@ -119,12 +127,20 @@ describe("Material 3 Expressive Shapes", () => {
   });
 
   it("maps models and targets to appropriate expressive pill silhouette classes", () => {
+    expect(getModelPillShape("google/gemma-4-26b-a4b-it:free")).toBe("rugged");
+    expect(getModelPillShape("poolside/laguna-s-2.1:free")).toBe("scalloped");
+    expect(getModelPillShape("thinkingmachines/inkling-small:free")).toBe("arch");
+    expect(getModelPillShape("nvidia/nemotron-3.5-lightning:free")).toBe("diamond");
     expect(getModelPillShape("google/gemini-2.5-flash")).toBe("rugged");
     expect(getModelPillShape("deepseek/deepseek-r1")).toBe("scalloped");
     expect(getModelPillShape("qwen/qwen-2.5-coder-32b")).toBe("diamond");
     expect(getModelPillShape("meta-llama/llama-3.3-70b")).toBe("rugged");
     expect(getModelPillShape("anthropic/claude-3-7-sonnet")).toBe("scalloped");
 
+    expect(getModelPillShapeClass("google/gemma-4-26b-a4b-it:free")).toBe("m3-pill-rugged");
+    expect(getModelPillShapeClass("poolside/laguna-s-2.1:free")).toBe("m3-pill-scalloped");
+    expect(getModelPillShapeClass("thinkingmachines/inkling-small:free")).toBe("m3-pill-arch");
+    expect(getModelPillShapeClass("nvidia/nemotron-3.5-lightning:free")).toBe("m3-pill-diamond");
     expect(getModelPillShapeClass("google/gemini-2.5-flash")).toBe("m3-pill-rugged");
     expect(getModelPillShapeClass("deepseek/deepseek-r1")).toBe("m3-pill-scalloped");
     expect(getModelPillShapeClass("qwen/qwen-2.5-coder-32b")).toBe("m3-pill-diamond");

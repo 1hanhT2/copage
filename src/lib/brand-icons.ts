@@ -1,4 +1,7 @@
 import { svg as geminiSvg } from "thesvg/gemini";
+import { svg as gemmaSvg } from "thesvg/gemma-google";
+import { svg as nemotronSvg } from "thesvg/nvidia-nemotron";
+import { svg as nvidiaSvg } from "thesvg/nvidia";
 import { svg as deepseekSvg } from "thesvg/deepseek";
 import { svg as qwenSvg } from "thesvg/qwen";
 import { svg as metaSvg } from "thesvg/meta";
@@ -9,7 +12,17 @@ import { svg as openaiSvg } from "thesvg/openai";
 import { svg as anthropicSvg } from "thesvg/anthropic";
 
 /**
- * Normalizes an SVG string from thesvg to fit given dimensions cleanly.
+ * Official vector brand icon for Poolside (beach umbrella in circle silhouette).
+ */
+export const poolsideSvg = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title>Poolside</title><path d="M6.742 22.786a11.93 11.93 0 01-5.232-4.963 11.98 11.98 0 01-1.463-6.886.975.975 0 011.943.173c-.178 2.005.246 4 1.226 5.769a9.968 9.968 0 003.526 3.685l4.586-9.405c-1.795-.598-3.29-.338-3.425-.312l-.058.012a.972.972 0 01-1.054-.576c-.24-.448-.96-1.544-1.834-1.97-.873-.426-2.218-.289-2.651-.195a.977.977 0 01-1.087-1.38C4.117.792 11.315-1.686 17.262 1.215c5.946 2.9 8.422 10.093 5.529 16.038l-.01.02c-2.903 5.94-10.095 8.414-16.039 5.514zm6.338-10.773l-4.586 9.405c4.629 1.73 9.896-.192 12.304-4.558-.338-.524-.932-1.275-1.62-1.61-.888-.434-2.19-.292-2.637-.198a.989.989 0 01-.616-.055.984.984 0 01-.49-.473c-.028-.058-.739-1.438-2.355-2.51zM5.81 6.56c.747.365 1.356.944 1.81 1.49 1.406-2.15 3.314-3.774 4.787-4.82a20.81 20.81 0 011.66-1.067A10.078 10.078 0 003.882 6.077c.617.042 1.297.174 1.929.482zm12.671-2.243c.09.624.152 1.294.182 1.965.083 1.801-.021 4.296-.844 6.722.686.018 1.484.14 2.214.495.652.318 1.198.8 1.628 1.28a10.082 10.082 0 00-3.18-10.462zm-5.394 5.46a9.522 9.522 0 012.984 2.287c1.075-3.493.606-7.402.215-8.85-1.381.584-4.75 2.62-6.84 5.618a9.515 9.515 0 013.64.944z"/></svg>`;
+
+/**
+ * Official vector brand icon for Thinking Machines (stepped circuit T monolith).
+ */
+export const thinkingmachinesSvg = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title>Thinking Machines</title><path fill-rule="evenodd" clip-rule="evenodd" d="M5 2h14a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm1 0v7h3.5v7h5v-7H18V2H6z"/></svg>`;
+
+/**
+ * Normalizes an SVG string from thesvg or custom brand asset to fit given dimensions cleanly.
  */
 export function formatBrandSvg(rawSvg: string, size = 16, extraStyle = ""): string {
   if (!rawSvg) return "";
@@ -21,6 +34,13 @@ export function formatBrandSvg(rawSvg: string, size = 16, extraStyle = ""): stri
 
 export type BrandIconKey =
   | "gemini"
+  | "gemma"
+  | "nemotron"
+  | "nvidia"
+  | "poolside"
+  | "laguna"
+  | "thinkingmachines"
+  | "inkling"
   | "deepseek"
   | "qwen"
   | "llama"
@@ -33,6 +53,13 @@ export type BrandIconKey =
 
 export const BRAND_SVGS: Record<string, string> = {
   gemini: geminiSvg,
+  gemma: gemmaSvg,
+  nemotron: nemotronSvg,
+  nvidia: nvidiaSvg,
+  poolside: poolsideSvg,
+  laguna: poolsideSvg,
+  thinkingmachines: thinkingmachinesSvg,
+  inkling: thinkingmachinesSvg,
   deepseek: deepseekSvg,
   qwen: qwenSvg,
   llama: metaSvg,
@@ -51,7 +78,12 @@ export function getBrandIconSvg(identifier: string, size = 16, extraStyle = ""):
   const lower = (identifier || "").toLowerCase();
 
   let raw: string = openrouterSvg;
-  if (lower.includes("gemini")) raw = geminiSvg;
+  if (lower.includes("gemma")) raw = gemmaSvg;
+  else if (lower.includes("gemini")) raw = geminiSvg;
+  else if (lower.includes("nemotron")) raw = nemotronSvg;
+  else if (lower.includes("nvidia")) raw = nvidiaSvg;
+  else if (lower.includes("poolside") || lower.includes("laguna")) raw = poolsideSvg;
+  else if (lower.includes("thinking") || lower.includes("inkling")) raw = thinkingmachinesSvg;
   else if (lower.includes("deepseek")) raw = deepseekSvg;
   else if (lower.includes("qwen")) raw = qwenSvg;
   else if (lower.includes("ollama")) raw = ollamaSvg;

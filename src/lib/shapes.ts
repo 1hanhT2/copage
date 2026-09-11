@@ -39,7 +39,11 @@ export function getM3ShapeSvg(name: M3ShapeName, size = 16, color = "currentColo
  */
 export function getProviderShape(providerOrModel: string): M3ShapeName {
   const lower = providerOrModel.toLowerCase();
+  if (lower.includes("gemma")) return "sparkle";
   if (lower.includes("google") || lower.includes("gemini")) return "sparkle";
+  if (lower.includes("poolside") || lower.includes("laguna")) return "flower";
+  if (lower.includes("thinking") || lower.includes("inkling")) return "squircle";
+  if (lower.includes("nemotron") || lower.includes("nvidia")) return "sunburst";
   if (lower.includes("deepseek")) return "flower";
   if (lower.includes("qwen")) return "diamond";
   if (lower.includes("meta") || lower.includes("llama")) return "sunburst";
@@ -326,7 +330,11 @@ export function getActionM3Shape(action: string): M3CanonicalShapeName {
  */
 export function getCanonicalModelShape(providerOrModel: string): M3CanonicalShapeName {
   const lower = providerOrModel.toLowerCase();
+  if (lower.includes("gemma")) return "very-sunny";
   if (lower.includes("google") || lower.includes("gemini")) return "very-sunny";
+  if (lower.includes("poolside") || lower.includes("laguna")) return "flower";
+  if (lower.includes("thinking") || lower.includes("inkling")) return "arch";
+  if (lower.includes("nemotron") || lower.includes("nvidia")) return "burst";
   if (lower.includes("deepseek")) return "flower";
   if (lower.includes("qwen")) return "diamond";
   if (lower.includes("meta") || lower.includes("llama")) return "burst";
@@ -367,7 +375,11 @@ export const M3_EXPRESSIVE_PILL_POLYGONS: Record<M3PillShapeName, string> = {
  */
 export function getModelPillShape(providerOrModel: string): M3PillShapeName {
   const lower = providerOrModel.toLowerCase();
+  if (lower.includes("gemma")) return "rugged";
   if (lower.includes("google") || lower.includes("gemini")) return "rugged";
+  if (lower.includes("poolside") || lower.includes("laguna")) return "scalloped";
+  if (lower.includes("thinking") || lower.includes("inkling")) return "arch";
+  if (lower.includes("nemotron") || lower.includes("nvidia")) return "diamond";
   if (lower.includes("deepseek")) return "scalloped";
   if (lower.includes("qwen")) return "diamond";
   if (lower.includes("meta") || lower.includes("llama")) return "rugged";

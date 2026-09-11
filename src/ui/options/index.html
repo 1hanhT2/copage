@@ -497,12 +497,35 @@
       gap: 10px;
       transition: border-radius 0.28s var(--m3-spring), transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.2s ease;
     }
-    /* Google / Gemini Solar Diagonal */
+    /* Gemma / Google Solar Diagonal */
+    .m3-action-card.card-shape-gemma,
     .m3-action-card.card-shape-gemini {
       border-radius: 28px 10px 28px 10px;
     }
+    .m3-action-card.card-shape-gemma:hover,
     .m3-action-card.card-shape-gemini:hover {
       border-radius: 12px 28px 12px 28px;
+    }
+    /* Poolside Organic Wave */
+    .m3-action-card.card-shape-poolside {
+      border-radius: 28px 28px 10px 28px;
+    }
+    .m3-action-card.card-shape-poolside:hover {
+      border-radius: 14px 28px 28px 14px;
+    }
+    /* Thinking Machines Geometric Arch */
+    .m3-action-card.card-shape-thinking {
+      border-radius: 10px 28px 28px 28px;
+    }
+    .m3-action-card.card-shape-thinking:hover {
+      border-radius: 28px 14px 14px 28px;
+    }
+    /* NVIDIA Nemotron Lightning Facet */
+    .m3-action-card.card-shape-nemotron {
+      border-radius: 28px 28px 28px 10px;
+    }
+    .m3-action-card.card-shape-nemotron:hover {
+      border-radius: 28px 12px 28px 28px;
     }
     /* DeepSeek Reasoning Scalloped Leaf */
     .m3-action-card.card-shape-deepseek {
@@ -1449,7 +1472,7 @@
 
       <div class="m3-form-group">
         <label class="m3-label" for="custom-model-input">Raw Model Identifier</label>
-        <input type="text" id="custom-model-input" class="m3-input" value="google/gemini-2.5-flash" />
+        <input type="text" id="custom-model-input" class="m3-input" value="google/gemma-4-26b-a4b-it:free" />
         <p class="m3-helper-text">Enter any valid model ID supported by your provider.</p>
       </div>
 
