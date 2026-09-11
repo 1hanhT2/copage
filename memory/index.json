@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T14:17:16.857Z",
-  "count": 46,
+  "generatedAt": "2026-09-11T14:40:02.448Z",
+  "count": 47,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -363,6 +363,18 @@
       "tags": [
         "fix",
         "ui"
+      ]
+    },
+    {
+      "file": "2026-09-11_b44e88f_feat-assets-integrate-adaptive-mini-logos-1-for-dark-mode-2-.md",
+      "hash": "b44e88fd376928440bb0c6ac051752c929f88d96",
+      "short": "b44e88f",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat(assets): integrate adaptive mini logos (1 for dark mode, 2 for white mode) as favicons",
+      "tags": [
+        "feature"
       ]
     },
     {
