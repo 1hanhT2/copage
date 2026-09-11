@@ -1,4 +1,4 @@
-import type { LLMConfig, RecentCapture } from "./types";
+import type { LLMConfig, RecentCapture, UserPreferences } from "./types";
 
 export interface ModelPreset {
   id: string;
@@ -44,6 +44,15 @@ export const RECOMMENDED_MODELS: ModelPreset[] = [
   }
 ];
 
+export const DEFAULT_PREFERENCES: UserPreferences = {
+  pruneNoise: true,
+  mapTailwind: true,
+  extractSvgs: true,
+  autoCopy: true,
+  deepShadow: true,
+  frameworkTarget: "react"
+};
+
 export const DEFAULT_LLM_CONFIG: LLMConfig = {
   provider: "openrouter",
   apiKey: "",
@@ -52,7 +61,34 @@ export const DEFAULT_LLM_CONFIG: LLMConfig = {
 };
 
 const STORAGE_KEY_CONFIG = "copage_llm_config";
+const STORAGE_KEY_PREFS = "copage_user_prefs";
 const STORAGE_KEY_CAPTURES = "copage_recent_captures";
+
+export async function getUserPreferences(): Promise<UserPreferences> {
+  if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+    const res = await chrome.storage.local.get(STORAGE_KEY_PREFS);
+    return { ...DEFAULT_PREFERENCES, ...(res[STORAGE_KEY_PREFS] || {}) };
+  }
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_PREFS);
+    return raw ? { ...DEFAULT_PREFERENCES, ...JSON.parse(raw) } : DEFAULT_PREFERENCES;
+  } catch {
+    return DEFAULT_PREFERENCES;
+  }
+}
+
+export async function setUserPreferences(prefs: Partial<UserPreferences>): Promise<UserPreferences> {
+  const current = await getUserPreferences();
+  const updated = { ...current, ...prefs };
+  if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+    await chrome.storage.local.set({ [STORAGE_KEY_PREFS]: updated });
+  } else {
+    try {
+      localStorage.setItem(STORAGE_KEY_PREFS, JSON.stringify(updated));
+    } catch {}
+  }
+  return updated;
+}
 
 export async function getLLMConfig(): Promise<LLMConfig> {
   if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {

@@ -261,32 +261,154 @@ export class InspectorOverlay {
         display: flex;
         align-items: center;
         gap: 8px;
+        position: relative;
       }
       .copage-model-label {
         font-size: 11px;
         color: rgba(255, 255, 255, 0.60);
         font-weight: 400;
       }
-      .copage-model-select {
-        background-color: #232323;
+
+      /* MUI Dropdown Select in HUD */
+      .copage-select-wrap {
+        position: relative;
+      }
+      .copage-select-trigger {
+        background-color: #252525;
         border: 1px solid rgba(255, 255, 255, 0.23);
         color: rgba(255, 255, 255, 0.87);
-        font-size: 11px;
-        padding: 4px 8px;
+        font-size: 11.5px;
+        padding: 5px 10px;
         border-radius: 4px;
-        outline: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        user-select: none;
         transition: border-color 150ms ease;
       }
-      .copage-model-select:focus {
+      .copage-select-trigger:hover,
+      .copage-select-trigger.open {
         border-color: #90caf9;
       }
+      .copage-select-arrow {
+        color: rgba(255, 255, 255, 0.5);
+        transition: transform 180ms ease;
+        flex-shrink: 0;
+      }
+      .copage-select-trigger.open .copage-select-arrow {
+        transform: rotate(180deg);
+        color: #90caf9;
+      }
+      .copage-menu-popover {
+        position: absolute;
+        bottom: calc(100% + 6px);
+        left: 0;
+        min-width: 260px;
+        background-color: #292929;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 6px;
+        box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.4), 0px 8px 10px 1px rgba(0,0,0,0.28), 0px 3px 14px 2px rgba(0,0,0,0.22);
+        padding: 4px 0;
+        z-index: 2147483647;
+        display: none;
+        animation: copageMenuPop 140ms ease;
+      }
+      .copage-menu-popover.open {
+        display: block;
+      }
+      @keyframes copageMenuPop {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .copage-menu-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.87);
+        cursor: pointer;
+        transition: background-color 120ms ease;
+      }
+      .copage-menu-item:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+      }
+      .copage-menu-item.selected {
+        background-color: rgba(144, 202, 249, 0.14);
+        color: #90caf9;
+        font-weight: 500;
+      }
+      .copage-menu-item-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .copage-menu-item-title {
+        font-weight: 500;
+        font-size: 12px;
+      }
+      .copage-menu-item-desc {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .copage-menu-item-check {
+        color: #90caf9;
+        opacity: 0;
+        flex-shrink: 0;
+      }
+      .copage-menu-item.selected .copage-menu-item-check {
+        opacity: 1;
+      }
 
-      /* MUI Contained Button */
-      .copage-btn-primary {
+      /* MUI Segmented Button Group (Toggle Buttons) */
+      .copage-segmented-group {
+        display: inline-flex;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 6px;
+        overflow: hidden;
+        background-color: #252525;
+      }
+      .copage-segmented-btn {
+        background: transparent;
+        border: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 5px 11px;
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.65);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: background-color 150ms ease, color 150ms ease;
+        font-family: inherit;
+      }
+      .copage-segmented-btn:last-child {
+        border-right: none;
+      }
+      .copage-segmented-btn:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.95);
+      }
+      .copage-segmented-btn.active {
+        background-color: rgba(144, 202, 249, 0.18);
+        color: #90caf9;
+        font-weight: 600;
+      }
+
+      /* MUI Split Button */
+      .copage-split-group {
+        display: inline-flex;
+        border-radius: 4px;
+        box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+        position: relative;
+      }
+      .copage-split-main {
         background-color: #90caf9;
         color: #0d47a1;
         border: none;
-        border-radius: 4px;
+        border-radius: 4px 0 0 4px;
         padding: 6px 14px;
         font-size: 11.5px;
         font-weight: 600;
@@ -296,18 +418,53 @@ export class InspectorOverlay {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
-        transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        transition: background-color 200ms ease;
       }
-      .copage-btn-primary:hover:not(:disabled) {
+      .copage-split-main:hover:not(:disabled) {
         background-color: #64b5f6;
-        box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
       }
-      .copage-btn-primary:disabled {
+      .copage-split-main:disabled {
         background-color: rgba(255, 255, 255, 0.12);
         color: rgba(255, 255, 255, 0.38);
-        box-shadow: none;
         cursor: not-allowed;
+      }
+      .copage-split-arrow-btn {
+        background-color: #90caf9;
+        color: #0d47a1;
+        border: none;
+        border-left: 1px solid rgba(13, 71, 161, 0.3);
+        border-radius: 0 4px 4px 0;
+        padding: 6px 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 200ms ease;
+      }
+      .copage-split-arrow-btn:hover:not(:disabled) {
+        background-color: #64b5f6;
+      }
+      .copage-split-arrow-btn:disabled {
+        background-color: rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.38);
+        cursor: not-allowed;
+      }
+      .copage-actions-popover {
+        position: absolute;
+        bottom: calc(100% + 6px);
+        right: 0;
+        min-width: 200px;
+        background-color: #292929;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 6px;
+        box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.4), 0px 8px 10px 1px rgba(0,0,0,0.28), 0px 3px 14px 2px rgba(0,0,0,0.22);
+        padding: 4px 0;
+        z-index: 2147483647;
+        display: none;
+        animation: copageMenuPop 140ms ease;
+      }
+      .copage-actions-popover.open {
+        display: block;
       }
 
       /* MUI Outlined Button */

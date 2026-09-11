@@ -1,7 +1,7 @@
 import type { InspectedElementData, PromptTarget, LLMConfig } from "../../lib/types";
 import { buildPromptForTarget } from "../../llm/prompts";
 import { streamCompletion } from "../../llm/gateway";
-import { getLLMConfig, saveRecentCapture, RECOMMENDED_MODELS } from "../../lib/storage";
+import { getLLMConfig, setLLMConfig, saveRecentCapture, RECOMMENDED_MODELS, getUserPreferences } from "../../lib/storage";
 
 export class CopageDock {
   private container: HTMLElement;
@@ -50,7 +50,6 @@ export class CopageDock {
         button.style.borderColor = "";
       }, 1600);
     } catch {
-      // Fallback
       const ta = document.createElement("textarea");
       ta.value = text;
       document.body.appendChild(ta);
@@ -65,12 +64,24 @@ export class CopageDock {
     }
   }
 
+  private downloadFile(content: string, filename: string) {
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   private async handleStreamGeneration(outputPre: HTMLElement, actionBtn: HTMLButtonElement) {
     if (!this.currentData || this.isStreaming) return;
 
     const config = await getLLMConfig();
     if (!config.apiKey && config.provider === "openrouter") {
-      outputPre.textContent = "Error: OpenRouter API key not configured. Open Copage extension options to add your key.";
+      outputPre.textContent = "Error: OpenRouter API key not configured. Open Copage extension settings to add your key.";
       outputPre.style.color = "#f44336";
       return;
     }
@@ -109,7 +120,7 @@ export class CopageDock {
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
           <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
         </svg>
-        <span>Regenerate React Component</span>
+        <span>Regenerate Component</span>
       `;
 
       // Auto save capture
@@ -124,16 +135,24 @@ export class CopageDock {
         cleanHtml: this.currentData.cleanHtml,
         reproductionPrompt: this.generatedCode
       });
+
+      // Auto-copy preference check
+      const prefs = await getUserPreferences();
+      if (prefs.autoCopy && this.generatedCode) {
+        try {
+          await navigator.clipboard.writeText(this.generatedCode);
+        } catch {}
+      }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      outputPre.textContent = `Stream Error: ${msg}\n\nTip: Verify your API key or try switching to another recommended model in Settings.`;
+      outputPre.textContent = `Stream Error: ${msg}\n\nTip: Check API Key or choose a different model.`;
       outputPre.style.color = "#f44336";
       actionBtn.disabled = false;
       actionBtn.innerHTML = `
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
           <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
         </svg>
-        <span>Retry Component Generation</span>
+        <span>Retry Generation</span>
       `;
     } finally {
       this.isStreaming = false;
@@ -179,73 +198,121 @@ export class CopageDock {
         <!-- Breadcrumbs Navigation -->
         ${d.breadcrumbs.length > 1 ? `<div class="copage-breadcrumbs-bar">${breadcrumbHtml}</div>` : ""}
 
-        <!-- Prompt Copy Grid (MUI Cards) -->
-        <div class="copage-action-grid">
-          <button class="copage-action-card" data-target="cursor">
-            <div class="copage-card-top">
-              <div class="copage-card-title">Cursor Composer</div>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="copage-card-icon"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            </div>
-            <div class="copage-card-desc">Production prompt for Cursor &amp; Windsurf</div>
-          </button>
-          <button class="copage-action-card" data-target="claude">
-            <div class="copage-card-top">
-              <div class="copage-card-title">Claude Prompt</div>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="copage-card-icon"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            </div>
-            <div class="copage-card-desc">Detailed UI decomposition &amp; hierarchy</div>
-          </button>
-          <button class="copage-action-card" data-target="v0">
-            <div class="copage-card-top">
-              <div class="copage-card-title">v0 / 21st.dev</div>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="copage-card-icon"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            </div>
-            <div class="copage-card-desc">Tailwind component reproduction prompt</div>
-          </button>
-          <button class="copage-action-card" data-target="html-tailwind">
-            <div class="copage-card-top">
-              <div class="copage-card-title">HTML + Tailwind</div>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="copage-card-icon"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            </div>
-            <div class="copage-card-desc">Clean semantic HTML with utility classes</div>
+        <!-- Material 3 Segmented Toggle Group for Prompt Targets -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <div class="copage-segmented-group" id="copage-prompt-targets">
+            <button class="copage-segmented-btn active" data-target="cursor" title="Copy production prompt for Cursor &amp; Windsurf">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Cursor</span>
+            </button>
+            <button class="copage-segmented-btn" data-target="claude" title="Copy detailed UI decomposition prompt for Claude">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Claude</span>
+            </button>
+            <button class="copage-segmented-btn" data-target="v0" title="Copy Tailwind component prompt for v0 &amp; 21st.dev">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>v0 / 21st</span>
+            </button>
+            <button class="copage-segmented-btn" data-target="html-tailwind" title="Copy semantic HTML with mapped Tailwind utilities">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Tailwind HTML</span>
+            </button>
+          </div>
+          <button id="copage-copy-prompt-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 5px 12px;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+            <span>Copy Prompt</span>
           </button>
         </div>
 
         <!-- Live AI Synthesis Section -->
         <div class="copage-ai-section">
           <div class="copage-ai-header">
+            <!-- Material Outlined Model Selector Dropdown -->
             <div class="copage-model-info">
-              <span class="copage-model-label">Active Model:</span>
-              <select id="copage-quick-model-select" class="copage-model-select">
-                ${RECOMMENDED_MODELS.map(
-                  (m) => `<option value="${m.id}">${m.name} (${m.speed}, ${m.cost})</option>`
-                ).join("")}
-              </select>
+              <span class="copage-model-label">Model:</span>
+              <div class="copage-select-wrap">
+                <div id="copage-dock-model-trigger" class="copage-select-trigger" tabindex="0">
+                  <span id="copage-dock-model-name">Gemini 2.5 Flash</span>
+                  <svg class="copage-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M7 10l5 5 5-5z"/>
+                  </svg>
+                </div>
+                <div id="copage-dock-model-menu" class="copage-menu-popover">
+                  <!-- Injected dynamically -->
+                </div>
+              </div>
             </div>
-            <button id="copage-stream-btn" class="copage-btn-primary">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
-              </svg>
-              <span>Synthesize React Component</span>
-            </button>
+
+            <!-- Material Split Action Button -->
+            <div class="copage-split-group">
+              <button id="copage-stream-btn" class="copage-split-main" title="Synthesize full production React component">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                  <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
+                </svg>
+                <span>Synthesize Component</span>
+              </button>
+              <button id="copage-split-arrow" class="copage-split-arrow-btn" title="Quick copy raw assets &amp; code">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M7 10l5 5 5-5z"/>
+                </svg>
+              </button>
+              <div id="copage-actions-menu" class="copage-actions-popover">
+                <div class="copage-menu-item" data-action="copy-html">
+                  <div class="copage-menu-item-text">
+                    <span class="copage-menu-item-title">Copy Clean HTML</span>
+                    <span class="copage-menu-item-desc">Pruned DOM without trackers</span>
+                  </div>
+                </div>
+                <div class="copage-menu-item" data-action="copy-css">
+                  <div class="copage-menu-item-text">
+                    <span class="copage-menu-item-title">Copy Distilled CSS</span>
+                    <span class="copage-menu-item-desc">Layout &amp; box-model rules</span>
+                  </div>
+                </div>
+                <div class="copage-menu-item" data-action="copy-tailwind">
+                  <div class="copage-menu-item-text">
+                    <span class="copage-menu-item-title">Copy Tailwind Classes</span>
+                    <span class="copage-menu-item-desc">${d.tailwindClasses.length} mapped utility classes</span>
+                  </div>
+                </div>
+                <div class="copage-menu-item" data-action="copy-svgs">
+                  <div class="copage-menu-item-text">
+                    <span class="copage-menu-item-title">Copy Inlined SVGs</span>
+                    <span class="copage-menu-item-desc">${d.svgAssets.length} sanitized vector assets</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- Code Preview Area -->
           <div class="copage-code-preview-wrap">
             <div class="copage-code-preview-header">
-              <span class="copage-code-title">Output Preview (React TSX)</span>
-              <button id="copage-copy-code-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 3px 10px;">
-                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                </svg>
-                <span>Copy Code</span>
-              </button>
+              <span class="copage-code-title">Component Output (React TSX + Tailwind)</span>
+              <div style="display: flex; gap: 6px;">
+                <button id="copage-copy-code-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 3px 10px;">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                  </svg>
+                  <span>Copy Code</span>
+                </button>
+                <button id="copage-download-code-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 3px 10px;">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                  </svg>
+                  <span>Download .tsx</span>
+                </button>
+              </div>
             </div>
-            <pre id="copage-stream-output" class="copage-code-pre">Click "Synthesize React Component" above to generate with your configured model...</pre>
+            <pre id="copage-stream-output" class="copage-code-pre">Click "Synthesize Component" above to generate with your configured model...</pre>
           </div>
         </div>
       </div>
     `;
 
-    // Event Bindings
+    // Unlock button
     const unlockBtn = this.container.querySelector("#copage-unlock-btn");
     unlockBtn?.addEventListener("click", () => this.onUnlock());
 
@@ -257,41 +324,126 @@ export class CopageDock {
       });
     });
 
-    // Copy prompt cards
-    this.container.querySelectorAll(".copage-action-card").forEach((card) => {
-      card.addEventListener("click", (e) => {
+    // Segmented Prompt Target selection & Copy Prompt
+    let activePromptTarget: PromptTarget = "cursor";
+    const promptTargetBtns = this.container.querySelectorAll(".copage-segmented-btn");
+    const copyPromptBtn = this.container.querySelector("#copage-copy-prompt-btn") as HTMLElement;
+
+    promptTargetBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
         const target = (e.currentTarget as HTMLElement).dataset.target as PromptTarget;
-        const { prompt } = buildPromptForTarget(this.currentData!, target);
-        this.copyToClipboard(prompt, e.currentTarget as HTMLElement, "Prompt Copied!");
+        activePromptTarget = target;
+        promptTargetBtns.forEach((b) => b.classList.remove("active"));
+        (e.currentTarget as HTMLElement).classList.add("active");
+
+        // Quick copy prompt on target click
+        const { prompt } = buildPromptForTarget(this.currentData!, activePromptTarget);
+        this.copyToClipboard(prompt, copyPromptBtn, `${target.toUpperCase()} Copied!`);
       });
+    });
+
+    copyPromptBtn?.addEventListener("click", () => {
+      const { prompt } = buildPromptForTarget(this.currentData!, activePromptTarget);
+      this.copyToClipboard(prompt, copyPromptBtn, "Prompt Copied!");
+    });
+
+    // Model Dropdown Menu
+    const modelTrigger = this.container.querySelector("#copage-dock-model-trigger") as HTMLElement;
+    const modelMenu = this.container.querySelector("#copage-dock-model-menu") as HTMLElement;
+    const modelNameLabel = this.container.querySelector("#copage-dock-model-name") as HTMLElement;
+
+    getLLMConfig().then((cfg) => {
+      const activePreset = RECOMMENDED_MODELS.find((m) => m.id === cfg.model);
+      if (modelNameLabel) {
+        modelNameLabel.textContent = activePreset ? activePreset.name : (cfg.model.split("/").pop() || cfg.model);
+      }
+
+      if (modelMenu) {
+        modelMenu.innerHTML = "";
+        RECOMMENDED_MODELS.forEach((preset) => {
+          const isSelected = cfg.model === preset.id;
+          const item = document.createElement("div");
+          item.className = `copage-menu-item ${isSelected ? "selected" : ""}`;
+          item.innerHTML = `
+            <div class="copage-menu-item-text">
+              <span class="copage-menu-item-title">${preset.name}</span>
+              <span class="copage-menu-item-desc">${preset.speed} • ${preset.cost}</span>
+            </div>
+            <svg class="copage-menu-item-check" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+          `;
+          item.addEventListener("click", async () => {
+            await setLLMConfig({ model: preset.id });
+            modelNameLabel.textContent = preset.name;
+            modelMenu.querySelectorAll(".copage-menu-item").forEach((it) => it.classList.remove("selected"));
+            item.classList.add("selected");
+            modelMenu.classList.remove("open");
+            modelTrigger.classList.remove("open");
+          });
+          modelMenu.appendChild(item);
+        });
+      }
+    });
+
+    modelTrigger?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = modelMenu.classList.toggle("open");
+      modelTrigger.classList.toggle("open", isOpen);
+      // Close actions menu if open
+      actionsMenu?.classList.remove("open");
+    });
+
+    // Split Button Actions Dropdown
+    const splitArrow = this.container.querySelector("#copage-split-arrow") as HTMLElement;
+    const actionsMenu = this.container.querySelector("#copage-actions-menu") as HTMLElement;
+
+    splitArrow?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = actionsMenu.classList.toggle("open");
+      // Close model menu if open
+      modelMenu?.classList.remove("open");
+      modelTrigger?.classList.remove("open");
+    });
+
+    // Actions items
+    actionsMenu?.querySelectorAll(".copage-menu-item").forEach((item) => {
+      item.addEventListener("click", (e) => {
+        const action = (e.currentTarget as HTMLElement).dataset.action;
+        actionsMenu.classList.remove("open");
+
+        if (!this.currentData) return;
+
+        if (action === "copy-html") {
+          this.copyToClipboard(this.currentData.cleanHtml, splitArrow, "HTML Copied!");
+        } else if (action === "copy-css") {
+          const cssText = Object.entries(this.currentData.distilledStyles)
+            .map(([group, styles]) => `/* ${group} */\n` + Object.entries(styles).map(([k, v]) => `  ${k}: ${v};`).join("\n"))
+            .join("\n\n");
+          this.copyToClipboard(cssText, splitArrow, "CSS Copied!");
+        } else if (action === "copy-tailwind") {
+          this.copyToClipboard(this.currentData.tailwindClasses.join(" "), splitArrow, "Tailwind Copied!");
+        } else if (action === "copy-svgs") {
+          const svgs = this.currentData.svgAssets.map((s, i) => `<!-- SVG Asset ${i + 1} (${s.suggestedLucideIcon || "icon"}) -->\n${s.svgString}`).join("\n\n");
+          this.copyToClipboard(svgs || "No SVGs found in this element.", splitArrow, "SVGs Copied!");
+        }
+      });
+    });
+
+    // Dismiss menus on click outside inside dock
+    this.container.addEventListener("click", (e) => {
+      if (!modelTrigger.contains(e.target as Node) && !modelMenu.contains(e.target as Node)) {
+        modelMenu.classList.remove("open");
+        modelTrigger.classList.remove("open");
+      }
+      if (!splitArrow.contains(e.target as Node) && !actionsMenu.contains(e.target as Node)) {
+        actionsMenu.classList.remove("open");
+      }
     });
 
     // Stream generation button
     const streamBtn = this.container.querySelector("#copage-stream-btn") as HTMLButtonElement;
     const outputPre = this.container.querySelector("#copage-stream-output") as HTMLElement;
-    const modelSelect = this.container.querySelector("#copage-quick-model-select") as HTMLSelectElement;
-
-    // Load saved model selection into dropdown
-    getLLMConfig().then((cfg) => {
-      if (modelSelect) {
-        if (!Array.from(modelSelect.options).some((opt) => opt.value === cfg.model)) {
-          const opt = document.createElement("option");
-          opt.value = cfg.model;
-          opt.text = cfg.model;
-          modelSelect.add(opt);
-        }
-        modelSelect.value = cfg.model;
-      }
-    });
-
-    modelSelect?.addEventListener("change", async () => {
-      // update storage
-      const cfg = await getLLMConfig();
-      cfg.model = modelSelect.value;
-      if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
-        chrome.storage.local.set({ copage_llm_config: cfg });
-      }
-    });
 
     streamBtn?.addEventListener("click", () => {
       this.handleStreamGeneration(outputPre, streamBtn);
@@ -302,6 +454,15 @@ export class CopageDock {
     copyCodeBtn?.addEventListener("click", () => {
       if (this.generatedCode) {
         this.copyToClipboard(this.generatedCode, copyCodeBtn, "TSX Copied!");
+      }
+    });
+
+    // Download code button
+    const downloadCodeBtn = this.container.querySelector("#copage-download-code-btn") as HTMLElement;
+    downloadCodeBtn?.addEventListener("click", () => {
+      if (this.generatedCode) {
+        const componentName = `${d.tagName.charAt(0).toUpperCase() + d.tagName.slice(1)}Component`;
+        this.downloadFile(this.generatedCode, `${componentName}.tsx`);
       }
     });
   }

@@ -58,6 +58,15 @@ export interface InspectedElementData {
 
 export type LLMProvider = "openrouter" | "openai-compatible";
 
+export interface UserPreferences {
+  pruneNoise: boolean;
+  mapTailwind: boolean;
+  extractSvgs: boolean;
+  autoCopy: boolean;
+  deepShadow: boolean;
+  frameworkTarget: "react" | "vue" | "svelte" | "html";
+}
+
 export interface LLMConfig {
   provider: LLMProvider;
   apiKey: string;

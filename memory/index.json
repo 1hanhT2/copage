@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T09:44:31.269Z",
-  "count": 24,
+  "generatedAt": "2026-09-11T09:44:34.048Z",
+  "count": 25,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -198,6 +198,18 @@
       "commit": "feat: initial project setup with agent workflow, deterministic memory, and versioning",
       "tags": [
         "feature",
+        "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_a51836d_chore-memory-update-memory-index.md",
+      "hash": "a51836d6c5b0cddccffc6784d0b49056bafec73f",
+      "short": "a51836d",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore(memory): update memory index",
+      "tags": [
         "memory"
       ]
     },

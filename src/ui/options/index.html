@@ -12,6 +12,7 @@
       --mui-bg: #121212;
       --mui-surface: #1e1e1e;
       --mui-surface-card: #252525;
+      --mui-surface-hover: rgba(255, 255, 255, 0.06);
       --mui-border: rgba(255, 255, 255, 0.12);
       --mui-border-input: rgba(255, 255, 255, 0.23);
       --mui-text-primary: rgba(255, 255, 255, 0.87);
@@ -39,7 +40,7 @@
 
     /* MUI Paper Container */
     .mui-container {
-      max-width: 660px;
+      max-width: 700px;
       margin: 0 auto;
       background-color: var(--mui-surface);
       border: 1px solid var(--mui-border);
@@ -50,21 +51,92 @@
 
     /* Header */
     .mui-header {
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--mui-border);
-      margin-bottom: 28px;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+    .mui-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
     }
     .mui-title {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 500;
       letter-spacing: 0.0075em;
       color: var(--mui-text-primary);
-      margin-bottom: 4px;
+    }
+    .mui-chip-version {
+      font-size: 11px;
+      font-weight: 500;
+      background-color: rgba(255, 255, 255, 0.08);
+      color: var(--mui-text-secondary);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-family: monospace;
     }
     .mui-subtitle {
       font-size: 13px;
       color: var(--mui-text-secondary);
       font-weight: 400;
+    }
+
+    /* MUI Tabs Bar */
+    .mui-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--mui-border);
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+    .mui-tab {
+      background: transparent;
+      border: none;
+      color: var(--mui-text-secondary);
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      transition: color 150ms ease, background-color 150ms ease;
+      border-radius: 6px 6px 0 0;
+      font-family: inherit;
+    }
+    .mui-tab:hover {
+      color: var(--mui-text-primary);
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+    .mui-tab.active {
+      color: var(--mui-primary);
+      font-weight: 600;
+    }
+    .mui-tab.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--mui-primary);
+      border-radius: 2px 2px 0 0;
+      box-shadow: 0 0 8px rgba(144, 202, 249, 0.6);
+    }
+
+    /* Tab Panels */
+    .mui-tab-panel {
+      display: none;
+    }
+    .mui-tab-panel.active {
+      display: block;
+      animation: muiPanelFade 150ms ease;
+    }
+    @keyframes muiPanelFade {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Section Overline */
@@ -89,8 +161,7 @@
       margin-bottom: 6px;
       letter-spacing: 0.015em;
     }
-    .mui-input,
-    .mui-select {
+    .mui-input {
       width: 100%;
       background-color: transparent;
       border: 1px solid var(--mui-border-input);
@@ -102,14 +173,10 @@
       outline: none;
       transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .mui-select option {
-      background-color: var(--mui-surface-card);
-      color: var(--mui-text-primary);
-    }
-    .mui-input:hover, .mui-select:hover {
+    .mui-input:hover {
       border-color: rgba(255, 255, 255, 0.4);
     }
-    .mui-input:focus, .mui-select:focus {
+    .mui-input:focus {
       border-color: var(--mui-primary);
       box-shadow: 0 0 0 1px var(--mui-primary);
     }
@@ -125,6 +192,175 @@
       border-radius: 3px;
       font-family: monospace;
       color: var(--mui-text-primary);
+    }
+
+    /* Password Input Wrapper with toggle */
+    .mui-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .mui-input-action {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      color: var(--mui-text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 50%;
+      transition: color 150ms ease;
+    }
+    .mui-input-action:hover {
+      color: var(--mui-text-primary);
+    }
+
+    /* MUI Custom Select with Animated Dropdown Menu */
+    .mui-select-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .mui-select-trigger {
+      width: 100%;
+      background-color: transparent;
+      border: 1px solid var(--mui-border-input);
+      color: var(--mui-text-primary);
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mui-select-trigger:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    .mui-select-trigger.open,
+    .mui-select-trigger:focus {
+      border-color: var(--mui-primary);
+      box-shadow: 0 0 0 1px var(--mui-primary);
+      outline: none;
+    }
+    .mui-select-value {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+    }
+    .mui-select-arrow {
+      transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--mui-text-secondary);
+      flex-shrink: 0;
+    }
+    .mui-select-trigger.open .mui-select-arrow {
+      transform: rotate(180deg);
+      color: var(--mui-primary);
+    }
+    .mui-menu-paper {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background-color: #252525;
+      border: 1px solid var(--mui-border);
+      border-radius: 6px;
+      box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.3), 0px 8px 10px 1px rgba(0,0,0,0.22), 0px 3px 14px 2px rgba(0,0,0,0.18);
+      padding: 6px 0;
+      z-index: 100;
+      display: none;
+      max-height: 280px;
+      overflow-y: auto;
+      animation: muiMenuFade 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mui-menu-paper.open {
+      display: block;
+    }
+    @keyframes muiMenuFade {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .mui-menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--mui-text-primary);
+      cursor: pointer;
+      transition: background-color 120ms ease;
+    }
+    .mui-menu-item:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+    .mui-menu-item.selected {
+      background-color: rgba(144, 202, 249, 0.14);
+      color: var(--mui-primary);
+      font-weight: 500;
+    }
+    .mui-menu-item-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .mui-menu-item-title {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .mui-menu-item-desc {
+      font-size: 11px;
+      color: var(--mui-text-secondary);
+    }
+    .mui-menu-item-check {
+      color: var(--mui-primary);
+      opacity: 0;
+      flex-shrink: 0;
+    }
+    .mui-menu-item.selected .mui-menu-item-check {
+      opacity: 1;
+    }
+
+    /* MUI Segmented Button Group (Toggle Button Group) */
+    .mui-toggle-button-group {
+      display: inline-flex;
+      border: 1px solid var(--mui-border);
+      border-radius: 6px;
+      overflow: hidden;
+      background-color: var(--mui-surface-card);
+      margin-bottom: 16px;
+    }
+    .mui-toggle-button {
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--mui-border);
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--mui-text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 150ms ease, color 150ms ease;
+      font-family: inherit;
+    }
+    .mui-toggle-button:last-child {
+      border-right: none;
+    }
+    .mui-toggle-button:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--mui-text-primary);
+    }
+    .mui-toggle-button.active {
+      background-color: rgba(144, 202, 249, 0.16);
+      color: var(--mui-primary);
+      font-weight: 600;
     }
 
     /* Model Selection Cards */
@@ -162,6 +398,152 @@
       color: var(--mui-text-secondary);
     }
 
+    /* MUI Switches */
+    .mui-switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background-color: var(--mui-surface-card);
+      border: 1px solid var(--mui-border);
+      border-radius: 6px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: border-color 150ms ease, background-color 150ms ease;
+    }
+    .mui-switch-row:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+    .mui-switch-label-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-right: 16px;
+    }
+    .mui-switch-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--mui-text-primary);
+    }
+    .mui-switch-desc {
+      font-size: 11px;
+      color: var(--mui-text-secondary);
+      line-height: 1.4;
+    }
+    .mui-switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    .mui-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .mui-switch-track {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.2);
+      transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 20px;
+    }
+    .mui-switch-thumb {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #bdbdbd;
+      transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+    .mui-switch input:checked + .mui-switch-track {
+      background-color: rgba(144, 202, 249, 0.5);
+    }
+    .mui-switch input:checked + .mui-switch-track .mui-switch-thumb {
+      transform: translateX(18px);
+      background-color: var(--mui-primary);
+    }
+
+    /* History capture cards */
+    .mui-history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .mui-history-empty {
+      padding: 32px 16px;
+      text-align: center;
+      color: var(--mui-text-secondary);
+      font-size: 13px;
+      background-color: var(--mui-surface-card);
+      border: 1px dashed var(--mui-border);
+      border-radius: 8px;
+    }
+    .mui-history-card {
+      background-color: var(--mui-surface-card);
+      border: 1px solid var(--mui-border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .mui-history-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      overflow: hidden;
+    }
+    .mui-history-tag {
+      font-size: 12px;
+      font-family: monospace;
+      font-weight: 600;
+      color: var(--mui-primary);
+    }
+    .mui-history-meta {
+      font-size: 11px;
+      color: var(--mui-text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 450px;
+    }
+    .mui-history-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .mui-icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--mui-text-secondary);
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 150ms ease, color 150ms ease;
+    }
+    .mui-icon-btn:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+      color: var(--mui-text-primary);
+    }
+
     /* Buttons */
     .mui-actions-bar {
       display: flex;
@@ -186,6 +568,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      font-family: inherit;
       transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
     }
     .mui-btn-outlined:hover:not(:disabled) {
@@ -212,6 +595,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      font-family: inherit;
       box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
       transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -276,58 +660,225 @@
 <body>
   <main class="mui-container">
     <header class="mui-header">
-      <h1 class="mui-title">Copage Settings</h1>
-      <p class="mui-subtitle">Configure your LLM provider for instant in-page component synthesis and prompt distillation.</p>
+      <div class="mui-title-row">
+        <h1 class="mui-title">Copage Settings</h1>
+        <span class="mui-chip-version">v0.1.0</span>
+      </div>
+      <p class="mui-subtitle">Configure LLM inference providers, extraction behavior, and inspection defaults.</p>
     </header>
 
-    <div class="mui-section-title">Inference Provider (BYOK)</div>
-
-    <div class="mui-form-group">
-      <label class="mui-label" for="provider-select">Provider Type</label>
-      <select id="provider-select" class="mui-select">
-        <option value="openrouter">OpenRouter (Recommended — Multi-model gateway)</option>
-        <option value="openai-compatible">Custom OpenAI-Compatible (Ollama, LM Studio, vLLM)</option>
-      </select>
-    </div>
-
-    <div class="mui-form-group">
-      <label class="mui-label" for="api-key-input">API Key</label>
-      <input type="password" id="api-key-input" class="mui-input" placeholder="sk-or-v1-..." />
-      <p class="mui-helper-text">Stored strictly in local browser storage (chrome.storage.local) and sent directly to the inference endpoint.</p>
-    </div>
-
-    <div class="mui-form-group">
-      <label class="mui-label" for="base-url-input">Base Endpoint URL</label>
-      <input type="text" id="base-url-input" class="mui-input" value="https://openrouter.ai/api/v1" />
-      <p class="mui-helper-text">For local Ollama, use <code>http://localhost:11434/v1</code>.</p>
-    </div>
-
-    <div class="mui-section-title" style="margin-top: 28px;">Recommended Fast &amp; Cheap Models</div>
-    <div class="mui-cards-grid" id="model-presets-container">
-      <!-- Injected via options.ts -->
-    </div>
-
-    <div class="mui-form-group">
-      <label class="mui-label" for="custom-model-input">Selected Model Identifier</label>
-      <input type="text" id="custom-model-input" class="mui-input" value="google/gemini-2.5-flash" />
-      <p class="mui-helper-text">Enter any valid model ID supported by your provider.</p>
-    </div>
-
-    <div id="test-result-box" class="mui-alert"></div>
-
-    <div class="mui-actions-bar">
-      <button id="test-conn-btn" class="mui-btn-outlined">
+    <!-- Material Tabs Bar -->
+    <nav class="mui-tabs" role="tablist">
+      <button class="mui-tab active" data-tab="inference" role="tab" aria-selected="true">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-          <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+          <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
         </svg>
-        <span>Test Connection</span>
+        <span>Inference &amp; Models</span>
       </button>
-      <button id="save-btn" class="mui-btn-contained">
+      <button class="mui-tab" data-tab="extraction" role="tab" aria-selected="false">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-          <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+          <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
         </svg>
-        <span>Save Settings</span>
+        <span>Engine &amp; Extraction</span>
       </button>
+      <button class="mui-tab" data-tab="history" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+        </svg>
+        <span>Recent Captures</span>
+      </button>
+    </nav>
+
+    <!-- Tab 1: Inference & Models -->
+    <div id="tab-inference" class="mui-tab-panel active">
+      <div class="mui-section-title">Inference Provider (BYOK)</div>
+
+      <!-- Segmented Buttons for Provider -->
+      <div class="mui-toggle-button-group" id="provider-toggle-group">
+        <button type="button" class="mui-toggle-button active" data-provider="openrouter">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          <span>OpenRouter</span>
+        </button>
+        <button type="button" class="mui-toggle-button" data-provider="openai-compatible">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+            <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
+          </svg>
+          <span>Custom OpenAI / Local Ollama</span>
+        </button>
+      </div>
+      <input type="hidden" id="provider-select" value="openrouter" />
+
+      <div class="mui-form-group">
+        <label class="mui-label" for="api-key-input">API Key</label>
+        <div class="mui-input-wrapper">
+          <input type="password" id="api-key-input" class="mui-input" placeholder="sk-or-v1-..." />
+          <button type="button" id="toggle-key-visibility" class="mui-input-action" title="Toggle visibility">
+            <svg id="eye-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+          </button>
+        </div>
+        <p class="mui-helper-text">Stored strictly in local browser storage (chrome.storage.local) and sent directly to the inference endpoint.</p>
+      </div>
+
+      <div class="mui-form-group">
+        <label class="mui-label" for="base-url-input">Base Endpoint URL</label>
+        <input type="text" id="base-url-input" class="mui-input" value="https://openrouter.ai/api/v1" />
+        <p class="mui-helper-text">For local Ollama, use <code>http://localhost:11434/v1</code>.</p>
+      </div>
+
+      <div class="mui-section-title" style="margin-top: 24px;">Recommended Fast &amp; Cheap Models</div>
+      <div class="mui-cards-grid" id="model-presets-container">
+        <!-- Injected via options.ts -->
+      </div>
+
+      <!-- MUI Outlined Dropdown Menu for Model Selection -->
+      <div class="mui-form-group">
+        <label class="mui-label" for="model-dropdown-trigger">Active Model Preset</label>
+        <div class="mui-select-wrapper">
+          <div id="model-dropdown-trigger" class="mui-select-trigger" tabindex="0" role="combobox" aria-expanded="false">
+            <div class="mui-select-value">
+              <span id="selected-model-text">Gemini 2.5 Flash (Google)</span>
+            </div>
+            <svg class="mui-select-arrow" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </div>
+          <div id="model-dropdown-menu" class="mui-menu-paper" role="listbox">
+            <!-- Items populated via options.ts -->
+          </div>
+        </div>
+      </div>
+
+      <div class="mui-form-group">
+        <label class="mui-label" for="custom-model-input">Raw Model Identifier</label>
+        <input type="text" id="custom-model-input" class="mui-input" value="google/gemini-2.5-flash" />
+        <p class="mui-helper-text">Enter any valid model ID supported by your provider.</p>
+      </div>
+
+      <div id="test-result-box" class="mui-alert"></div>
+
+      <div class="mui-actions-bar">
+        <button id="test-conn-btn" class="mui-btn-outlined">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+          </svg>
+          <span>Test Connection</span>
+        </button>
+        <button id="save-btn" class="mui-btn-contained">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+          </svg>
+          <span>Save Settings</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab 2: Engine & Extraction -->
+    <div id="tab-extraction" class="mui-tab-panel">
+      <div class="mui-section-title">Extraction Engine Preferences</div>
+
+      <!-- MUI Segmented Button for Target Framework -->
+      <div class="mui-form-group">
+        <label class="mui-label">Default Framework Output</label>
+        <div class="mui-toggle-button-group" id="framework-toggle-group">
+          <button type="button" class="mui-toggle-button active" data-framework="react">
+            <span>React + Tailwind</span>
+          </button>
+          <button type="button" class="mui-toggle-button" data-framework="vue">
+            <span>Vue 3</span>
+          </button>
+          <button type="button" class="mui-toggle-button" data-framework="svelte">
+            <span>Svelte</span>
+          </button>
+          <button type="button" class="mui-toggle-button" data-framework="html">
+            <span>Semantic HTML</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MUI Switches -->
+      <label class="mui-switch-row" for="switch-prune">
+        <div class="mui-switch-label-wrap">
+          <span class="mui-switch-title">Prune Noise &amp; Tracking Attributes</span>
+          <span class="mui-switch-desc">Automatically remove scripts, noscripts, comments, and data-testid tags to preserve LLM token context.</span>
+        </div>
+        <div class="mui-switch">
+          <input type="checkbox" id="switch-prune" checked />
+          <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+        </div>
+      </label>
+
+      <label class="mui-switch-row" for="switch-tailwind">
+        <div class="mui-switch-label-wrap">
+          <span class="mui-switch-title">Map Computed CSS to Tailwind Utilities</span>
+          <span class="mui-switch-desc">Translate computed spacing, typography, flexbox/grid, and colors directly into canonical Tailwind CSS classes.</span>
+        </div>
+        <div class="mui-switch">
+          <input type="checkbox" id="switch-tailwind" checked />
+          <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+        </div>
+      </label>
+
+      <label class="mui-switch-row" for="switch-svg">
+        <div class="mui-switch-label-wrap">
+          <span class="mui-switch-title">Extract Clean SVGs &amp; Suggest Icons</span>
+          <span class="mui-switch-desc">Sanitize inline vector icons and recommend corresponding Lucide icon names for clean code synthesis.</span>
+        </div>
+        <div class="mui-switch">
+          <input type="checkbox" id="switch-svg" checked />
+          <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+        </div>
+      </label>
+
+      <label class="mui-switch-row" for="switch-deep-shadow">
+        <div class="mui-switch-label-wrap">
+          <span class="mui-switch-title">Piercing Shadow DOM Inspection</span>
+          <span class="mui-switch-desc">Traverse open Shadow DOM roots inside custom web components and embedded page widgets.</span>
+        </div>
+        <div class="mui-switch">
+          <input type="checkbox" id="switch-deep-shadow" checked />
+          <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+        </div>
+      </label>
+
+      <label class="mui-switch-row" for="switch-autocopy">
+        <div class="mui-switch-label-wrap">
+          <span class="mui-switch-title">Auto-Copy on Synthesis</span>
+          <span class="mui-switch-desc">Automatically copy finished prompts and synthesized code directly to your system clipboard.</span>
+        </div>
+        <div class="mui-switch">
+          <input type="checkbox" id="switch-autocopy" checked />
+          <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+        </div>
+      </label>
+
+      <div class="mui-actions-bar">
+        <button id="save-prefs-btn" class="mui-btn-contained">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+          </svg>
+          <span>Save Preferences</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab 3: Recent Captures History -->
+    <div id="tab-history" class="mui-tab-panel">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div class="mui-section-title" style="margin-bottom: 0;">Captured Elements (Local Storage)</div>
+        <button id="clear-history-btn" class="mui-btn-outlined" style="font-size: 11px; padding: 4px 10px;">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+          </svg>
+          <span>Clear History</span>
+        </button>
+      </div>
+      <div id="history-container" class="mui-history-list">
+        <!-- Rendered via options.ts -->
+      </div>
     </div>
 
     <div class="mui-security-banner">
