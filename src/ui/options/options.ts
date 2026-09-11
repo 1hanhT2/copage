@@ -12,8 +12,8 @@ import type { LLMProvider, UserPreferences, RecentCapture } from "../../lib/type
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Tabs
-  const tabButtons = document.querySelectorAll<HTMLButtonElement>(".mui-tab");
-  const tabPanels = document.querySelectorAll<HTMLElement>(".mui-tab-panel");
+  const tabButtons = document.querySelectorAll<HTMLButtonElement>(".m3-tab");
+  const tabPanels = document.querySelectorAll<HTMLElement>(".m3-tab-panel");
 
   tabButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Set initial Provider Segmented Buttons
   function setProviderUI(provider: LLMProvider) {
     providerSelectHidden.value = provider;
-    providerToggleGroup.querySelectorAll(".mui-toggle-button").forEach((btn) => {
+    providerToggleGroup.querySelectorAll(".m3-toggle-button").forEach((btn) => {
       const p = (btn as HTMLElement).dataset.provider;
       if (p === provider) {
         btn.classList.add("active");
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   setProviderUI(config.provider);
 
-  providerToggleGroup.querySelectorAll(".mui-toggle-button").forEach((btn) => {
+  providerToggleGroup.querySelectorAll(".m3-toggle-button").forEach((btn) => {
     btn.addEventListener("click", () => {
       const p = (btn as HTMLElement).dataset.provider as LLMProvider;
       setProviderUI(p);
@@ -114,10 +114,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     modelPresetsContainer.innerHTML = "";
     RECOMMENDED_MODELS.forEach((preset) => {
       const card = document.createElement("div");
-      card.className = `mui-action-card ${customModelInput.value === preset.id ? "selected" : ""}`;
+      card.className = `m3-action-card ${customModelInput.value === preset.id ? "selected" : ""}`;
       card.innerHTML = `
-        <div class="mui-card-name">${preset.name}</div>
-        <div class="mui-card-meta">${preset.speed} • ${preset.cost}</div>
+        <div class="m3-card-name">${preset.name}</div>
+        <div class="m3-card-meta">${preset.speed} • ${preset.cost}</div>
       `;
       card.addEventListener("click", () => {
         selectModel(preset.id, preset.name);
@@ -132,15 +132,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     RECOMMENDED_MODELS.forEach((preset) => {
       const isSelected = customModelInput.value === preset.id;
       const item = document.createElement("div");
-      item.className = `mui-menu-item ${isSelected ? "selected" : ""}`;
+      item.className = `m3-menu-item ${isSelected ? "selected" : ""}`;
       item.setAttribute("role", "option");
       item.setAttribute("aria-selected", isSelected ? "true" : "false");
       item.innerHTML = `
-        <div class="mui-menu-item-text">
-          <span class="mui-menu-item-title">${preset.name}</span>
-          <span class="mui-menu-item-desc">${preset.provider} • ${preset.speed} • ${preset.cost}</span>
+        <div class="m3-menu-item-text">
+          <span class="m3-menu-item-title">${preset.name}</span>
+          <span class="m3-menu-item-desc">${preset.provider} • ${preset.speed} • ${preset.cost}</span>
         </div>
-        <svg class="mui-menu-item-check" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+        <svg class="m3-menu-item-check" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
         </svg>
       `;
@@ -160,9 +160,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   function selectModel(modelId: string, modelName: string) {
     customModelInput.value = modelId;
     selectedModelText.textContent = modelName;
-    document.querySelectorAll(".mui-action-card").forEach((c) => c.classList.remove("selected"));
-    document.querySelectorAll(".mui-menu-item").forEach((item) => {
-      const isMatch = item.querySelector(".mui-menu-item-title")?.textContent === modelName;
+    document.querySelectorAll(".m3-action-card").forEach((c) => c.classList.remove("selected"));
+    document.querySelectorAll(".m3-menu-item").forEach((item) => {
+      const isMatch = item.querySelector(".m3-menu-item-title")?.textContent === modelName;
       item.classList.toggle("selected", isMatch);
       item.setAttribute("aria-selected", isMatch ? "true" : "false");
     });
@@ -199,8 +199,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   customModelInput.addEventListener("input", () => {
     const matched = RECOMMENDED_MODELS.find((m) => m.id === customModelInput.value);
     selectedModelText.textContent = matched ? `${matched.name} (${matched.provider})` : customModelInput.value;
-    document.querySelectorAll(".mui-action-card").forEach((c) => {
-      const name = c.querySelector(".mui-card-name")?.textContent;
+    document.querySelectorAll(".m3-action-card").forEach((c) => {
+      const name = c.querySelector(".m3-card-name")?.textContent;
       c.classList.toggle("selected", matched ? name === matched.name : false);
     });
   });
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       </svg>
       <span>Testing...</span>
     `;
-    testResultBox.className = "mui-alert";
+    testResultBox.className = "m3-alert";
     testResultBox.textContent = "Connecting to inference endpoint...";
     testResultBox.style.display = "flex";
 
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
 
     if (res.success) {
-      testResultBox.className = "mui-alert mui-alert-success";
+      testResultBox.className = "m3-alert m3-alert-success";
       testResultBox.innerHTML = `
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink: 0;">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <span>${res.message}</span>
       `;
     } else {
-      testResultBox.className = "mui-alert mui-alert-error";
+      testResultBox.className = "m3-alert m3-alert-error";
       testResultBox.innerHTML = `
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink: 0;">
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
@@ -274,8 +274,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       </svg>
       <span>Saved!</span>
     `;
-    saveBtn.style.backgroundColor = "#66bb6a";
-    saveBtn.style.color = "#003300";
+    saveBtn.style.backgroundColor = "#78dc77";
+    saveBtn.style.color = "#062e6f";
     setTimeout(() => {
       saveBtn.disabled = false;
       saveBtn.innerHTML = `
@@ -297,12 +297,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   switchAutoCopy.checked = prefs.autoCopy;
 
   let activeFramework = prefs.frameworkTarget || "react";
-  frameworkToggleGroup.querySelectorAll(".mui-toggle-button").forEach((btn) => {
+  frameworkToggleGroup.querySelectorAll(".m3-toggle-button").forEach((btn) => {
     const fw = (btn as HTMLElement).dataset.framework;
     btn.classList.toggle("active", fw === activeFramework);
     btn.addEventListener("click", () => {
       activeFramework = fw as UserPreferences["frameworkTarget"];
-      frameworkToggleGroup.querySelectorAll(".mui-toggle-button").forEach((b) => b.classList.remove("active"));
+      frameworkToggleGroup.querySelectorAll(".m3-toggle-button").forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
     });
   });
@@ -324,8 +324,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       </svg>
       <span>Preferences Saved!</span>
     `;
-    savePrefsBtn.style.backgroundColor = "#66bb6a";
-    savePrefsBtn.style.color = "#003300";
+    savePrefsBtn.style.backgroundColor = "#78dc77";
+    savePrefsBtn.style.color = "#062e6f";
     setTimeout(() => {
       savePrefsBtn.disabled = false;
       savePrefsBtn.innerHTML = `
@@ -344,7 +344,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const captures = await getRecentCaptures();
     if (captures.length === 0) {
       historyContainer.innerHTML = `
-        <div class="mui-history-empty">
+        <div class="m3-history-empty">
           <svg viewBox="0 0 24 24" width="28" height="28" fill="rgba(255,255,255,0.25)" style="margin-bottom: 8px;">
             <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
           </svg>
@@ -357,19 +357,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     historyContainer.innerHTML = "";
     captures.forEach((cap: RecentCapture) => {
       const card = document.createElement("div");
-      card.className = "mui-history-card";
+      card.className = "m3-history-card";
       const timeStr = new Date(cap.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       card.innerHTML = `
-        <div class="mui-history-info">
+        <div class="m3-history-info">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="mui-history-tag">&lt;${cap.tagName}&gt;</span>
-            <span style="font-size: 11px; color: var(--mui-text-secondary);">${cap.dimensions}</span>
-            <span style="font-size: 10px; background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px; color: var(--mui-text-secondary);">${timeStr}</span>
+            <span class="m3-history-tag">&lt;${cap.tagName}&gt;</span>
+            <span style="font-size: 11px; color: var(--m3-text-secondary);">${cap.dimensions}</span>
+            <span style="font-size: 10px; background: rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 9999px; color: var(--m3-primary); font-weight: 500;">${timeStr}</span>
           </div>
-          <div class="mui-history-meta">${cap.title || cap.url}</div>
+          <div class="m3-history-meta">${cap.title || cap.url}</div>
         </div>
-        <div class="mui-history-actions">
-          <button class="mui-icon-btn copy-hist-btn" title="Copy Reproduction Prompt">
+        <div class="m3-history-actions">
+          <button class="m3-icon-btn copy-hist-btn" title="Copy Reproduction Prompt">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
             </svg>
@@ -381,7 +381,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       copyBtn?.addEventListener("click", async () => {
         await navigator.clipboard.writeText(cap.reproductionPrompt || cap.cleanHtml);
         copyBtn.innerHTML = `
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="#66bb6a">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="#78dc77">
             <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
           </svg>
         `;

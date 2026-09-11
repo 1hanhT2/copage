@@ -49,86 +49,90 @@ export class InspectorOverlay {
         box-sizing: border-box !important;
       }
 
-      /* Bounding Box Highlight (Material primary / success) */
+      /* Bounding Box Highlight (Material 3 Expressive Electric Primary / Mint Locked) */
       .copage-bbox {
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         pointer-events: none !important;
-        border: 2px solid #90caf9 !important;
-        background-color: rgba(144, 202, 249, 0.12) !important;
-        border-radius: 2px !important;
-        transition: transform 0.03s linear, width 0.03s linear, height 0.03s linear;
+        border: 2px solid #a8c7fa !important;
+        background-color: rgba(168, 199, 250, 0.14) !important;
+        border-radius: 6px !important;
+        transition: transform 0.04s cubic-bezier(0.2, 0, 0, 1), width 0.04s cubic-bezier(0.2, 0, 0, 1), height 0.04s cubic-bezier(0.2, 0, 0, 1);
         will-change: transform, width, height;
         display: none;
         z-index: 2147483640 !important;
       }
       .copage-bbox.locked {
-        border-color: #66bb6a !important;
-        background-color: rgba(102, 187, 106, 0.1) !important;
-        box-shadow: 0 0 0 1px rgba(102, 187, 106, 0.4), 0 0 16px rgba(102, 187, 106, 0.25) !important;
+        border-color: #78dc77 !important;
+        background-color: rgba(120, 220, 119, 0.15) !important;
+        box-shadow: 0 0 0 2px rgba(120, 220, 119, 0.4), 0 0 24px rgba(120, 220, 119, 0.3) !important;
       }
 
-      /* Floating Tooltip (MUI Tooltip Style) */
+      /* Floating Tooltip (M3 Expressive Squircle Tooltip) */
       .copage-tooltip {
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         pointer-events: none !important;
-        background-color: #2c2c2c !important;
-        color: rgba(255, 255, 255, 0.87) !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-radius: 4px !important;
-        padding: 5px 10px !important;
+        background-color: rgba(39, 37, 45, 0.94) !important;
+        color: rgba(255, 255, 255, 0.92) !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        border-radius: 12px !important;
+        padding: 6px 12px !important;
         font-size: 11px !important;
-        line-height: 1.2 !important;
-        box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12) !important;
+        line-height: 1.25 !important;
+        box-shadow: 0px 8px 24px -4px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08) !important;
+        backdrop-filter: blur(16px) !important;
         display: none;
         align-items: center;
         gap: 8px;
         white-space: nowrap;
         z-index: 2147483645 !important;
+        transition: opacity 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       .copage-tt-tag {
-        color: #90caf9;
+        color: #a8c7fa;
         font-weight: 600;
         font-family: monospace;
       }
       .copage-tt-dim {
-        color: #ffe082;
+        color: #ffdf99;
         font-family: monospace;
       }
       .copage-tt-class {
-        color: #ce93d8;
-        max-width: 200px;
+        color: #d0bcff;
+        max-width: 240px;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      /* Dock Panel (MUI Paper Elevation-8) */
+      /* Dock Panel (M3 Expressive Floating Island) */
       .copage-dock-panel {
         position: fixed;
         bottom: 24px;
         left: 50%;
         transform: translateX(-50%);
         width: 92vw;
-        max-width: 740px;
-        background-color: #1e1e1e;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 12px;
-        padding: 16px 18px;
-        box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.3), 0px 8px 10px 1px rgba(0,0,0,0.22), 0px 3px 14px 2px rgba(0,0,0,0.18);
+        max-width: 760px;
+        background-color: rgba(28, 27, 33, 0.94);
+        backdrop-filter: blur(28px) saturate(190%);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 28px;
+        padding: 16px 20px;
+        box-shadow: 0 20px 48px -8px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08), 0 0 40px -4px rgba(168, 199, 250, 0.18);
         pointer-events: auto !important;
         z-index: 2147483646 !important;
         display: flex;
         flex-direction: column;
         gap: 12px;
-        animation: copageSlideUp 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: copageExpressiveSpring 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
-      @keyframes copageSlideUp {
-        from { opacity: 0; transform: translate(-50%, 14px); }
-        to { opacity: 1; transform: translate(-50%, 0); }
+      @keyframes copageExpressiveSpring {
+        from { opacity: 0; transform: translate(-50%, 28px) scale(0.92); }
+        65% { transform: translate(-50%, -4px) scale(1.015); }
+        to { opacity: 1; transform: translate(-50%, 0) scale(1); }
       }
 
       .copage-dock-header {
@@ -148,31 +152,31 @@ export class InspectorOverlay {
         font-weight: 700;
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        background: #90caf9;
-        color: #0d47a1;
-        padding: 2px 7px;
-        border-radius: 4px;
+        background: #a8c7fa;
+        color: #062e6f;
+        padding: 3px 9px;
+        border-radius: 9999px;
       }
       .copage-tag-badge {
         font-size: 13px;
         font-weight: 600;
-        color: #90caf9;
+        color: #a8c7fa;
         font-family: monospace;
       }
       .copage-dim-badge {
         font-size: 11px;
-        color: #ffe082;
+        color: #ffdf99;
         font-family: monospace;
       }
       .copage-class-badge {
         font-size: 11px;
-        color: #ce93d8;
+        color: #d0bcff;
         max-width: 240px;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      /* Breadcrumbs bar (MUI Chips) */
+      /* Breadcrumbs bar (M3 Pill Chips) */
       .copage-breadcrumbs-bar {
         display: flex;
         align-items: center;
@@ -181,71 +185,33 @@ export class InspectorOverlay {
         padding-bottom: 2px;
       }
       .copage-bc-btn {
-        background: rgba(255, 255, 255, 0.06);
+        background: rgba(255, 255, 255, 0.07);
         border: 1px solid rgba(255, 255, 255, 0.12);
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.75);
         font-size: 11px;
         font-family: monospace;
-        padding: 2px 8px;
-        border-radius: 12px;
+        padding: 3px 10px;
+        border-radius: 9999px;
         cursor: pointer;
         white-space: nowrap;
-        transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
       }
       .copage-bc-btn:hover {
-        border-color: #90caf9;
+        border-color: #a8c7fa;
         color: #ffffff;
-        background-color: rgba(144, 202, 249, 0.12);
+        background-color: rgba(168, 199, 250, 0.16);
+        transform: translateY(-1px) scale(1.03);
+      }
+      .copage-bc-btn:active {
+        transform: scale(0.96);
       }
 
-      /* Action Grid (MUI Action Cards) */
-      .copage-action-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
-        gap: 8px;
-      }
-      .copage-action-card {
-        background-color: #252525;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 6px;
-        padding: 10px 12px;
-        text-align: left;
-        cursor: pointer;
-        transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), border-color 150ms cubic-bezier(0.4, 0, 0.2, 1), transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .copage-action-card:hover {
-        background-color: rgba(255, 255, 255, 0.08);
-        border-color: #90caf9;
-        transform: translateY(-1px);
-      }
-      .copage-card-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 4px;
-      }
-      .copage-card-title {
-        font-size: 12px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.87);
-        letter-spacing: 0.01em;
-      }
-      .copage-card-icon {
-        color: rgba(255, 255, 255, 0.4);
-        flex-shrink: 0;
-      }
-      .copage-card-desc {
-        font-size: 10.5px;
-        color: rgba(255, 255, 255, 0.60);
-        line-height: 1.35;
-      }
-
-      /* AI Section (MUI Sub-Paper) */
+      /* AI Section (M3 Expressive Sub-Surface) */
       .copage-ai-section {
-        background-color: #171717;
+        background-color: rgba(21, 21, 26, 0.85);
         border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 8px;
-        padding: 12px 14px;
+        border-radius: 20px;
+        padding: 12px 16px;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -264,79 +230,99 @@ export class InspectorOverlay {
         position: relative;
       }
       .copage-model-label {
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.60);
-        font-weight: 400;
+        font-size: 11.5px;
+        color: rgba(255, 255, 255, 0.65);
+        font-weight: 500;
       }
 
-      /* MUI Dropdown Select in HUD */
+      /* M3 Expressive Dropdown Select in HUD */
       .copage-select-wrap {
         position: relative;
       }
       .copage-select-trigger {
-        background-color: #252525;
-        border: 1px solid rgba(255, 255, 255, 0.23);
-        color: rgba(255, 255, 255, 0.87);
+        background-color: #27252d;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: rgba(255, 255, 255, 0.92);
         font-size: 11.5px;
-        padding: 5px 10px;
-        border-radius: 4px;
+        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: 9999px;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         gap: 6px;
         user-select: none;
-        transition: border-color 150ms ease;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.15s ease, background-color 0.15s ease;
       }
-      .copage-select-trigger:hover,
+      .copage-select-trigger:hover {
+        border-color: #a8c7fa;
+        transform: translateY(-1px);
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+      .copage-select-trigger:active {
+        transform: scale(0.97);
+      }
       .copage-select-trigger.open {
-        border-color: #90caf9;
+        border-color: #a8c7fa;
+        box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25);
       }
       .copage-select-arrow {
-        color: rgba(255, 255, 255, 0.5);
-        transition: transform 180ms ease;
+        color: rgba(255, 255, 255, 0.55);
+        transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
         flex-shrink: 0;
       }
       .copage-select-trigger.open .copage-select-arrow {
         transform: rotate(180deg);
-        color: #90caf9;
+        color: #a8c7fa;
       }
       .copage-menu-popover {
         position: absolute;
-        bottom: calc(100% + 6px);
+        bottom: calc(100% + 8px);
         left: 0;
-        min-width: 260px;
-        background-color: #292929;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 6px;
-        box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.4), 0px 8px 10px 1px rgba(0,0,0,0.28), 0px 3px 14px 2px rgba(0,0,0,0.22);
-        padding: 4px 0;
+        min-width: 270px;
+        background-color: #27252d;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 20px;
+        box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.55), 0px 0px 24px rgba(168,199,250,0.12);
+        backdrop-filter: blur(24px);
+        padding: 6px 0;
         z-index: 2147483647;
         display: none;
-        animation: copageMenuPop 140ms ease;
+        transform-origin: bottom left;
+        animation: copageMenuSpring 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       .copage-menu-popover.open {
         display: block;
       }
-      @keyframes copageMenuPop {
-        from { opacity: 0; transform: translateY(4px); }
-        to { opacity: 1; transform: translateY(0); }
+      @keyframes copageMenuSpring {
+        from { opacity: 0; transform: scale(0.88) translateY(12px); }
+        65% { transform: scale(1.02) translateY(-2px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
       }
       .copage-menu-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 8px 12px;
+        padding: 9px 16px;
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.87);
+        color: rgba(255, 255, 255, 0.88);
         cursor: pointer;
         transition: background-color 120ms ease;
+      }
+      .copage-menu-item:first-child {
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+      }
+      .copage-menu-item:last-child {
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
       }
       .copage-menu-item:hover {
         background-color: rgba(255, 255, 255, 0.08);
       }
       .copage-menu-item.selected {
-        background-color: rgba(144, 202, 249, 0.14);
-        color: #90caf9;
+        background-color: rgba(168, 199, 250, 0.16);
+        color: #a8c7fa;
         font-weight: 500;
       }
       .copage-menu-item-text {
@@ -346,14 +332,14 @@ export class InspectorOverlay {
       }
       .copage-menu-item-title {
         font-weight: 500;
-        font-size: 12px;
+        font-size: 12.5px;
       }
       .copage-menu-item-desc {
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(255, 255, 255, 0.55);
       }
       .copage-menu-item-check {
-        color: #90caf9;
+        color: #a8c7fa;
         opacity: 0;
         flex-shrink: 0;
       }
@@ -361,67 +347,72 @@ export class InspectorOverlay {
         opacity: 1;
       }
 
-      /* MUI Segmented Button Group (Toggle Buttons) */
+      /* M3 Expressive Segmented Button Group (Capsule Toggle) */
       .copage-segmented-group {
         display: inline-flex;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 9999px;
         overflow: hidden;
-        background-color: #252525;
+        background-color: #15151a;
+        padding: 3px;
+        gap: 2px;
       }
       .copage-segmented-btn {
         background: transparent;
         border: none;
-        border-right: 1px solid rgba(255, 255, 255, 0.12);
-        padding: 5px 11px;
+        padding: 5px 12px;
         font-size: 11px;
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.65);
+        color: rgba(255, 255, 255, 0.7);
+        border-radius: 9999px;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         gap: 5px;
-        transition: background-color 150ms ease, color 150ms ease;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.18s ease, color 0.18s ease;
         font-family: inherit;
-      }
-      .copage-segmented-btn:last-child {
-        border-right: none;
       }
       .copage-segmented-btn:hover {
         background-color: rgba(255, 255, 255, 0.08);
-        color: rgba(255, 255, 255, 0.95);
+        color: #ffffff;
+      }
+      .copage-segmented-btn:active {
+        transform: scale(0.96);
       }
       .copage-segmented-btn.active {
-        background-color: rgba(144, 202, 249, 0.18);
-        color: #90caf9;
+        background-color: rgba(168, 199, 250, 0.22);
+        color: #a8c7fa;
         font-weight: 600;
       }
 
-      /* MUI Split Button */
+      /* M3 Expressive Split Button */
       .copage-split-group {
         display: inline-flex;
-        border-radius: 4px;
-        box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+        border-radius: 9999px;
+        box-shadow: 0px 4px 12px -2px rgba(0,0,0,0.4), 0px 2px 4px 0px rgba(0,0,0,0.2);
         position: relative;
       }
       .copage-split-main {
-        background-color: #90caf9;
-        color: #0d47a1;
+        background-color: #a8c7fa;
+        color: #062e6f;
         border: none;
-        border-radius: 4px 0 0 4px;
-        padding: 6px 14px;
-        font-size: 11.5px;
+        border-radius: 9999px 0 0 9999px;
+        padding: 7px 16px;
+        font-size: 12px;
         font-weight: 600;
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
+        letter-spacing: 0.02em;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        transition: background-color 200ms ease;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
       }
       .copage-split-main:hover:not(:disabled) {
-        background-color: #64b5f6;
+        background-color: #7cacf8;
+        transform: translateY(-1px);
+      }
+      .copage-split-main:active:not(:disabled) {
+        transform: scale(0.96);
       }
       .copage-split-main:disabled {
         background-color: rgba(255, 255, 255, 0.12);
@@ -429,20 +420,23 @@ export class InspectorOverlay {
         cursor: not-allowed;
       }
       .copage-split-arrow-btn {
-        background-color: #90caf9;
-        color: #0d47a1;
+        background-color: #a8c7fa;
+        color: #062e6f;
         border: none;
-        border-left: 1px solid rgba(13, 71, 161, 0.3);
-        border-radius: 0 4px 4px 0;
-        padding: 6px 8px;
+        border-left: 1px solid rgba(6, 46, 111, 0.25);
+        border-radius: 0 9999px 9999px 0;
+        padding: 7px 10px;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        transition: background-color 200ms ease;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
       }
       .copage-split-arrow-btn:hover:not(:disabled) {
-        background-color: #64b5f6;
+        background-color: #7cacf8;
+      }
+      .copage-split-arrow-btn:active:not(:disabled) {
+        transform: scale(0.96);
       }
       .copage-split-arrow-btn:disabled {
         background-color: rgba(255, 255, 255, 0.12);
@@ -451,42 +445,46 @@ export class InspectorOverlay {
       }
       .copage-actions-popover {
         position: absolute;
-        bottom: calc(100% + 6px);
+        bottom: calc(100% + 8px);
         right: 0;
-        min-width: 200px;
-        background-color: #292929;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 6px;
-        box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.4), 0px 8px 10px 1px rgba(0,0,0,0.28), 0px 3px 14px 2px rgba(0,0,0,0.22);
-        padding: 4px 0;
+        min-width: 210px;
+        background-color: #27252d;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 20px;
+        box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.55), 0px 0px 24px rgba(168,199,250,0.12);
+        backdrop-filter: blur(24px);
+        padding: 6px 0;
         z-index: 2147483647;
         display: none;
-        animation: copageMenuPop 140ms ease;
+        transform-origin: bottom right;
+        animation: copageMenuSpring 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       .copage-actions-popover.open {
         display: block;
       }
 
-      /* MUI Outlined Button */
+      /* M3 Expressive Outlined Button */
       .copage-btn-secondary {
         background: transparent;
-        border: 1px solid rgba(144, 202, 249, 0.5);
-        color: #90caf9;
-        border-radius: 4px;
-        padding: 4px 10px;
+        border: 1px solid rgba(168, 199, 250, 0.5);
+        color: #a8c7fa;
+        border-radius: 9999px;
+        padding: 5px 12px;
         font-size: 11px;
         font-weight: 500;
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease, border-color 0.15s ease;
       }
       .copage-btn-secondary:hover {
-        background-color: rgba(144, 202, 249, 0.08);
-        border-color: #90caf9;
+        background-color: rgba(168, 199, 250, 0.12);
+        border-color: #a8c7fa;
+        transform: translateY(-1px) scale(1.02);
+      }
+      .copage-btn-secondary:active {
+        transform: scale(0.96);
       }
 
       .copage-code-preview-wrap {
@@ -501,18 +499,18 @@ export class InspectorOverlay {
       }
       .copage-code-title {
         font-size: 11px;
-        color: rgba(255, 255, 255, 0.60);
+        color: rgba(255, 255, 255, 0.65);
         font-family: monospace;
       }
       .copage-code-pre {
-        background-color: #121212;
+        background-color: #0f0f12;
         border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 4px;
-        padding: 10px;
+        border-radius: 16px;
+        padding: 12px;
         font-family: "JetBrains Mono", monospace;
         font-size: 11px;
         line-height: 1.45;
-        color: rgba(255, 255, 255, 0.87);
+        color: rgba(255, 255, 255, 0.9);
         max-height: 180px;
         overflow-y: auto;
         white-space: pre-wrap;

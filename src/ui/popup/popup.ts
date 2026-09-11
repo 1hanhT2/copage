@@ -40,15 +40,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     RECOMMENDED_MODELS.forEach((preset) => {
       const isSelected = config.model === preset.id;
       const item = document.createElement("div");
-      item.className = `mui-menu-item ${isSelected ? "selected" : ""}`;
+      item.className = `m3-menu-item ${isSelected ? "selected" : ""}`;
       item.setAttribute("role", "option");
       item.setAttribute("aria-selected", isSelected ? "true" : "false");
       item.innerHTML = `
-        <div class="mui-menu-item-text">
-          <span class="mui-menu-item-title">${preset.name}</span>
-          <span class="mui-menu-item-desc">${preset.speed} • ${preset.cost}</span>
+        <div class="m3-menu-item-text">
+          <span class="m3-menu-item-title">${preset.name}</span>
+          <span class="m3-menu-item-desc">${preset.speed} • ${preset.cost}</span>
         </div>
-        <svg class="mui-menu-item-check" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+        <svg class="m3-menu-item-check" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
         </svg>
       `;
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         config.model = preset.id;
         await setLLMConfig({ model: preset.id });
         selectedModelLabel.textContent = preset.name;
-        document.querySelectorAll("#popup-model-menu .mui-menu-item").forEach((it) => {
+        document.querySelectorAll("#popup-model-menu .m3-menu-item").forEach((it) => {
           it.classList.remove("selected");
           it.setAttribute("aria-selected", "false");
         });

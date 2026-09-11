@@ -7,22 +7,29 @@
   <style>
     :root {
       color-scheme: dark;
-      --mui-primary: #90caf9;
-      --mui-primary-contrast: #0d47a1;
-      --mui-bg: #121212;
-      --mui-surface: #1e1e1e;
-      --mui-surface-card: #252525;
-      --mui-surface-hover: rgba(255, 255, 255, 0.06);
-      --mui-border: rgba(255, 255, 255, 0.12);
-      --mui-border-input: rgba(255, 255, 255, 0.23);
-      --mui-text-primary: rgba(255, 255, 255, 0.87);
-      --mui-text-secondary: rgba(255, 255, 255, 0.60);
-      --mui-text-disabled: rgba(255, 255, 255, 0.38);
-      --mui-success: #66bb6a;
-      --mui-success-bg: rgba(102, 187, 106, 0.12);
-      --mui-error: #f44336;
-      --mui-error-bg: rgba(244, 67, 54, 0.12);
-      --mui-info-bg: rgba(144, 202, 249, 0.08);
+      --m3-primary: #a8c7fa;
+      --m3-on-primary: #062e6f;
+      --m3-primary-container: #0842a0;
+      --m3-on-primary-container: #d3e3fd;
+      --m3-secondary: #7cacf8;
+      --m3-secondary-container: #2b3d5b;
+      --m3-tertiary: #d0bcff;
+      --m3-tertiary-container: #4a3a75;
+      --m3-bg: #0f0f12;
+      --m3-surface: #1c1b21;
+      --m3-surface-container: #27252d;
+      --m3-surface-container-high: #323039;
+      --m3-border: rgba(255, 255, 255, 0.12);
+      --m3-border-input: rgba(255, 255, 255, 0.20);
+      --m3-text-primary: rgba(255, 255, 255, 0.92);
+      --m3-text-secondary: rgba(255, 255, 255, 0.65);
+      --m3-text-disabled: rgba(255, 255, 255, 0.40);
+      --m3-success: #78dc77;
+      --m3-success-bg: rgba(120, 220, 119, 0.14);
+      --m3-error: #ffb4ab;
+      --m3-error-bg: rgba(255, 180, 171, 0.14);
+      --m3-info-bg: rgba(168, 199, 250, 0.10);
+      --m3-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     * {
       box-sizing: border-box;
@@ -30,206 +37,203 @@
       padding: 0;
     }
     body {
-      background-color: var(--mui-bg);
-      color: var(--mui-text-primary);
+      background-color: var(--m3-bg);
+      color: var(--m3-text-primary);
       font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       padding: 40px 16px;
       line-height: 1.5;
       letter-spacing: 0.01071em;
     }
 
-    /* MUI Paper Container */
-    .mui-container {
-      max-width: 700px;
+    /* M3 Expressive Container (Large Squircle Island) */
+    .m3-container {
+      max-width: 720px;
       margin: 0 auto;
-      background-color: var(--mui-surface);
-      border: 1px solid var(--mui-border);
-      border-radius: 12px;
-      padding: 32px 36px;
-      box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
+      background-color: var(--m3-surface);
+      border: 1px solid var(--m3-border);
+      border-radius: 28px;
+      padding: 36px 40px;
+      box-shadow: 0px 12px 36px -4px rgba(0,0,0,0.5), 0px 0px 32px -4px rgba(168, 199, 250, 0.1);
     }
 
     /* Header */
-    .mui-header {
-      padding-bottom: 20px;
+    .m3-header {
+      padding-bottom: 24px;
       margin-bottom: 20px;
     }
-    .mui-title-row {
+    .m3-title-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 4px;
     }
-    .mui-title {
-      font-size: 22px;
-      font-weight: 500;
+    .m3-title {
+      font-size: 24px;
+      font-weight: 600;
       letter-spacing: 0.0075em;
-      color: var(--mui-text-primary);
+      color: var(--m3-text-primary);
     }
-    .mui-chip-version {
+    .m3-chip-version {
       font-size: 11px;
-      font-weight: 500;
-      background-color: rgba(255, 255, 255, 0.08);
-      color: var(--mui-text-secondary);
-      padding: 3px 8px;
-      border-radius: 12px;
+      font-weight: 600;
+      background-color: rgba(168, 199, 250, 0.16);
+      color: var(--m3-primary);
+      padding: 4px 10px;
+      border-radius: 9999px;
       font-family: monospace;
     }
-    .mui-subtitle {
-      font-size: 13px;
-      color: var(--mui-text-secondary);
+    .m3-subtitle {
+      font-size: 13.5px;
+      color: var(--m3-text-secondary);
       font-weight: 400;
     }
 
-    /* MUI Tabs Bar */
-    .mui-tabs {
-      display: flex;
-      border-bottom: 1px solid var(--mui-border);
-      margin-bottom: 24px;
+    /* M3 Expressive Capsule Tabs Bar */
+    .m3-tabs {
+      display: inline-flex;
+      background-color: var(--m3-bg);
+      border: 1px solid var(--m3-border);
+      border-radius: 9999px;
+      padding: 4px;
       gap: 4px;
+      margin-bottom: 28px;
     }
-    .mui-tab {
+    .m3-tab {
       background: transparent;
       border: none;
-      color: var(--mui-text-secondary);
-      padding: 12px 18px;
-      font-size: 13px;
+      color: var(--m3-text-secondary);
+      padding: 8px 20px;
+      font-size: 12.5px;
       font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       position: relative;
-      transition: color 150ms ease, background-color 150ms ease;
-      border-radius: 6px 6px 0 0;
+      border-radius: 9999px;
+      transition: transform 0.2s var(--m3-spring), background-color 0.18s ease, color 0.18s ease;
       font-family: inherit;
     }
-    .mui-tab:hover {
-      color: var(--mui-text-primary);
-      background-color: rgba(255, 255, 255, 0.04);
+    .m3-tab:hover {
+      color: var(--m3-text-primary);
+      background-color: rgba(255, 255, 255, 0.06);
     }
-    .mui-tab.active {
-      color: var(--mui-primary);
+    .m3-tab:active {
+      transform: scale(0.96);
+    }
+    .m3-tab.active {
+      color: var(--m3-primary);
+      background-color: rgba(168, 199, 250, 0.18);
       font-weight: 600;
-    }
-    .mui-tab.active::after {
-      content: "";
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background-color: var(--mui-primary);
-      border-radius: 2px 2px 0 0;
-      box-shadow: 0 0 8px rgba(144, 202, 249, 0.6);
     }
 
     /* Tab Panels */
-    .mui-tab-panel {
+    .m3-tab-panel {
       display: none;
     }
-    .mui-tab-panel.active {
+    .m3-tab-panel.active {
       display: block;
-      animation: muiPanelFade 150ms ease;
+      animation: m3PanelSpring 0.25s var(--m3-spring);
     }
-    @keyframes muiPanelFade {
-      from { opacity: 0; transform: translateY(4px); }
+    @keyframes m3PanelSpring {
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     /* Section Overline */
-    .mui-section-title {
-      font-size: 11px;
-      font-weight: 500;
+    .m3-section-title {
+      font-size: 11.5px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--mui-primary);
+      color: var(--m3-primary);
       margin-bottom: 16px;
     }
 
-    /* Form Groups (MUI Outlined Text Fields) */
-    .mui-form-group {
-      margin-bottom: 20px;
+    /* Form Groups */
+    .m3-form-group {
+      margin-bottom: 22px;
     }
-    .mui-label {
+    .m3-label {
       display: block;
       font-size: 12px;
       font-weight: 500;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
       margin-bottom: 6px;
       letter-spacing: 0.015em;
     }
-    .mui-input {
+    .m3-input {
       width: 100%;
       background-color: transparent;
-      border: 1px solid var(--mui-border-input);
-      color: var(--mui-text-primary);
-      border-radius: 4px;
-      padding: 10px 14px;
+      border: 1px solid var(--m3-border-input);
+      color: var(--m3-text-primary);
+      border-radius: 14px;
+      padding: 11px 16px;
       font-size: 14px;
       font-family: inherit;
       outline: none;
-      transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .mui-input:hover {
-      border-color: rgba(255, 255, 255, 0.4);
+    .m3-input:hover {
+      border-color: rgba(255, 255, 255, 0.35);
     }
-    .mui-input:focus {
-      border-color: var(--mui-primary);
-      box-shadow: 0 0 0 1px var(--mui-primary);
+    .m3-input:focus {
+      border-color: var(--m3-primary);
+      box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25);
     }
-    .mui-helper-text {
+    .m3-helper-text {
       font-size: 11px;
-      color: var(--mui-text-secondary);
-      margin-top: 5px;
+      color: var(--m3-text-secondary);
+      margin-top: 6px;
       line-height: 1.4;
+      padding-left: 4px;
     }
-    .mui-helper-text code {
+    .m3-helper-text code {
       background-color: rgba(255, 255, 255, 0.08);
-      padding: 1px 4px;
-      border-radius: 3px;
+      padding: 1px 5px;
+      border-radius: 4px;
       font-family: monospace;
-      color: var(--mui-text-primary);
+      color: var(--m3-text-primary);
     }
 
     /* Password Input Wrapper with toggle */
-    .mui-input-wrapper {
+    .m3-input-wrapper {
       position: relative;
       display: flex;
       align-items: center;
     }
-    .mui-input-action {
+    .m3-input-action {
       position: absolute;
-      right: 10px;
+      right: 12px;
       background: none;
       border: none;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
+      padding: 5px;
       border-radius: 50%;
-      transition: color 150ms ease;
+      transition: color 150ms ease, transform 0.2s var(--m3-spring);
     }
-    .mui-input-action:hover {
-      color: var(--mui-text-primary);
+    .m3-input-action:hover {
+      color: var(--m3-text-primary);
+      transform: scale(1.1);
     }
 
-    /* MUI Custom Select with Animated Dropdown Menu */
-    .mui-select-wrapper {
+    /* M3 Expressive Custom Pill Select Dropdown */
+    .m3-select-wrapper {
       position: relative;
       width: 100%;
     }
-    .mui-select-trigger {
+    .m3-select-trigger {
       width: 100%;
       background-color: transparent;
-      border: 1px solid var(--mui-border-input);
-      color: var(--mui-text-primary);
-      border-radius: 4px;
-      padding: 10px 14px;
+      border: 1px solid var(--m3-border-input);
+      color: var(--m3-text-primary);
+      border-radius: 14px;
+      padding: 11px 16px;
       font-size: 14px;
       font-family: inherit;
       display: flex;
@@ -237,452 +241,474 @@
       justify-content: space-between;
       cursor: pointer;
       user-select: none;
-      transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.2s var(--m3-spring), border-color 0.15s ease;
     }
-    .mui-select-trigger:hover {
-      border-color: rgba(255, 255, 255, 0.4);
+    .m3-select-trigger:hover {
+      border-color: rgba(255, 255, 255, 0.35);
     }
-    .mui-select-trigger.open,
-    .mui-select-trigger:focus {
-      border-color: var(--mui-primary);
-      box-shadow: 0 0 0 1px var(--mui-primary);
+    .m3-select-trigger.open,
+    .m3-select-trigger:focus {
+      border-color: var(--m3-primary);
+      box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25);
       outline: none;
     }
-    .mui-select-value {
+    .m3-select-value {
       display: flex;
       align-items: center;
       gap: 10px;
       font-weight: 500;
     }
-    .mui-select-arrow {
-      transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
-      color: var(--mui-text-secondary);
+    .m3-select-arrow {
+      transition: transform 0.24s var(--m3-spring);
+      color: var(--m3-text-secondary);
       flex-shrink: 0;
     }
-    .mui-select-trigger.open .mui-select-arrow {
+    .m3-select-trigger.open .m3-select-arrow {
       transform: rotate(180deg);
-      color: var(--mui-primary);
+      color: var(--m3-primary);
     }
-    .mui-menu-paper {
+    .m3-menu-popover {
       position: absolute;
-      top: calc(100% + 4px);
+      top: calc(100% + 6px);
       left: 0;
       right: 0;
-      background-color: #252525;
-      border: 1px solid var(--mui-border);
-      border-radius: 6px;
-      box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.3), 0px 8px 10px 1px rgba(0,0,0,0.22), 0px 3px 14px 2px rgba(0,0,0,0.18);
-      padding: 6px 0;
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border);
+      border-radius: 20px;
+      box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.55), 0px 0px 24px rgba(168,199,250,0.12);
+      backdrop-filter: blur(24px);
+      padding: 6px;
       z-index: 100;
       display: none;
       max-height: 280px;
       overflow-y: auto;
-      animation: muiMenuFade 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: top center;
+      animation: m3MenuSpring 0.26s var(--m3-spring);
     }
-    .mui-menu-paper.open {
+    .m3-menu-popover.open {
       display: block;
     }
-    @keyframes muiMenuFade {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes m3MenuSpring {
+      from { opacity: 0; transform: scale(0.9) translateY(-8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
-    .mui-menu-item {
+    .m3-menu-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 10px 16px;
       font-size: 13px;
-      color: var(--mui-text-primary);
+      color: var(--m3-text-primary);
       cursor: pointer;
+      border-radius: 14px;
       transition: background-color 120ms ease;
     }
-    .mui-menu-item:hover {
+    .m3-menu-item:hover {
       background-color: rgba(255, 255, 255, 0.08);
     }
-    .mui-menu-item.selected {
-      background-color: rgba(144, 202, 249, 0.14);
-      color: var(--mui-primary);
+    .m3-menu-item.selected {
+      background-color: rgba(168, 199, 250, 0.16);
+      color: var(--m3-primary);
       font-weight: 500;
     }
-    .mui-menu-item-text {
+    .m3-menu-item-text {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
-    .mui-menu-item-title {
+    .m3-menu-item-title {
       font-size: 13px;
       font-weight: 500;
     }
-    .mui-menu-item-desc {
+    .m3-menu-item-desc {
       font-size: 11px;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
     }
-    .mui-menu-item-check {
-      color: var(--mui-primary);
+    .m3-menu-item-check {
+      color: var(--m3-primary);
       opacity: 0;
       flex-shrink: 0;
     }
-    .mui-menu-item.selected .mui-menu-item-check {
+    .m3-menu-item.selected .m3-menu-item-check {
       opacity: 1;
     }
 
-    /* MUI Segmented Button Group (Toggle Button Group) */
-    .mui-toggle-button-group {
+    /* M3 Expressive Capsule Toggle Button Group */
+    .m3-toggle-button-group {
       display: inline-flex;
-      border: 1px solid var(--mui-border);
-      border-radius: 6px;
+      border: 1px solid var(--m3-border);
+      border-radius: 9999px;
       overflow: hidden;
-      background-color: var(--mui-surface-card);
+      background-color: var(--m3-bg);
+      padding: 3px;
+      gap: 2px;
       margin-bottom: 16px;
     }
-    .mui-toggle-button {
+    .m3-toggle-button {
       background: transparent;
       border: none;
-      border-right: 1px solid var(--mui-border);
-      padding: 8px 16px;
+      padding: 7px 16px;
       font-size: 12px;
       font-weight: 500;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: background-color 150ms ease, color 150ms ease;
+      border-radius: 9999px;
+      transition: transform 0.2s var(--m3-spring), background-color 0.18s ease, color 0.18s ease;
       font-family: inherit;
     }
-    .mui-toggle-button:last-child {
-      border-right: none;
+    .m3-toggle-button:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+      color: var(--m3-text-primary);
     }
-    .mui-toggle-button:hover {
-      background-color: rgba(255, 255, 255, 0.05);
-      color: var(--mui-text-primary);
+    .m3-toggle-button:active {
+      transform: scale(0.96);
     }
-    .mui-toggle-button.active {
-      background-color: rgba(144, 202, 249, 0.16);
-      color: var(--mui-primary);
+    .m3-toggle-button.active {
+      background-color: rgba(168, 199, 250, 0.2);
+      color: var(--m3-primary);
       font-weight: 600;
     }
 
-    /* Model Selection Cards */
-    .mui-cards-grid {
+    /* Model Selection Cards (Squircles with spring hover) */
+    .m3-cards-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: 12px;
+      margin-bottom: 18px;
     }
-    .mui-action-card {
-      background-color: var(--mui-surface-card);
-      border: 1px solid var(--mui-border);
-      border-radius: 6px;
-      padding: 10px 12px;
+    .m3-action-card {
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border);
+      border-radius: 18px;
+      padding: 12px 14px;
       cursor: pointer;
-      transition: border-color 150ms ease, background-color 150ms ease;
+      transition: transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease;
     }
-    .mui-action-card:hover {
+    .m3-action-card:hover {
       border-color: rgba(255, 255, 255, 0.3);
-      background-color: rgba(255, 255, 255, 0.04);
+      transform: translateY(-2px) scale(1.015);
+      background-color: rgba(255, 255, 255, 0.05);
     }
-    .mui-action-card.selected {
-      border-color: var(--mui-primary);
-      background-color: rgba(144, 202, 249, 0.08);
-      box-shadow: 0 0 0 1px var(--mui-primary);
+    .m3-action-card:active {
+      transform: scale(0.97);
     }
-    .mui-card-name {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--mui-text-primary);
-      margin-bottom: 2px;
+    .m3-action-card.selected {
+      border-color: var(--m3-primary);
+      background-color: rgba(168, 199, 250, 0.1);
+      box-shadow: 0 0 0 1px var(--m3-primary);
     }
-    .mui-card-meta {
+    .m3-card-name {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--m3-text-primary);
+      margin-bottom: 3px;
+    }
+    .m3-card-meta {
       font-size: 11px;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
     }
 
-    /* MUI Switches */
-    .mui-switch-row {
+    /* M3 Expressive Switches */
+    .m3-switch-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
-      background-color: var(--mui-surface-card);
-      border: 1px solid var(--mui-border);
-      border-radius: 6px;
-      margin-bottom: 10px;
+      padding: 14px 18px;
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border);
+      border-radius: 20px;
+      margin-bottom: 12px;
       cursor: pointer;
-      transition: border-color 150ms ease, background-color 150ms ease;
+      transition: transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease;
     }
-    .mui-switch-row:hover {
+    .m3-switch-row:hover {
       border-color: rgba(255, 255, 255, 0.25);
-      background-color: rgba(255, 255, 255, 0.02);
+      transform: translateY(-1px);
+      background-color: rgba(255, 255, 255, 0.04);
     }
-    .mui-switch-label-wrap {
+    .m3-switch-label-wrap {
       display: flex;
       flex-direction: column;
       gap: 2px;
       padding-right: 16px;
     }
-    .mui-switch-title {
+    .m3-switch-title {
       font-size: 13px;
       font-weight: 500;
-      color: var(--mui-text-primary);
+      color: var(--m3-text-primary);
     }
-    .mui-switch-desc {
+    .m3-switch-desc {
       font-size: 11px;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
       line-height: 1.4;
     }
-    .mui-switch {
+    .m3-switch {
       position: relative;
       display: inline-block;
-      width: 38px;
-      height: 20px;
+      width: 44px;
+      height: 26px;
       flex-shrink: 0;
     }
-    .mui-switch input {
+    .m3-switch input {
       opacity: 0;
       width: 0;
       height: 0;
     }
-    .mui-switch-track {
+    .m3-switch-track {
       position: absolute;
       cursor: pointer;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(255, 255, 255, 0.2);
-      transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 20px;
+      background-color: rgba(255, 255, 255, 0.18);
+      transition: background-color 0.25s var(--m3-spring);
+      border-radius: 9999px;
     }
-    .mui-switch-thumb {
+    .m3-switch-thumb {
       position: absolute;
       content: "";
-      height: 14px;
-      width: 14px;
-      left: 3px;
-      bottom: 3px;
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
       background-color: #bdbdbd;
-      transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.25s var(--m3-spring), background-color 0.25s var(--m3-spring), width 0.15s ease;
       border-radius: 50%;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.4);
     }
-    .mui-switch input:checked + .mui-switch-track {
-      background-color: rgba(144, 202, 249, 0.5);
+    .m3-switch input:checked + .m3-switch-track {
+      background-color: var(--m3-primary-container);
+      box-shadow: 0 0 0 1px var(--m3-primary);
     }
-    .mui-switch input:checked + .mui-switch-track .mui-switch-thumb {
+    .m3-switch input:checked + .m3-switch-track .m3-switch-thumb {
       transform: translateX(18px);
-      background-color: var(--mui-primary);
+      background-color: var(--m3-primary);
     }
 
     /* History capture cards */
-    .mui-history-list {
+    .m3-history-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       margin-top: 14px;
     }
-    .mui-history-empty {
-      padding: 32px 16px;
+    .m3-history-empty {
+      padding: 40px 16px;
       text-align: center;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
       font-size: 13px;
-      background-color: var(--mui-surface-card);
-      border: 1px dashed var(--mui-border);
-      border-radius: 8px;
+      background-color: var(--m3-surface-container);
+      border: 1px dashed var(--m3-border);
+      border-radius: 20px;
     }
-    .mui-history-card {
-      background-color: var(--mui-surface-card);
-      border: 1px solid var(--mui-border);
-      border-radius: 6px;
-      padding: 12px 16px;
+    .m3-history-card {
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border);
+      border-radius: 18px;
+      padding: 12px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      transition: transform 0.2s var(--m3-spring);
     }
-    .mui-history-info {
+    .m3-history-card:hover {
+      transform: translateY(-1px);
+    }
+    .m3-history-info {
       display: flex;
       flex-direction: column;
       gap: 3px;
       overflow: hidden;
     }
-    .mui-history-tag {
+    .m3-history-tag {
       font-size: 12px;
       font-family: monospace;
       font-weight: 600;
-      color: var(--mui-primary);
+      color: var(--m3-primary);
     }
-    .mui-history-meta {
+    .m3-history-meta {
       font-size: 11px;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 450px;
+      max-width: 480px;
     }
-    .mui-history-actions {
+    .m3-history-actions {
       display: flex;
       align-items: center;
       gap: 6px;
       flex-shrink: 0;
     }
-    .mui-icon-btn {
+    .m3-icon-btn {
       background: transparent;
       border: none;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
       cursor: pointer;
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background-color 150ms ease, color 150ms ease;
+      transition: transform 0.2s var(--m3-spring), background-color 0.15s ease, color 0.15s ease;
     }
-    .mui-icon-btn:hover {
+    .m3-icon-btn:hover {
       background-color: rgba(255, 255, 255, 0.08);
-      color: var(--mui-text-primary);
+      color: var(--m3-text-primary);
+      transform: scale(1.08);
     }
 
     /* Buttons */
-    .mui-actions-bar {
+    .m3-actions-bar {
       display: flex;
       align-items: center;
       justify-content: flex-end;
       gap: 12px;
-      margin-top: 28px;
+      margin-top: 30px;
       padding-top: 24px;
-      border-top: 1px solid var(--mui-border);
+      border-top: 1px solid var(--m3-border);
     }
-    .mui-btn-outlined {
+    .m3-btn-outlined {
       background: transparent;
-      border: 1px solid rgba(144, 202, 249, 0.5);
-      color: var(--mui-primary);
-      padding: 8px 18px;
-      border-radius: 4px;
+      border: 1px solid rgba(168, 199, 250, 0.5);
+      color: var(--m3-primary);
+      padding: 10px 22px;
+      border-radius: 9999px;
       font-size: 13px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.035em;
+      font-weight: 600;
+      letter-spacing: 0.02em;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       font-family: inherit;
-      transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.2s var(--m3-spring), background-color 0.15s ease, border-color 0.15s ease;
     }
-    .mui-btn-outlined:hover:not(:disabled) {
-      background-color: rgba(144, 202, 249, 0.08);
-      border-color: var(--mui-primary);
+    .m3-btn-outlined:hover:not(:disabled) {
+      background-color: rgba(168, 199, 250, 0.12);
+      border-color: var(--m3-primary);
+      transform: translateY(-1px) scale(1.02);
     }
-    .mui-btn-outlined:disabled {
-      border-color: var(--mui-border);
-      color: var(--mui-text-disabled);
+    .m3-btn-outlined:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+    .m3-btn-outlined:disabled {
+      border-color: var(--m3-border);
+      color: var(--m3-text-disabled);
       cursor: not-allowed;
     }
 
-    .mui-btn-contained {
-      background-color: var(--mui-primary);
-      color: var(--mui-primary-contrast);
+    .m3-btn-contained {
+      background-color: var(--m3-primary);
+      color: var(--m3-on-primary);
       border: none;
-      padding: 8px 20px;
-      border-radius: 4px;
+      padding: 10px 24px;
+      border-radius: 9999px;
       font-size: 13px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.035em;
+      letter-spacing: 0.02em;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       font-family: inherit;
-      box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
-      transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0px 4px 14px -2px rgba(0,0,0,0.4), 0px 0px 20px -4px rgba(168,199,250,0.3);
+      transition: transform 0.2s var(--m3-spring), background-color 0.15s ease, box-shadow 0.2s ease;
     }
-    .mui-btn-contained:hover:not(:disabled) {
-      background-color: #64b5f6;
-      box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+    .m3-btn-contained:hover:not(:disabled) {
+      background-color: #7cacf8;
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0px 6px 18px -2px rgba(0,0,0,0.5), 0px 0px 24px -2px rgba(168,199,250,0.4);
     }
-    .mui-btn-contained:disabled {
+    .m3-btn-contained:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+    .m3-btn-contained:disabled {
       background-color: rgba(255, 255, 255, 0.12);
-      color: var(--mui-text-disabled);
+      color: var(--m3-text-disabled);
       box-shadow: none;
       cursor: not-allowed;
     }
 
-    /* MUI Alert / Result Box */
-    .mui-alert {
+    /* M3 Alert Box */
+    .m3-alert {
       display: none;
-      padding: 10px 14px;
-      border-radius: 4px;
-      font-size: 12px;
-      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 12.5px;
+      margin-top: 16px;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
-    .mui-alert-success {
+    .m3-alert-success {
       display: flex;
-      background-color: var(--mui-success-bg);
-      border: 1px solid var(--mui-success);
-      color: #a5d6a7;
+      background-color: var(--m3-success-bg);
+      border: 1px solid var(--m3-success);
+      color: #a9f1a7;
     }
-    .mui-alert-error {
+    .m3-alert-error {
       display: flex;
-      background-color: var(--mui-error-bg);
-      border: 1px solid var(--mui-error);
-      color: #ef9a9a;
+      background-color: var(--m3-error-bg);
+      border: 1px solid var(--m3-error);
+      color: #ffb4ab;
     }
 
     /* Notice Banner */
-    .mui-security-banner {
+    .m3-security-banner {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      background-color: var(--mui-info-bg);
-      border: 1px solid rgba(144, 202, 249, 0.2);
-      border-radius: 6px;
-      padding: 12px 16px;
+      gap: 12px;
+      background-color: var(--m3-info-bg);
+      border: 1px solid rgba(168, 199, 250, 0.2);
+      border-radius: 18px;
+      padding: 14px 18px;
       font-size: 12px;
-      color: var(--mui-text-secondary);
-      margin-top: 24px;
+      color: var(--m3-text-secondary);
+      margin-top: 26px;
       line-height: 1.5;
     }
-    .mui-security-banner strong {
-      color: var(--mui-text-primary);
+    .m3-security-banner strong {
+      color: var(--m3-text-primary);
     }
-    .mui-security-banner svg {
+    .m3-security-banner svg {
       flex-shrink: 0;
-      color: var(--mui-primary);
+      color: var(--m3-primary);
       margin-top: 1px;
     }
   </style>
 </head>
 <body>
-  <main class="mui-container">
-    <header class="mui-header">
-      <div class="mui-title-row">
-        <h1 class="mui-title">Copage Settings</h1>
-        <span class="mui-chip-version">v0.1.0</span>
+  <main class="m3-container">
+    <header class="m3-header">
+      <div class="m3-title-row">
+        <h1 class="m3-title">Copage Settings</h1>
+        <span class="m3-chip-version">v0.1.0</span>
       </div>
-      <p class="mui-subtitle">Configure LLM inference providers, extraction behavior, and inspection defaults.</p>
+      <p class="m3-subtitle">Configure LLM inference providers, extraction behavior, and inspection defaults.</p>
     </header>
 
-    <!-- Material Tabs Bar -->
-    <nav class="mui-tabs" role="tablist">
-      <button class="mui-tab active" data-tab="inference" role="tab" aria-selected="true">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+    <!-- M3 Expressive Capsule Tabs Bar -->
+    <nav class="m3-tabs" role="tablist">
+      <button class="m3-tab active" data-tab="inference" role="tab" aria-selected="true">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
           <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
         </svg>
         <span>Inference &amp; Models</span>
       </button>
-      <button class="mui-tab" data-tab="extraction" role="tab" aria-selected="false">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+      <button class="m3-tab" data-tab="extraction" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
           <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
         </svg>
         <span>Engine &amp; Extraction</span>
       </button>
-      <button class="mui-tab" data-tab="history" role="tab" aria-selected="false">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+      <button class="m3-tab" data-tab="history" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
           <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
         </svg>
         <span>Recent Captures</span>
@@ -690,18 +716,18 @@
     </nav>
 
     <!-- Tab 1: Inference & Models -->
-    <div id="tab-inference" class="mui-tab-panel active">
-      <div class="mui-section-title">Inference Provider (BYOK)</div>
+    <div id="tab-inference" class="m3-tab-panel active">
+      <div class="m3-section-title">Inference Provider (BYOK)</div>
 
       <!-- Segmented Buttons for Provider -->
-      <div class="mui-toggle-button-group" id="provider-toggle-group">
-        <button type="button" class="mui-toggle-button active" data-provider="openrouter">
+      <div class="m3-toggle-button-group" id="provider-toggle-group">
+        <button type="button" class="m3-toggle-button active" data-provider="openrouter">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
           </svg>
           <span>OpenRouter</span>
         </button>
-        <button type="button" class="mui-toggle-button" data-provider="openai-compatible">
+        <button type="button" class="m3-toggle-button" data-provider="openai-compatible">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
             <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
           </svg>
@@ -710,64 +736,64 @@
       </div>
       <input type="hidden" id="provider-select" value="openrouter" />
 
-      <div class="mui-form-group">
-        <label class="mui-label" for="api-key-input">API Key</label>
-        <div class="mui-input-wrapper">
-          <input type="password" id="api-key-input" class="mui-input" placeholder="sk-or-v1-..." />
-          <button type="button" id="toggle-key-visibility" class="mui-input-action" title="Toggle visibility">
+      <div class="m3-form-group">
+        <label class="m3-label" for="api-key-input">API Key</label>
+        <div class="m3-input-wrapper">
+          <input type="password" id="api-key-input" class="m3-input" placeholder="sk-or-v1-..." />
+          <button type="button" id="toggle-key-visibility" class="m3-input-action" title="Toggle visibility">
             <svg id="eye-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
             </svg>
           </button>
         </div>
-        <p class="mui-helper-text">Stored strictly in local browser storage (chrome.storage.local) and sent directly to the inference endpoint.</p>
+        <p class="m3-helper-text">Stored strictly in local browser storage (chrome.storage.local) and sent directly to the inference endpoint.</p>
       </div>
 
-      <div class="mui-form-group">
-        <label class="mui-label" for="base-url-input">Base Endpoint URL</label>
-        <input type="text" id="base-url-input" class="mui-input" value="https://openrouter.ai/api/v1" />
-        <p class="mui-helper-text">For local Ollama, use <code>http://localhost:11434/v1</code>.</p>
+      <div class="m3-form-group">
+        <label class="m3-label" for="base-url-input">Base Endpoint URL</label>
+        <input type="text" id="base-url-input" class="m3-input" value="https://openrouter.ai/api/v1" />
+        <p class="m3-helper-text">For local Ollama, use <code>http://localhost:11434/v1</code>.</p>
       </div>
 
-      <div class="mui-section-title" style="margin-top: 24px;">Recommended Fast &amp; Cheap Models</div>
-      <div class="mui-cards-grid" id="model-presets-container">
+      <div class="m3-section-title" style="margin-top: 24px;">Recommended Fast &amp; Cheap Models</div>
+      <div class="m3-cards-grid" id="model-presets-container">
         <!-- Injected via options.ts -->
       </div>
 
-      <!-- MUI Outlined Dropdown Menu for Model Selection -->
-      <div class="mui-form-group">
-        <label class="mui-label" for="model-dropdown-trigger">Active Model Preset</label>
-        <div class="mui-select-wrapper">
-          <div id="model-dropdown-trigger" class="mui-select-trigger" tabindex="0" role="combobox" aria-expanded="false">
-            <div class="mui-select-value">
+      <!-- M3 Expressive Custom Dropdown Menu for Model Selection -->
+      <div class="m3-form-group">
+        <label class="m3-label" for="model-dropdown-trigger">Active Model Preset</label>
+        <div class="m3-select-wrapper">
+          <div id="model-dropdown-trigger" class="m3-select-trigger" tabindex="0" role="combobox" aria-expanded="false">
+            <div class="m3-select-value">
               <span id="selected-model-text">Gemini 2.5 Flash (Google)</span>
             </div>
-            <svg class="mui-select-arrow" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <svg class="m3-select-arrow" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
               <path d="M7 10l5 5 5-5z"/>
             </svg>
           </div>
-          <div id="model-dropdown-menu" class="mui-menu-paper" role="listbox">
+          <div id="model-dropdown-menu" class="m3-menu-popover" role="listbox">
             <!-- Items populated via options.ts -->
           </div>
         </div>
       </div>
 
-      <div class="mui-form-group">
-        <label class="mui-label" for="custom-model-input">Raw Model Identifier</label>
-        <input type="text" id="custom-model-input" class="mui-input" value="google/gemini-2.5-flash" />
-        <p class="mui-helper-text">Enter any valid model ID supported by your provider.</p>
+      <div class="m3-form-group">
+        <label class="m3-label" for="custom-model-input">Raw Model Identifier</label>
+        <input type="text" id="custom-model-input" class="m3-input" value="google/gemini-2.5-flash" />
+        <p class="m3-helper-text">Enter any valid model ID supported by your provider.</p>
       </div>
 
-      <div id="test-result-box" class="mui-alert"></div>
+      <div id="test-result-box" class="m3-alert"></div>
 
-      <div class="mui-actions-bar">
-        <button id="test-conn-btn" class="mui-btn-outlined">
+      <div class="m3-actions-bar">
+        <button id="test-conn-btn" class="m3-btn-outlined">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
             <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
           </svg>
           <span>Test Connection</span>
         </button>
-        <button id="save-btn" class="mui-btn-contained">
+        <button id="save-btn" class="m3-btn-contained">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
             <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
           </svg>
@@ -777,86 +803,86 @@
     </div>
 
     <!-- Tab 2: Engine & Extraction -->
-    <div id="tab-extraction" class="mui-tab-panel">
-      <div class="mui-section-title">Extraction Engine Preferences</div>
+    <div id="tab-extraction" class="m3-tab-panel">
+      <div class="m3-section-title">Extraction Engine Preferences</div>
 
-      <!-- MUI Segmented Button for Target Framework -->
-      <div class="mui-form-group">
-        <label class="mui-label">Default Framework Output</label>
-        <div class="mui-toggle-button-group" id="framework-toggle-group">
-          <button type="button" class="mui-toggle-button active" data-framework="react">
+      <!-- M3 Expressive Capsule Segmented Button for Target Framework -->
+      <div class="m3-form-group">
+        <label class="m3-label">Default Framework Output</label>
+        <div class="m3-toggle-button-group" id="framework-toggle-group">
+          <button type="button" class="m3-toggle-button active" data-framework="react">
             <span>React + Tailwind</span>
           </button>
-          <button type="button" class="mui-toggle-button" data-framework="vue">
+          <button type="button" class="m3-toggle-button" data-framework="vue">
             <span>Vue 3</span>
           </button>
-          <button type="button" class="mui-toggle-button" data-framework="svelte">
+          <button type="button" class="m3-toggle-button" data-framework="svelte">
             <span>Svelte</span>
           </button>
-          <button type="button" class="mui-toggle-button" data-framework="html">
+          <button type="button" class="m3-toggle-button" data-framework="html">
             <span>Semantic HTML</span>
           </button>
         </div>
       </div>
 
-      <!-- MUI Switches -->
-      <label class="mui-switch-row" for="switch-prune">
-        <div class="mui-switch-label-wrap">
-          <span class="mui-switch-title">Prune Noise &amp; Tracking Attributes</span>
-          <span class="mui-switch-desc">Automatically remove scripts, noscripts, comments, and data-testid tags to preserve LLM token context.</span>
+      <!-- M3 Expressive Switches -->
+      <label class="m3-switch-row" for="switch-prune">
+        <div class="m3-switch-label-wrap">
+          <span class="m3-switch-title">Prune Noise &amp; Tracking Attributes</span>
+          <span class="m3-switch-desc">Automatically remove scripts, noscripts, comments, and data-testid tags to preserve LLM token context.</span>
         </div>
-        <div class="mui-switch">
+        <div class="m3-switch">
           <input type="checkbox" id="switch-prune" checked />
-          <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+          <span class="m3-switch-track"><span class="m3-switch-thumb"></span></span>
         </div>
       </label>
 
-      <label class="mui-switch-row" for="switch-tailwind">
-        <div class="mui-switch-label-wrap">
-          <span class="mui-switch-title">Map Computed CSS to Tailwind Utilities</span>
-          <span class="mui-switch-desc">Translate computed spacing, typography, flexbox/grid, and colors directly into canonical Tailwind CSS classes.</span>
+      <label class="m3-switch-row" for="switch-tailwind">
+        <div class="m3-switch-label-wrap">
+          <span class="m3-switch-title">Map Computed CSS to Tailwind Utilities</span>
+          <span class="m3-switch-desc">Translate computed spacing, typography, flexbox/grid, and colors directly into canonical Tailwind CSS classes.</span>
         </div>
-        <div class="mui-switch">
+        <div class="m3-switch">
           <input type="checkbox" id="switch-tailwind" checked />
-          <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+          <span class="m3-switch-track"><span class="m3-switch-thumb"></span></span>
         </div>
       </label>
 
-      <label class="mui-switch-row" for="switch-svg">
-        <div class="mui-switch-label-wrap">
-          <span class="mui-switch-title">Extract Clean SVGs &amp; Suggest Icons</span>
-          <span class="mui-switch-desc">Sanitize inline vector icons and recommend corresponding Lucide icon names for clean code synthesis.</span>
+      <label class="m3-switch-row" for="switch-svg">
+        <div class="m3-switch-label-wrap">
+          <span class="m3-switch-title">Extract Clean SVGs &amp; Suggest Icons</span>
+          <span class="m3-switch-desc">Sanitize inline vector icons and recommend corresponding Lucide icon names for clean code synthesis.</span>
         </div>
-        <div class="mui-switch">
+        <div class="m3-switch">
           <input type="checkbox" id="switch-svg" checked />
-          <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+          <span class="m3-switch-track"><span class="m3-switch-thumb"></span></span>
         </div>
       </label>
 
-      <label class="mui-switch-row" for="switch-deep-shadow">
-        <div class="mui-switch-label-wrap">
-          <span class="mui-switch-title">Piercing Shadow DOM Inspection</span>
-          <span class="mui-switch-desc">Traverse open Shadow DOM roots inside custom web components and embedded page widgets.</span>
+      <label class="m3-switch-row" for="switch-deep-shadow">
+        <div class="m3-switch-label-wrap">
+          <span class="m3-switch-title">Piercing Shadow DOM Inspection</span>
+          <span class="m3-switch-desc">Traverse open Shadow DOM roots inside custom web components and embedded page widgets.</span>
         </div>
-        <div class="mui-switch">
+        <div class="m3-switch">
           <input type="checkbox" id="switch-deep-shadow" checked />
-          <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+          <span class="m3-switch-track"><span class="m3-switch-thumb"></span></span>
         </div>
       </label>
 
-      <label class="mui-switch-row" for="switch-autocopy">
-        <div class="mui-switch-label-wrap">
-          <span class="mui-switch-title">Auto-Copy on Synthesis</span>
-          <span class="mui-switch-desc">Automatically copy finished prompts and synthesized code directly to your system clipboard.</span>
+      <label class="m3-switch-row" for="switch-autocopy">
+        <div class="m3-switch-label-wrap">
+          <span class="m3-switch-title">Auto-Copy on Synthesis</span>
+          <span class="m3-switch-desc">Automatically copy finished prompts and synthesized code directly to your system clipboard.</span>
         </div>
-        <div class="mui-switch">
+        <div class="m3-switch">
           <input type="checkbox" id="switch-autocopy" checked />
-          <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+          <span class="m3-switch-track"><span class="m3-switch-thumb"></span></span>
         </div>
       </label>
 
-      <div class="mui-actions-bar">
-        <button id="save-prefs-btn" class="mui-btn-contained">
+      <div class="m3-actions-bar">
+        <button id="save-prefs-btn" class="m3-btn-contained">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
             <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
           </svg>
@@ -866,22 +892,22 @@
     </div>
 
     <!-- Tab 3: Recent Captures History -->
-    <div id="tab-history" class="mui-tab-panel">
+    <div id="tab-history" class="m3-tab-panel">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-        <div class="mui-section-title" style="margin-bottom: 0;">Captured Elements (Local Storage)</div>
-        <button id="clear-history-btn" class="mui-btn-outlined" style="font-size: 11px; padding: 4px 10px;">
+        <div class="m3-section-title" style="margin-bottom: 0;">Captured Elements (Local Storage)</div>
+        <button id="clear-history-btn" class="m3-btn-outlined" style="font-size: 11px; padding: 5px 14px;">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
             <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
           </svg>
           <span>Clear History</span>
         </button>
       </div>
-      <div id="history-container" class="mui-history-list">
+      <div id="history-container" class="m3-history-list">
         <!-- Rendered via options.ts -->
       </div>
     </div>
 
-    <div class="mui-security-banner">
+    <div class="m3-security-banner">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
         <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
       </svg>

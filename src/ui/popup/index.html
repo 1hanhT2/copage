@@ -7,20 +7,25 @@
   <style>
     :root {
       color-scheme: dark;
-      --mui-primary: #90caf9;
-      --mui-primary-contrast: #0d47a1;
-      --mui-bg: #121212;
-      --mui-surface: #1e1e1e;
-      --mui-surface-card: #252525;
-      --mui-surface-high: #292929;
-      --mui-border: rgba(255, 255, 255, 0.12);
-      --mui-border-input: rgba(255, 255, 255, 0.23);
-      --mui-text-primary: rgba(255, 255, 255, 0.87);
-      --mui-text-secondary: rgba(255, 255, 255, 0.60);
-      --mui-text-disabled: rgba(255, 255, 255, 0.38);
-      --mui-success: #66bb6a;
-      --mui-warning: #ffa726;
-      --mui-error: #f44336;
+      --m3-primary: #a8c7fa;
+      --m3-on-primary: #062e6f;
+      --m3-primary-container: #0842a0;
+      --m3-on-primary-container: #d3e3fd;
+      --m3-secondary: #7cacf8;
+      --m3-tertiary: #d0bcff;
+      --m3-bg: #0f0f12;
+      --m3-surface: #1c1b21;
+      --m3-surface-container: #27252d;
+      --m3-surface-container-high: #323039;
+      --m3-border: rgba(255, 255, 255, 0.12);
+      --m3-border-input: rgba(255, 255, 255, 0.20);
+      --m3-text-primary: rgba(255, 255, 255, 0.92);
+      --m3-text-secondary: rgba(255, 255, 255, 0.65);
+      --m3-text-disabled: rgba(255, 255, 255, 0.40);
+      --m3-success: #78dc77;
+      --m3-warning: #ffdf99;
+      --m3-error: #ffb4ab;
+      --m3-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     * {
       box-sizing: border-box;
@@ -28,100 +33,110 @@
       padding: 0;
     }
     body {
-      width: 328px;
-      background-color: var(--mui-bg);
-      color: var(--mui-text-primary);
+      width: 336px;
+      background-color: var(--m3-bg);
+      color: var(--m3-text-primary);
       font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding: 16px;
+      padding: 18px;
       font-size: 13px;
-      line-height: 1.43;
+      line-height: 1.45;
       letter-spacing: 0.01071em;
+      border-radius: 24px;
     }
 
-    /* MUI App Bar / Header */
-    .mui-app-bar {
+    /* M3 Expressive Header Bar */
+    .m3-app-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding-bottom: 12px;
-      border-bottom: 1px solid var(--mui-border);
+      border-bottom: 1px solid var(--m3-border);
       margin-bottom: 16px;
     }
-    .mui-brand {
+    .m3-brand {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .mui-brand-title {
-      font-size: 15px;
-      font-weight: 500;
+    .m3-brand-title {
+      font-size: 16px;
+      font-weight: 600;
       letter-spacing: 0.0075em;
-      color: var(--mui-text-primary);
+      color: var(--m3-text-primary);
     }
-    .mui-chip-version {
+    .m3-chip-version {
       font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.03em;
-      background-color: rgba(255, 255, 255, 0.08);
-      color: var(--mui-text-secondary);
-      padding: 2px 6px;
-      border-radius: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      background-color: rgba(168, 199, 250, 0.14);
+      color: var(--m3-primary);
+      padding: 3px 8px;
+      border-radius: 9999px;
       font-family: monospace;
     }
-    .mui-icon-button {
+    .m3-icon-button {
       background: transparent;
       border: none;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
       cursor: pointer;
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.2s var(--m3-spring), background-color 0.15s ease, color 0.15s ease;
     }
-    .mui-icon-button:hover {
+    .m3-icon-button:hover {
       background-color: rgba(255, 255, 255, 0.08);
-      color: var(--mui-text-primary);
+      color: var(--m3-text-primary);
+      transform: scale(1.08);
+    }
+    .m3-icon-button:active {
+      transform: scale(0.92);
     }
 
-    /* MUI Contained Button */
-    .mui-btn-contained {
+    /* M3 Expressive Contained Pill Button */
+    .m3-btn-pill {
       width: 100%;
-      background-color: var(--mui-primary);
-      color: var(--mui-primary-contrast);
+      background-color: var(--m3-primary);
+      color: var(--m3-on-primary);
       border: none;
-      border-radius: 6px;
-      padding: 10px 16px;
+      border-radius: 9999px;
+      padding: 12px 20px;
       font-size: 13px;
       font-weight: 600;
-      letter-spacing: 0.035em;
-      text-transform: uppercase;
+      letter-spacing: 0.025em;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
-      transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0px 4px 14px -2px rgba(0,0,0,0.45), 0px 0px 20px -4px rgba(168,199,250,0.3);
+      transition: transform 0.2s var(--m3-spring), background-color 0.15s ease, box-shadow 0.2s ease;
       margin-bottom: 12px;
+      font-family: inherit;
     }
-    .mui-btn-contained:hover:not(:disabled) {
-      background-color: #64b5f6;
-      box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+    .m3-btn-pill:hover:not(:disabled) {
+      background-color: #7cacf8;
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0px 6px 18px -2px rgba(0,0,0,0.5), 0px 0px 24px -2px rgba(168,199,250,0.4);
     }
-    .mui-btn-contained:disabled {
+    .m3-btn-pill:active:not(:disabled) {
+      transform: scale(0.96);
+      box-shadow: 0px 2px 8px rgba(0,0,0,0.4);
+    }
+    .m3-btn-pill:disabled {
       background-color: rgba(255, 255, 255, 0.12);
-      color: var(--mui-text-disabled);
+      color: var(--m3-text-disabled);
       box-shadow: none;
       cursor: not-allowed;
     }
 
     /* Shortcut Caption */
-    .mui-caption {
+    .m3-caption {
       font-size: 11px;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
       text-align: center;
       margin-bottom: 16px;
       display: flex;
@@ -130,38 +145,39 @@
       gap: 6px;
     }
     kbd {
-      background-color: var(--mui-surface-high);
-      border: 1px solid var(--mui-border);
-      border-radius: 4px;
-      padding: 1px 5px;
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border);
+      border-radius: 6px;
+      padding: 2px 6px;
       font-family: monospace;
       font-size: 10px;
-      font-weight: 500;
-      color: var(--mui-text-primary);
+      font-weight: 600;
+      color: var(--m3-text-primary);
     }
 
-    /* Form Label */
-    .mui-label {
-      font-size: 11px;
+    /* Section Label */
+    .m3-label {
+      font-size: 11.5px;
       font-weight: 500;
-      color: var(--mui-text-secondary);
-      margin-bottom: 4px;
+      color: var(--m3-text-secondary);
+      margin-bottom: 6px;
       display: block;
+      padding-left: 4px;
     }
 
-    /* MUI Outlined Select for Active Model */
-    .mui-select-wrapper {
+    /* M3 Expressive Pill Select Dropdown */
+    .m3-select-wrapper {
       position: relative;
       width: 100%;
       margin-bottom: 14px;
     }
-    .mui-select-trigger {
+    .m3-select-trigger {
       width: 100%;
-      background-color: var(--mui-surface-card);
-      border: 1px solid var(--mui-border-input);
-      color: var(--mui-text-primary);
-      border-radius: 6px;
-      padding: 8px 12px;
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border-input);
+      color: var(--m3-text-primary);
+      border-radius: 9999px;
+      padding: 8px 14px;
       font-size: 12px;
       font-family: inherit;
       display: flex;
@@ -169,18 +185,23 @@
       justify-content: space-between;
       cursor: pointer;
       user-select: none;
-      transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease;
     }
-    .mui-select-trigger:hover {
-      border-color: rgba(255, 255, 255, 0.4);
+    .m3-select-trigger:hover {
+      border-color: var(--m3-primary);
+      transform: translateY(-1px);
+      background-color: rgba(255, 255, 255, 0.08);
     }
-    .mui-select-trigger.open,
-    .mui-select-trigger:focus {
-      border-color: var(--mui-primary);
-      box-shadow: 0 0 0 1px var(--mui-primary);
+    .m3-select-trigger:active {
+      transform: scale(0.97);
+    }
+    .m3-select-trigger.open,
+    .m3-select-trigger:focus {
+      border-color: var(--m3-primary);
+      box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25);
       outline: none;
     }
-    .mui-select-value {
+    .m3-select-value {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -189,103 +210,106 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .mui-select-arrow {
-      transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
-      color: var(--mui-text-secondary);
+    .m3-select-arrow {
+      transition: transform 0.25s var(--m3-spring);
+      color: var(--m3-text-secondary);
       flex-shrink: 0;
     }
-    .mui-select-trigger.open .mui-select-arrow {
+    .m3-select-trigger.open .m3-select-arrow {
       transform: rotate(180deg);
-      color: var(--mui-primary);
+      color: var(--m3-primary);
     }
-    .mui-menu-paper {
+    .m3-menu-popover {
       position: absolute;
-      top: calc(100% + 4px);
+      top: calc(100% + 6px);
       left: 0;
       right: 0;
-      background-color: #292929;
-      border: 1px solid var(--mui-border);
-      border-radius: 6px;
-      box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.3), 0px 8px 10px 1px rgba(0,0,0,0.22), 0px 3px 14px 2px rgba(0,0,0,0.18);
-      padding: 4px 0;
+      background-color: #27252d;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.55), 0px 0px 24px rgba(168,199,250,0.12);
+      backdrop-filter: blur(24px);
+      padding: 6px;
       z-index: 100;
       display: none;
       max-height: 220px;
       overflow-y: auto;
-      animation: muiMenuFade 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: top center;
+      animation: m3MenuSpring 0.26s var(--m3-spring);
     }
-    .mui-menu-paper.open {
+    .m3-menu-popover.open {
       display: block;
     }
-    @keyframes muiMenuFade {
-      from { opacity: 0; transform: translateY(-4px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes m3MenuSpring {
+      from { opacity: 0; transform: scale(0.9) translateY(-8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
-    .mui-menu-item {
+    .m3-menu-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 8px 12px;
       font-size: 12px;
-      color: var(--mui-text-primary);
+      color: var(--m3-text-primary);
       cursor: pointer;
+      border-radius: 12px;
       transition: background-color 120ms ease;
     }
-    .mui-menu-item:hover {
+    .m3-menu-item:hover {
       background-color: rgba(255, 255, 255, 0.08);
     }
-    .mui-menu-item.selected {
-      background-color: rgba(144, 202, 249, 0.14);
-      color: var(--mui-primary);
+    .m3-menu-item.selected {
+      background-color: rgba(168, 199, 250, 0.16);
+      color: var(--m3-primary);
       font-weight: 500;
     }
-    .mui-menu-item-text {
+    .m3-menu-item-text {
       display: flex;
       flex-direction: column;
       gap: 1px;
     }
-    .mui-menu-item-title {
+    .m3-menu-item-title {
       font-weight: 500;
       font-size: 12px;
     }
-    .mui-menu-item-desc {
+    .m3-menu-item-desc {
       font-size: 10px;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
     }
-    .mui-menu-item-check {
-      color: var(--mui-primary);
+    .m3-menu-item-check {
+      color: var(--m3-primary);
       opacity: 0;
       flex-shrink: 0;
     }
-    .mui-menu-item.selected .mui-menu-item-check {
+    .m3-menu-item.selected .m3-menu-item-check {
       opacity: 1;
     }
 
-    /* MUI Card (Paper) */
-    .mui-card {
-      background-color: var(--mui-surface);
-      border: 1px solid var(--mui-border);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-bottom: 12px;
+    /* M3 Expressive Card (Squircle Paper) */
+    .m3-card {
+      background-color: var(--m3-surface-container);
+      border: 1px solid var(--m3-border);
+      border-radius: 20px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+      box-shadow: 0px 4px 12px -2px rgba(0,0,0,0.3);
     }
-    .mui-card-row {
+    .m3-card-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 12px;
     }
-    .mui-card-label {
-      color: var(--mui-text-secondary);
+    .m3-card-label {
+      color: var(--m3-text-secondary);
       font-weight: 400;
     }
-    .mui-card-value {
+    .m3-card-value {
       font-weight: 500;
-      color: var(--mui-text-primary);
+      color: var(--m3-text-primary);
       display: flex;
       align-items: center;
       gap: 6px;
@@ -298,71 +322,74 @@
       height: 8px;
       border-radius: 50%;
     }
-    .dot-green { background-color: var(--mui-success); box-shadow: 0 0 6px rgba(102, 187, 106, 0.4); }
-    .dot-amber { background-color: var(--mui-warning); box-shadow: 0 0 6px rgba(255, 167, 38, 0.4); }
+    .dot-green { background-color: var(--m3-success); box-shadow: 0 0 8px rgba(120, 220, 119, 0.5); }
+    .dot-amber { background-color: var(--m3-warning); box-shadow: 0 0 8px rgba(255, 223, 153, 0.5); }
 
-    /* MUI Switch row in popup */
-    .mui-switch-item {
+    /* M3 Expressive Switch */
+    .m3-switch-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 0;
+      padding: 6px 0 2px 0;
       font-size: 12px;
-      color: var(--mui-text-secondary);
+      color: var(--m3-text-secondary);
+      border-top: 1px solid var(--m3-border);
+      margin-top: 2px;
     }
-    .mui-switch {
+    .m3-switch {
       position: relative;
       display: inline-block;
-      width: 32px;
-      height: 16px;
+      width: 36px;
+      height: 20px;
       flex-shrink: 0;
     }
-    .mui-switch input {
+    .m3-switch input {
       opacity: 0;
       width: 0;
       height: 0;
     }
-    .mui-switch-track {
+    .m3-switch-track {
       position: absolute;
       cursor: pointer;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(255, 255, 255, 0.2);
-      transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 16px;
+      background-color: rgba(255, 255, 255, 0.18);
+      transition: background-color 0.25s var(--m3-spring);
+      border-radius: 9999px;
     }
-    .mui-switch-thumb {
+    .m3-switch-thumb {
       position: absolute;
       content: "";
-      height: 12px;
-      width: 12px;
-      left: 2px;
-      bottom: 2px;
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
       background-color: #bdbdbd;
-      transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.25s var(--m3-spring), background-color 0.25s var(--m3-spring), width 0.15s ease;
       border-radius: 50%;
     }
-    .mui-switch input:checked + .mui-switch-track {
-      background-color: rgba(144, 202, 249, 0.5);
+    .m3-switch input:checked + .m3-switch-track {
+      background-color: var(--m3-primary-container);
+      box-shadow: 0 0 0 1px var(--m3-primary);
     }
-    .mui-switch input:checked + .mui-switch-track .mui-switch-thumb {
+    .m3-switch input:checked + .m3-switch-track .m3-switch-thumb {
       transform: translateX(16px);
-      background-color: var(--mui-primary);
+      background-color: var(--m3-primary);
     }
 
     /* Footer */
-    .mui-footer {
+    .m3-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 11px;
-      color: var(--mui-text-secondary);
-      padding-top: 4px;
+      color: var(--m3-text-secondary);
+      padding-top: 2px;
     }
-    .mui-link {
-      color: var(--mui-primary);
+    .m3-link {
+      color: var(--m3-primary);
       text-decoration: none;
       font-weight: 500;
       display: inline-flex;
@@ -370,28 +397,28 @@
       gap: 4px;
       transition: color 150ms ease;
     }
-    .mui-link:hover {
+    .m3-link:hover {
       text-decoration: underline;
-      color: #bbdefb;
+      color: #d3e3fd;
     }
   </style>
 </head>
 <body>
-  <!-- MUI Header Toolbar -->
-  <header class="mui-app-bar">
-    <div class="mui-brand">
-      <span class="mui-brand-title">Copage</span>
-      <span class="mui-chip-version">v0.1.0</span>
+  <!-- M3 Expressive Header Bar -->
+  <header class="m3-app-bar">
+    <div class="m3-brand">
+      <span class="m3-brand-title">Copage</span>
+      <span class="m3-chip-version">v0.1.0</span>
     </div>
-    <button id="open-options-link" class="mui-icon-button" title="Settings" aria-label="Settings">
+    <button id="open-options-link" class="m3-icon-button" title="Settings" aria-label="Settings">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
         <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
       </svg>
     </button>
   </header>
 
-  <!-- Primary Contained Action Button -->
-  <button id="activate-btn" class="mui-btn-contained">
+  <!-- M3 Pill Action Button -->
+  <button id="activate-btn" class="m3-btn-pill">
     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
       <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-7 7H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4z"/>
     </svg>
@@ -399,50 +426,50 @@
   </button>
 
   <!-- Shortcut Hint -->
-  <div class="mui-caption">
+  <div class="m3-caption">
     Shortcut: press <kbd>Alt + C</kbd> on any webpage
   </div>
 
-  <!-- Interactive MUI Outlined Model Selector Dropdown -->
-  <span class="mui-label">Quick Model Selector</span>
-  <div class="mui-select-wrapper">
-    <div id="popup-model-trigger" class="mui-select-trigger" tabindex="0" role="combobox" aria-expanded="false">
-      <div class="mui-select-value">
+  <!-- Interactive M3 Pill Model Selector Dropdown -->
+  <span class="m3-label">Quick Model Selector</span>
+  <div class="m3-select-wrapper">
+    <div id="popup-model-trigger" class="m3-select-trigger" tabindex="0" role="combobox" aria-expanded="false">
+      <div class="m3-select-value">
         <span class="status-dot dot-green"></span>
         <span id="popup-selected-model">Gemini 2.5 Flash</span>
       </div>
-      <svg class="mui-select-arrow" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+      <svg class="m3-select-arrow" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
         <path d="M7 10l5 5 5-5z"/>
       </svg>
     </div>
-    <div id="popup-model-menu" class="mui-menu-paper" role="listbox">
+    <div id="popup-model-menu" class="m3-menu-popover" role="listbox">
       <!-- Injected via popup.ts -->
     </div>
   </div>
 
-  <!-- Status Card (MUI Paper) -->
-  <div class="mui-card">
-    <div class="mui-card-row">
-      <span class="mui-card-label">Provider</span>
-      <span id="stat-provider" class="mui-card-value">OpenRouter</span>
+  <!-- M3 Expressive Card -->
+  <div class="m3-card">
+    <div class="m3-card-row">
+      <span class="m3-card-label">Provider</span>
+      <span id="stat-provider" class="m3-card-value">OpenRouter</span>
     </div>
-    <div class="mui-card-row">
-      <span class="mui-card-label">API Key</span>
-      <span id="stat-key" class="mui-card-value"><span class="status-dot dot-amber"></span>Not configured</span>
+    <div class="m3-card-row">
+      <span class="m3-card-label">API Key</span>
+      <span id="stat-key" class="m3-card-value"><span class="status-dot dot-amber"></span>Not configured</span>
     </div>
-    <div class="mui-switch-item" style="border-top: 1px solid var(--mui-border); padding-top: 8px; margin-top: 2px;">
+    <div class="m3-switch-row">
       <span>Deep Shadow DOM</span>
-      <label class="mui-switch" for="popup-switch-shadow">
+      <label class="m3-switch" for="popup-switch-shadow">
         <input type="checkbox" id="popup-switch-shadow" checked />
-        <span class="mui-switch-track"><span class="mui-switch-thumb"></span></span>
+        <span class="m3-switch-track"><span class="m3-switch-thumb"></span></span>
       </label>
     </div>
   </div>
 
   <!-- Footer Links -->
-  <footer class="mui-footer">
+  <footer class="m3-footer">
     <span>BYOK Client-Side</span>
-    <a href="#" id="options-footer-link" class="mui-link">All Settings</a>
+    <a href="#" id="options-footer-link" class="m3-link">All Settings</a>
   </footer>
 
   <script type="module" src="./popup.ts"></script>

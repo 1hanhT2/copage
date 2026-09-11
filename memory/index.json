@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T09:51:20.342Z",
-  "count": 26,
+  "generatedAt": "2026-09-11T09:51:23.791Z",
+  "count": 27,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -49,6 +49,19 @@
       "commit": "feat: adopt SingleFile resilience architecture for 100% reliability across all web pages",
       "tags": [
         "feature"
+      ]
+    },
+    {
+      "file": "2026-09-11_375706b_chore-memory-sync-memory-index-for-advanced-mui-components.md",
+      "hash": "375706b6d748c0ccc10f95adc6c1690a4aa110b0",
+      "short": "375706b",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore(memory): sync memory index for advanced MUI components",
+      "tags": [
+        "ui",
+        "memory"
       ]
     },
     {
