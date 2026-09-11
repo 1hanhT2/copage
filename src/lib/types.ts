@@ -51,6 +51,7 @@ export interface InspectedElementData {
   svgAssets: SvgAsset[];
   breadcrumbs: BreadcrumbItem[];
   computedFont: string;
+  cssVariables?: Record<string, string>;
   pageUrl: string;
   pageTitle: string;
 }

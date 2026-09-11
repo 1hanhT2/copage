@@ -80,4 +80,40 @@ describe("DOM & Style Extractor Engine", () => {
     expect(asset.suggestedLucideIcon).toBe("Search");
     expect(asset.svgString).not.toContain("xmlns:xlink");
   });
+
+  it("preserves SVG attributes and paths inside pruned HTML (SingleFile inspiration)", () => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <button class="btn">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor">
+          <path d="M5 12h14" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        <span>Action</span>
+      </button>
+    `;
+
+    const cleanHtml = formatPrunedHtml(div.firstElementChild as HTMLElement);
+    expect(cleanHtml).toContain("viewbox=\"0 0 24 24\"");
+    expect(cleanHtml).toContain("d=\"M5 12h14\"");
+    expect(cleanHtml).toContain("stroke-width=\"2\"");
+    expect(cleanHtml).toContain("Action");
+  });
+
+  it("captures live user form input values and checkboxes", () => {
+    const form = document.createElement("form");
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = "Hello Copage";
+    form.appendChild(input);
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = true;
+    form.appendChild(checkbox);
+
+    const cleanHtml = formatPrunedHtml(form);
+    expect(cleanHtml).toContain('value="Hello Copage"');
+    expect(cleanHtml).toContain('checked=""');
+  });
 });
+

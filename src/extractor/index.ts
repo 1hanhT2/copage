@@ -1,6 +1,6 @@
 import type { InspectedElementData, BreadcrumbItem, BoxEdges } from "../lib/types";
 import { formatPrunedHtml } from "./pruner";
-import { extractDistilledStyles, extractFlatDistilledStyles } from "./styles";
+import { extractDistilledStyles, extractFlatDistilledStyles, extractRelevantCssVariables } from "./styles";
 import { mapStylesToTailwind } from "./tailwind-mapper";
 import { extractSvgAssets, cleanFontFamily } from "./assets";
 
@@ -63,6 +63,7 @@ export function extractElementData(element: HTMLElement): InspectedElementData {
   const svgAssets = extractSvgAssets(element);
   const breadcrumbs = extractBreadcrumbs(element);
   const computedFont = cleanFontFamily(computed.fontFamily);
+  const cssVariables = extractRelevantCssVariables(element);
 
   return {
     tagName: element.tagName.toLowerCase(),
@@ -76,6 +77,7 @@ export function extractElementData(element: HTMLElement): InspectedElementData {
     svgAssets,
     breadcrumbs,
     computedFont,
+    cssVariables,
     pageUrl: window.location.href,
     pageTitle: document.title || ""
   };

@@ -141,3 +141,21 @@ export function extractFlatDistilledStyles(element: HTMLElement): Record<string,
     ...distilled.transforms
   };
 }
+
+export function extractRelevantCssVariables(element: HTMLElement): Record<string, string> {
+  const vars: Record<string, string> = {};
+  try {
+    const computed = window.getComputedStyle(element);
+    for (let i = 0; i < computed.length; i++) {
+      const prop = computed[i];
+      if (prop.startsWith("--")) {
+        const val = computed.getPropertyValue(prop).trim();
+        if (val && !vars[prop] && Object.keys(vars).length < 25) {
+          vars[prop] = val;
+        }
+      }
+    }
+  } catch {}
+  return vars;
+}
+

@@ -24,12 +24,38 @@ const ALLOWED_ATTRS = new Set([
   "aria-label",
   "placeholder",
   "type",
+  "value",
   "checked",
+  "selected",
   "disabled",
   "title",
   "target",
   "class",
-  "id"
+  "id",
+  // SVG attributes
+  "viewbox",
+  "d",
+  "fill",
+  "stroke",
+  "stroke-width",
+  "stroke-linecap",
+  "stroke-linejoin",
+  "xmlns",
+  "clip-rule",
+  "fill-rule",
+  "transform",
+  "cx",
+  "cy",
+  "r",
+  "rx",
+  "ry",
+  "x1",
+  "y1",
+  "x2",
+  "y2",
+  "points",
+  "width",
+  "height"
 ]);
 
 export interface PruneOptions {
@@ -77,8 +103,11 @@ export function pruneElementTree(
     if (/analytics|pixel|telemetry|doubleclick|bat\.bing/i.test(src)) return null;
   }
 
-  // Create clean clone
-  const cleanEl = document.createElement(tagName.toLowerCase());
+  // Create clean clone with proper namespace (SVG vs HTML)
+  const isSvg = el.namespaceURI === "http://www.w3.org/2000/svg" || tagName === "SVG";
+  const cleanEl = (isSvg
+    ? document.createElementNS("http://www.w3.org/2000/svg", tagName.toLowerCase())
+    : document.createElement(tagName.toLowerCase())) as Element;
 
   // Copy allowed attributes only
   for (let i = 0; i < el.attributes.length; i++) {
@@ -101,8 +130,29 @@ export function pruneElementTree(
     cleanEl.setAttribute(name, attr.value);
   }
 
-  // Process children
-  let child = el.firstChild;
+  // Live form state capture (SingleFile inspiration)
+  if (tagName === "INPUT") {
+    const input = el as HTMLInputElement;
+    if (input.type === "checkbox" || input.type === "radio") {
+      if (input.checked) cleanEl.setAttribute("checked", "");
+      else cleanEl.removeAttribute("checked");
+    } else if (input.value) {
+      cleanEl.setAttribute("value", input.value);
+    }
+  } else if (tagName === "TEXTAREA") {
+    const textarea = el as HTMLTextAreaElement;
+    if (textarea.value) {
+      cleanEl.textContent = textarea.value;
+    }
+  } else if (tagName === "OPTION") {
+    const option = el as HTMLOptionElement;
+    if (option.selected) {
+      cleanEl.setAttribute("selected", "");
+    }
+  }
+
+  // Process children (including shadowRoot fallback for Web Components)
+  let child: Node | null = el.firstChild || (el.shadowRoot ? el.shadowRoot.firstChild : null);
   let childCount = 0;
   let omittedCount = 0;
 

@@ -22,8 +22,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const isRestricted = !currentTab?.url || !currentTab.url.startsWith("http");
+
+  if (isRestricted && activateBtn) {
+    activateBtn.disabled = true;
+    activateBtn.textContent = "Unavailable on this page";
+    activateBtn.style.opacity = "0.5";
+    activateBtn.style.cursor = "not-allowed";
+  }
+
   // Activate Inspector button with automatic injection fallback
   activateBtn?.addEventListener("click", async () => {
+    if (isRestricted) return;
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab || typeof tab.id !== "number") return;
     const tabId = tab.id;
@@ -37,15 +48,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Content script was not present in this tab; inject it dynamically
       try {
         await chrome.scripting.executeScript({
-          target: { tabId },
+          target: { tabId, allFrames: false },
           files: ["content.js"]
         });
-        setTimeout(async () => {
-          try {
-            await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
-          } catch {}
-          window.close();
-        }, 60);
+        await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
+        window.close();
       } catch (err) {
         activateBtn.textContent = "Cannot inspect this page";
         activateBtn.style.backgroundColor = "#982e3b";

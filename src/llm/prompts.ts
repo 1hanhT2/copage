@@ -7,6 +7,9 @@ export function buildPromptForTarget(data: InspectedElementData, target: PromptT
   const boxInfo = Object.entries(distilledStyles.boxModel).map(([k, v]) => `${k}: ${v}`).join(", ") || "default";
   const typoInfo = Object.entries(distilledStyles.typography).map(([k, v]) => `${k}: ${v}`).join(", ") || "default";
   const visualInfo = Object.entries(distilledStyles.visual).map(([k, v]) => `${k}: ${v}`).join(", ") || "default";
+  const cssVarsInfo = data.cssVariables && Object.keys(data.cssVariables).length > 0
+    ? Object.entries(data.cssVariables).map(([k, v]) => `${k}: ${v}`).join("; ")
+    : null;
 
   const svgSummary = svgAssets.length > 0
     ? svgAssets.map((s, i) => `Icon #${i + 1}: viewBox="${s.viewBox}"${s.suggestedLucideIcon ? ` (Suggest Lucide '${s.suggestedLucideIcon}')` : ""}`).join("\n")
@@ -22,7 +25,7 @@ Layout: ${layoutInfo}
 Box Model: ${boxInfo}
 Typography: ${typoInfo}
 Visual: ${visualInfo}
-Tailwind Equivalents: ${tailwindClasses.join(" ")}
+${cssVarsInfo ? `Theme Tokens / CSS Variables: ${cssVarsInfo}\n` : ""}Tailwind Equivalents: ${tailwindClasses.join(" ")}
 Vector Assets:
 ${svgSummary}
 

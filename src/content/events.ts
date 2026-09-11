@@ -33,8 +33,9 @@ export class EventManager {
       e.stopPropagation();
       e.stopImmediatePropagation();
 
-      if (e.type === "click" && e.target instanceof Element) {
-        onSelect(e.target);
+      const target = (path[0] instanceof Element ? path[0] : e.target) as Element;
+      if (e.type === "click" && target instanceof Element) {
+        onSelect(target);
       }
     };
 

@@ -11,8 +11,8 @@ export class InspectorOverlay {
   private isLocked = false;
 
   constructor(callbacks: { onUnlock: () => void; onSelectBreadcrumb: (index: number) => void }) {
-    // 1. Create custom host element and apply inline styles
-    this.hostEl = document.createElement("div");
+    // 1. Create custom host element and apply inline styles (custom tag avoids matching page div CSS)
+    this.hostEl = document.createElement("copage-inspector-root");
     this.hostEl.id = "copage-inspector-root";
     this.hostEl.style.cssText = `
       all: initial !important;
@@ -332,9 +332,20 @@ export class InspectorOverlay {
     this.shadow.appendChild(this.tooltip);
     this.shadow.appendChild(this.dockContainer);
 
-    // Mount to body or documentElement
-    const mountPoint = document.body || document.documentElement;
-    mountPoint.appendChild(this.hostEl);
+    // Mount to documentElement (SingleFile approach) to avoid body transform stacking contexts
+    const mount = () => {
+      if (!this.hostEl.isConnected) {
+        const mountPoint = document.documentElement || document.body;
+        if (mountPoint) {
+          mountPoint.appendChild(this.hostEl);
+        } else {
+          document.addEventListener("DOMContentLoaded", () => {
+            (document.documentElement || document.body)?.appendChild(this.hostEl);
+          }, { once: true });
+        }
+      }
+    };
+    mount();
   }
 
   public updateHover(target: Element) {
