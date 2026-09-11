@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T09:44:15.424Z",
-  "count": 22,
+  "generatedAt": "2026-09-11T09:44:25.234Z",
+  "count": 23,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -49,6 +49,19 @@
       "tags": [
         "memory",
         "docs"
+      ]
+    },
+    {
+      "file": "2026-09-11_4b2daa9_feat-ui-redesign-all-extension-surfaces-to-material-ui-and-e.md",
+      "hash": "4b2daa989ba8b2c0d9eb18dcf1d122a6d4200371",
+      "short": "4b2daa9",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat(ui): redesign all extension surfaces to Material UI and eliminate emojis",
+      "tags": [
+        "feature",
+        "ui"
       ]
     },
     {
