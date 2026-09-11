@@ -231,17 +231,17 @@
       transform: scale(1.1);
     }
 
-    /* M3 Expressive Custom Pill Select Dropdown */
+    /* M3 Expressive Custom Pill Select Dropdown with Morphing Silhouette */
     .m3-select-wrapper {
       position: relative;
       width: 100%;
     }
     .m3-select-trigger {
       width: 100%;
-      background-color: transparent;
+      background-color: var(--m3-surface-container);
       border: 1px solid var(--m3-border-input);
       color: var(--m3-text-primary);
-      border-radius: 14px;
+      border-radius: 20px 8px 20px 8px;
       padding: 11px 16px;
       font-size: 14px;
       font-family: inherit;
@@ -250,15 +250,23 @@
       justify-content: space-between;
       cursor: pointer;
       user-select: none;
-      transition: transform 0.2s var(--m3-spring), border-color 0.15s ease;
+      transition: border-radius 0.28s var(--m3-spring), transform 0.2s var(--m3-spring), border-color 0.15s ease, box-shadow 0.2s ease, background-color 0.15s ease;
     }
     .m3-select-trigger:hover {
-      border-color: rgba(255, 255, 255, 0.35);
+      border-radius: 10px 22px 10px 22px;
+      border-color: var(--m3-primary);
+      transform: translateY(-1px);
+      background-color: rgba(168, 199, 250, 0.06);
+    }
+    .m3-select-trigger:active {
+      transform: scale(0.98);
+      border-radius: 14px;
     }
     .m3-select-trigger.open,
     .m3-select-trigger:focus {
+      border-radius: 9999px;
       border-color: var(--m3-primary);
-      box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25);
+      box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25), 0 4px 16px rgba(168, 199, 250, 0.15);
       outline: none;
     }
     .m3-select-value {
@@ -266,6 +274,30 @@
       align-items: center;
       gap: 10px;
       font-weight: 500;
+    }
+    /* Dedicated M3 Expressive Inner Shape Well */
+    .m3-shape-well {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 8px 4px 8px 4px;
+      background: rgba(168, 199, 250, 0.14);
+      color: var(--m3-primary);
+      flex-shrink: 0;
+      transition: transform 0.26s var(--m3-spring), border-radius 0.26s var(--m3-spring), background-color 0.18s ease, color 0.18s ease;
+    }
+    .m3-select-trigger:hover .m3-shape-well {
+      transform: rotate(14deg) scale(1.14);
+      border-radius: 4px 8px 4px 8px;
+      background: rgba(168, 199, 250, 0.24);
+    }
+    .m3-select-trigger.open .m3-shape-well {
+      transform: rotate(20deg) scale(1.18);
+      border-radius: 50%;
+      background: var(--m3-primary);
+      color: var(--m3-on-primary);
     }
     .m3-select-arrow {
       transition: transform 0.24s var(--m3-spring);
@@ -283,9 +315,9 @@
       right: 0;
       background-color: var(--m3-surface-container);
       border: 1px solid var(--m3-border);
-      border-radius: 20px;
+      border-radius: 22px 8px 22px 22px;
       box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.55), 0px 0px 24px rgba(168,199,250,0.12);
-      backdrop-filter: blur(24px);
+      backdrop-filter: blur(28px) saturate(190%);
       padding: 6px;
       z-index: 100;
       display: none;
@@ -342,7 +374,7 @@
       opacity: 1;
     }
 
-    /* M3 Expressive Capsule Toggle Button Group */
+    /* M3 Expressive Connected Button Group */
     .m3-toggle-button-group {
       display: inline-flex;
       border: 1px solid var(--m3-border);
@@ -364,24 +396,34 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      border-radius: 9999px;
-      transition: transform 0.2s var(--m3-spring), background-color 0.18s ease, color 0.18s ease;
+      border-radius: 8px;
+      transition: border-radius 0.24s var(--m3-spring), transform 0.2s var(--m3-spring), background-color 0.18s ease, color 0.18s ease;
       font-family: 'Lexend', sans-serif;
     }
+    .m3-toggle-button:first-child {
+      border-radius: 9999px 8px 8px 9999px;
+    }
+    .m3-toggle-button:last-child {
+      border-radius: 8px 9999px 9999px 8px;
+    }
     .m3-toggle-button:hover {
-      background-color: rgba(255, 255, 255, 0.06);
+      background-color: rgba(255, 255, 255, 0.08);
       color: var(--m3-text-primary);
+      transform: translateY(-1px);
     }
     .m3-toggle-button:active {
       transform: scale(0.96);
     }
     .m3-toggle-button.active {
-      background-color: rgba(168, 199, 250, 0.2);
+      background-color: rgba(168, 199, 250, 0.22);
       color: var(--m3-primary);
+      border-radius: 9999px !important;
       font-weight: 600;
+      transform: scale(1.03);
+      box-shadow: 0 2px 8px rgba(168, 199, 250, 0.2);
     }
 
-    /* Model Selection Cards (Squircles with spring hover) */
+    /* Model Selection Cards with Signature M3 Expressive Silhouettes */
     .m3-cards-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -394,12 +436,54 @@
       background-color: var(--m3-surface-container);
       border: 1px solid var(--m3-border);
       border-radius: 20px;
-      padding: 14px 16px;
+      padding: 16px 18px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      transition: transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.2s ease;
+      gap: 10px;
+      transition: border-radius 0.28s var(--m3-spring), transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.2s ease;
+    }
+    /* Google / Gemini Solar Diagonal */
+    .m3-action-card.card-shape-gemini {
+      border-radius: 28px 10px 28px 10px;
+    }
+    .m3-action-card.card-shape-gemini:hover {
+      border-radius: 12px 28px 12px 28px;
+    }
+    /* DeepSeek Reasoning Scalloped Leaf */
+    .m3-action-card.card-shape-deepseek {
+      border-radius: 28px 28px 10px 28px;
+    }
+    .m3-action-card.card-shape-deepseek:hover {
+      border-radius: 14px 28px 28px 14px;
+    }
+    /* Qwen Coder Precision Jewel */
+    .m3-action-card.card-shape-qwen {
+      border-radius: 10px 28px 28px 28px;
+    }
+    .m3-action-card.card-shape-qwen:hover {
+      border-radius: 28px 14px 14px 28px;
+    }
+    /* Meta Llama Open Weights Shield */
+    .m3-action-card.card-shape-llama {
+      border-radius: 28px 28px 28px 10px;
+    }
+    .m3-action-card.card-shape-llama:hover {
+      border-radius: 28px 12px 28px 28px;
+    }
+    /* Anthropic Claude Creative Diamond */
+    .m3-action-card.card-shape-claude {
+      border-radius: 22px 28px 22px 28px;
+    }
+    .m3-action-card.card-shape-claude:hover {
+      border-radius: 28px 14px 28px 14px;
+    }
+    /* Selected card morphs to grounded high-emphasis squircle */
+    .m3-action-card.selected {
+      border-radius: 24px !important;
+      border-color: var(--m3-primary);
+      background: linear-gradient(145deg, rgba(168, 199, 250, 0.16) 0%, rgba(208, 188, 255, 0.09) 100%);
+      box-shadow: 0 0 0 1px var(--m3-primary), 0 6px 20px rgba(168, 199, 250, 0.2);
     }
     .m3-action-card-watermark {
       position: absolute;
@@ -428,11 +512,6 @@
     .m3-action-card:active {
       transform: scale(0.97);
     }
-    .m3-action-card.selected {
-      border-color: var(--m3-primary);
-      background: linear-gradient(145deg, rgba(168, 199, 250, 0.14) 0%, rgba(208, 188, 255, 0.08) 100%);
-      box-shadow: 0 0 0 1px var(--m3-primary), 0 4px 16px rgba(168, 199, 250, 0.15);
-    }
     .m3-card-top {
       display: flex;
       align-items: center;
@@ -443,11 +522,26 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px 6px 10px 6px;
       background: rgba(168, 199, 250, 0.14);
       color: var(--m3-primary);
+      flex-shrink: 0;
+      transition: transform 0.28s var(--m3-spring), border-radius 0.28s var(--m3-spring), background-color 0.2s ease, color 0.2s ease;
+    }
+    .m3-action-card:hover .m3-card-badge {
+      transform: rotate(12deg) scale(1.15);
+      border-radius: 6px 10px 6px 10px;
+      background: rgba(168, 199, 250, 0.22);
+    }
+    .m3-action-card.selected .m3-card-badge {
+      transform: rotate(0deg) scale(1.08);
+      border-radius: 50%;
+      background: var(--m3-primary);
+      color: var(--m3-on-primary);
+      box-shadow: 0 2px 8px rgba(168, 199, 250, 0.4);
+    }
       flex-shrink: 0;
       transition: background-color 0.2s ease, color 0.2s ease;
     }

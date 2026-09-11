@@ -74,8 +74,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       item.addEventListener("click", async () => {
         config.model = preset.id;
         await setLLMConfig({ model: preset.id });
-        const newShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 15, "var(--m3-primary)");
-        selectedModelLabel.innerHTML = `<span style="display:inline-flex; align-items:center; gap:6px;">${newShape} <span>${preset.name}</span></span>`;
+        const newShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 14, "currentColor");
+        selectedModelLabel.innerHTML = `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${newShape}</span> <span>${preset.name}</span></span>`;
         if (cardWatermark) {
           cardWatermark.innerHTML = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 130, "currentColor");
         }
@@ -92,10 +92,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === config.model);
-    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(config.model), 15, "var(--m3-primary)");
+    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(config.model), 14, "currentColor");
     selectedModelLabel.innerHTML = activePreset
-      ? `<span style="display:inline-flex; align-items:center; gap:6px;">${activeShape} <span>${activePreset.name}</span></span>`
-      : `<span style="display:inline-flex; align-items:center; gap:6px;">${activeShape} <span>${config.model.split("/").pop() || config.model}</span></span>`;
+      ? `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${activePreset.name}</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${config.model.split("/").pop() || config.model}</span></span>`;
   }
 
   function openDropdown() {

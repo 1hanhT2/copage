@@ -117,15 +117,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // Render Preset Cards with M3 Expressive Watermark and Silhouette Badges
+  function getModelCardShapeClass(modelId: string): string {
+    const lower = modelId.toLowerCase();
+    if (lower.includes("google") || lower.includes("gemini")) return "card-shape-gemini";
+    if (lower.includes("deepseek")) return "card-shape-deepseek";
+    if (lower.includes("qwen")) return "card-shape-qwen";
+    if (lower.includes("meta") || lower.includes("llama")) return "card-shape-llama";
+    if (lower.includes("anthropic") || lower.includes("claude")) return "card-shape-claude";
+    return "card-shape-gemini";
+  }
+
+  // Render Preset Cards with M3 Expressive Watermark and Silhouette Badges
   function renderPresets() {
     modelPresetsContainer.innerHTML = "";
     RECOMMENDED_MODELS.forEach((preset) => {
       const isSelected = customModelInput.value === preset.id;
       const shapeName = getCanonicalModelShape(preset.id);
       const watermarkSvg = getCanonicalM3ShapeSvg(shapeName, 90, "currentColor");
-      const shapeSvg = getCanonicalM3ShapeSvg(shapeName, 15, isSelected ? "var(--m3-on-primary)" : "var(--m3-primary)");
+      const shapeSvg = getCanonicalM3ShapeSvg(shapeName, 16, "currentColor");
       const card = document.createElement("div");
-      card.className = `m3-action-card ${isSelected ? "selected" : ""}`;
+      card.className = `m3-action-card ${getModelCardShapeClass(preset.id)} ${isSelected ? "selected" : ""}`;
       card.innerHTML = `
         <div class="m3-action-card-watermark">${watermarkSvg}</div>
         <div class="m3-card-top" style="position: relative; z-index: 1;">
@@ -175,19 +186,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === customModelInput.value);
-    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(customModelInput.value), 16, "var(--m3-primary)");
+    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(customModelInput.value), 14, "currentColor");
     selectedModelText.innerHTML = activePreset
-      ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${activePreset.name} (${activePreset.provider})</span></span>`
-      : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${customModelInput.value}</span></span>`;
+      ? `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${activePreset.name} (${activePreset.provider})</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${customModelInput.value}</span></span>`;
   }
 
   function selectModel(modelId: string, modelName: string) {
     customModelInput.value = modelId;
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === modelId);
-    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(modelId), 16, "var(--m3-primary)");
+    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(modelId), 14, "currentColor");
     selectedModelText.innerHTML = activePreset
-      ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${activePreset.name} (${activePreset.provider})</span></span>`
-      : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${modelName}</span></span>`;
+      ? `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${activePreset.name} (${activePreset.provider})</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${modelName}</span></span>`;
     document.querySelectorAll(".m3-action-card").forEach((c) => c.classList.remove("selected"));
     document.querySelectorAll(".m3-menu-item").forEach((item) => {
       const isMatch = item.querySelector(".m3-menu-item-title")?.textContent === modelName;
@@ -226,10 +237,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   customModelInput.addEventListener("input", () => {
     const matched = RECOMMENDED_MODELS.find((m) => m.id === customModelInput.value);
-    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(customModelInput.value), 16, "var(--m3-primary)");
+    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(customModelInput.value), 14, "currentColor");
     selectedModelText.innerHTML = matched
-      ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${matched.name} (${matched.provider})</span></span>`
-      : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeShape} <span>${customModelInput.value}</span></span>`;
+      ? `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${matched.name} (${matched.provider})</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${customModelInput.value}</span></span>`;
     document.querySelectorAll(".m3-action-card").forEach((c) => {
       const name = c.querySelector(".m3-card-name")?.textContent;
       c.classList.toggle("selected", matched ? name === matched.name : false);

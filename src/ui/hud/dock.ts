@@ -8,7 +8,8 @@ import {
   getProviderShape,
   getElementM3Shape,
   getTargetM3Shape,
-  getActionM3Shape
+  getActionM3Shape,
+  getCanonicalModelShape
 } from "../../lib/shapes";
 
 export class CopageDock {
@@ -384,14 +385,14 @@ export class CopageDock {
         modelNameLabel.textContent = activePreset ? activePreset.name : (cfg.model.split("/").pop() || cfg.model);
       }
       if (modelIconSpan) {
-        modelIconSpan.innerHTML = getM3ShapeSvg(getProviderShape(cfg.model), 14, "#a8c7fa");
+        modelIconSpan.innerHTML = `<span class="copage-shape-well">${getCanonicalM3ShapeSvg(getCanonicalModelShape(cfg.model), 13, "currentColor")}</span>`;
       }
 
       if (modelMenu) {
         modelMenu.innerHTML = "";
         RECOMMENDED_MODELS.forEach((preset) => {
           const isSelected = cfg.model === preset.id;
-          const shapeSvg = getM3ShapeSvg(getProviderShape(preset.id), 15, "#a8c7fa");
+          const shapeSvg = `<span class="copage-shape-well" style="width: 20px; height: 20px;">${getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 12, "currentColor")}</span>`;
           const item = document.createElement("div");
           item.className = `copage-menu-item ${isSelected ? "selected" : ""}`;
           item.innerHTML = `
@@ -410,7 +411,7 @@ export class CopageDock {
             await setLLMConfig({ model: preset.id });
             modelNameLabel.textContent = preset.name;
             if (modelIconSpan) {
-              modelIconSpan.innerHTML = getM3ShapeSvg(getProviderShape(preset.id), 14, "#a8c7fa");
+              modelIconSpan.innerHTML = `<span class="copage-shape-well">${getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 13, "currentColor")}</span>`;
             }
             modelMenu.querySelectorAll(".copage-menu-item").forEach((it) => it.classList.remove("selected"));
             item.classList.add("selected");

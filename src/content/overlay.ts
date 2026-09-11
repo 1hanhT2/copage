@@ -336,7 +336,7 @@ export class InspectorOverlay {
         font-weight: 500;
       }
 
-      /* M3 Expressive Dropdown Select in HUD */
+      /* M3 Expressive Dropdown Select in HUD with Morphing Asymmetric Silhouette */
       .copage-select-wrap {
         position: relative;
       }
@@ -347,26 +347,54 @@ export class InspectorOverlay {
         font-size: 11.5px;
         font-weight: 500;
         font-family: 'Lexend', sans-serif !important;
-        padding: 6px 12px;
-        border-radius: 9999px;
+        padding: 6px 14px;
+        border-radius: 18px 7px 18px 7px;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
         user-select: none;
-        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.15s ease, background-color 0.15s ease;
+        transition: border-radius 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.2s ease;
       }
       .copage-select-trigger:hover {
+        border-radius: 9px 20px 9px 20px;
         border-color: #a8c7fa;
-        transform: translateY(-1px);
-        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px) scale(1.01);
+        background-color: rgba(168, 199, 250, 0.12);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
       }
       .copage-select-trigger:active {
         transform: scale(0.97);
+        border-radius: 12px;
       }
       .copage-select-trigger.open {
+        border-radius: 9999px;
         border-color: #a8c7fa;
-        box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25);
+        box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25), 0 4px 16px rgba(168, 199, 250, 0.15);
+      }
+      /* Dedicated HUD M3 Inner Shape Well */
+      .copage-shape-well {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 7px 4px 7px 4px;
+        background: rgba(168, 199, 250, 0.16);
+        color: #a8c7fa;
+        flex-shrink: 0;
+        transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), border-radius 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.18s ease, color 0.18s ease;
+      }
+      .copage-select-trigger:hover .copage-shape-well {
+        transform: rotate(14deg) scale(1.14);
+        border-radius: 4px 7px 4px 7px;
+        background: rgba(168, 199, 250, 0.25);
+      }
+      .copage-select-trigger.open .copage-shape-well {
+        transform: rotate(20deg) scale(1.18);
+        border-radius: 50%;
+        background: #a8c7fa;
+        color: #062e6f;
       }
       .copage-select-arrow {
         color: rgba(255, 255, 255, 0.55);
@@ -384,9 +412,9 @@ export class InspectorOverlay {
         min-width: 270px;
         background-color: #27252d;
         border: 1px solid rgba(255, 255, 255, 0.16);
-        border-radius: 20px;
+        border-radius: 22px 8px 22px 22px;
         box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.55), 0px 0px 24px rgba(168,199,250,0.12);
-        backdrop-filter: blur(24px);
+        backdrop-filter: blur(28px) saturate(190%);
         padding: 6px 0;
         z-index: 2147483647;
         display: none;
@@ -449,7 +477,7 @@ export class InspectorOverlay {
         opacity: 1;
       }
 
-      /* M3 Expressive Segmented Button Group (Capsule Toggle) */
+      /* M3 Expressive Connected Button Group for Targets */
       .copage-segmented-group {
         display: inline-flex;
         border: 1px solid rgba(255, 255, 255, 0.14);
@@ -462,43 +490,53 @@ export class InspectorOverlay {
       .copage-segmented-btn {
         background: transparent;
         border: none;
-        padding: 5px 12px;
+        padding: 5px 14px;
         font-size: 11px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.7);
-        border-radius: 9999px;
+        border-radius: 8px;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.18s ease, color 0.18s ease;
+        gap: 6px;
+        transition: border-radius 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.18s ease, color 0.18s ease;
         font-family: 'Lexend', sans-serif !important;
       }
+      .copage-segmented-btn:first-child {
+        border-radius: 9999px 8px 8px 9999px;
+      }
+      .copage-segmented-btn:last-child {
+        border-radius: 8px 9999px 9999px 8px;
+      }
       .copage-segmented-btn:hover {
-        background-color: rgba(255, 255, 255, 0.08);
+        background-color: rgba(255, 255, 255, 0.09);
         color: #ffffff;
+        transform: translateY(-1px);
       }
       .copage-segmented-btn:active {
         animation: copageJelly 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       .copage-segmented-btn.active {
-        background-color: rgba(168, 199, 250, 0.22);
+        background-color: rgba(168, 199, 250, 0.24);
         color: #a8c7fa;
+        border-radius: 9999px !important;
         font-weight: 600;
+        transform: scale(1.04);
+        box-shadow: 0 2px 8px rgba(168, 199, 250, 0.25);
       }
 
-      /* M3 Expressive Split Button */
+      /* M3 Expressive Connected Split Button */
       .copage-split-group {
         display: inline-flex;
         border-radius: 9999px;
-        box-shadow: 0px 4px 12px -2px rgba(0,0,0,0.4), 0px 2px 4px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 4px 14px -2px rgba(0,0,0,0.45), 0px 2px 6px 0px rgba(0,0,0,0.25);
         position: relative;
       }
       .copage-split-main {
         background-color: #a8c7fa;
         color: #062e6f;
         border: none;
-        border-radius: 9999px 0 0 9999px;
+        border-radius: 9999px 8px 8px 9999px;
         padding: 7px 16px;
         font-size: 12px;
         font-weight: 600;

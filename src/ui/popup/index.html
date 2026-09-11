@@ -179,7 +179,7 @@
       padding-left: 4px;
     }
 
-    /* M3 Expressive Pill Select Dropdown */
+    /* M3 Expressive Model Select Trigger with Morphing Asymmetric Silhouette */
     .m3-select-wrapper {
       position: relative;
       width: 100%;
@@ -190,7 +190,7 @@
       background-color: var(--m3-surface-container);
       border: 1px solid var(--m3-border-input);
       color: var(--m3-text-primary);
-      border-radius: 9999px;
+      border-radius: 20px 8px 20px 8px;
       padding: 8px 14px;
       font-size: 12px;
       font-family: inherit;
@@ -199,20 +199,24 @@
       justify-content: space-between;
       cursor: pointer;
       user-select: none;
-      transition: transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease;
+      transition: border-radius 0.28s var(--m3-spring), transform 0.2s var(--m3-spring), border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.2s ease;
     }
     .m3-select-trigger:hover {
+      border-radius: 10px 22px 10px 22px;
       border-color: var(--m3-primary);
-      transform: translateY(-1px);
-      background-color: rgba(255, 255, 255, 0.08);
+      transform: translateY(-1px) scale(1.01);
+      background-color: rgba(168, 199, 250, 0.08);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     }
     .m3-select-trigger:active {
       transform: scale(0.97);
+      border-radius: 14px;
     }
     .m3-select-trigger.open,
     .m3-select-trigger:focus {
+      border-radius: 9999px;
       border-color: var(--m3-primary);
-      box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25);
+      box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.25), 0 4px 16px rgba(168, 199, 250, 0.15);
       outline: none;
     }
     .m3-select-value {
@@ -223,6 +227,30 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+    /* Dedicated M3 Expressive Inner Shape Well */
+    .m3-shape-well {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 7px 4px 7px 4px;
+      background: rgba(168, 199, 250, 0.14);
+      color: var(--m3-primary);
+      flex-shrink: 0;
+      transition: transform 0.26s var(--m3-spring), border-radius 0.26s var(--m3-spring), background-color 0.18s ease, color 0.18s ease;
+    }
+    .m3-select-trigger:hover .m3-shape-well {
+      transform: rotate(14deg) scale(1.14);
+      border-radius: 4px 7px 4px 7px;
+      background: rgba(168, 199, 250, 0.24);
+    }
+    .m3-select-trigger.open .m3-shape-well {
+      transform: rotate(20deg) scale(1.18);
+      border-radius: 50%;
+      background: var(--m3-primary);
+      color: var(--m3-on-primary);
     }
     .m3-select-arrow {
       transition: transform 0.25s var(--m3-spring);
@@ -238,11 +266,11 @@
       top: calc(100% + 6px);
       left: 0;
       right: 0;
-      background-color: #27252d;
+      background-color: var(--m3-surface-container);
       border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 20px;
+      border-radius: 22px 8px 22px 22px;
       box-shadow: 0px 16px 36px -4px rgba(0,0,0,0.55), 0px 0px 24px rgba(168,199,250,0.12);
-      backdrop-filter: blur(24px);
+      backdrop-filter: blur(28px) saturate(190%);
       padding: 6px;
       z-index: 100;
       display: none;
