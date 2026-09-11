@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T10:09:54.750Z",
-  "count": 35,
+  "generatedAt": "2026-09-11T10:17:29.719Z",
+  "count": 36,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -163,6 +163,19 @@
       "tags": [
         "memory",
         "docs"
+      ]
+    },
+    {
+      "file": "2026-09-11_66d6b14_feat-ui-implement-material-3-expressive-typography-with-comf.md",
+      "hash": "66d6b14db0d8beddf6c54713a46d966abc73eae0",
+      "short": "66d6b14",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat(ui): implement Material 3 Expressive typography with Comfortaa, Lexend, and JetBrains Mono",
+      "tags": [
+        "feature",
+        "ui"
       ]
     },
     {
