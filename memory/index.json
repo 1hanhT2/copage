@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T13:57:04.701Z",
-  "count": 42,
+  "generatedAt": "2026-09-11T14:05:10.712Z",
+  "count": 44,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -216,6 +216,19 @@
       ]
     },
     {
+      "file": "2026-09-11_7e3ee9e_docs-memory-record-dropdown-popover-glitch-resolution.md",
+      "hash": "7e3ee9eaac9fcc49f7caef7be76a8317025700a6",
+      "short": "7e3ee9e",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "docs(memory): record dropdown popover glitch resolution",
+      "tags": [
+        "memory",
+        "docs"
+      ]
+    },
+    {
       "file": "2026-09-11_83bc723_chore-memory-sync-memory-index-for-iife-bundle-fix.md",
       "hash": "83bc723833c5ecaf5d5a0628f6ae6882656bba01",
       "short": "83bc723",
@@ -337,6 +350,19 @@
       "commit": "chore(memory): update memory index",
       "tags": [
         "memory"
+      ]
+    },
+    {
+      "file": "2026-09-11_a63469a_fix-ui-eliminate-dropdown-popover-glitch-by-decoupling-conto.md",
+      "hash": "a63469adf6e851c6275dd15c4233ca804ffb2e25",
+      "short": "a63469a",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "fix(ui): eliminate dropdown popover glitch by decoupling contour filter and adding scroll containment",
+      "tags": [
+        "fix",
+        "ui"
       ]
     },
     {
