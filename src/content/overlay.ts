@@ -12,6 +12,18 @@ export class InspectorOverlay {
   private isLocked = false;
 
   constructor(callbacks: { onUnlock: () => void; onSelectBreadcrumb: (index: number) => void }) {
+    // Inject web fonts into document head so Shadow DOM can render Comfortaa, Lexend, JetBrains Mono
+    const fontId = "copage-google-fonts";
+    if (!document.getElementById(fontId)) {
+      const link = document.createElement("link");
+      link.id = fontId;
+      link.rel = "stylesheet";
+      link.href = "https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=JetBrains+Mono:wght@400;500;600&family=Lexend:wght@400;500;600;700&display=swap";
+      try {
+        (document.head || document.documentElement).appendChild(link);
+      } catch {}
+    }
+
     // 1. Create custom host element and apply inline styles (custom tag avoids matching page div CSS)
     this.hostEl = document.createElement("copage-inspector-root");
     this.hostEl.id = "copage-inspector-root";
@@ -45,11 +57,34 @@ export class InspectorOverlay {
         height: 100vh !important;
         pointer-events: none !important;
         z-index: 2147483647 !important;
-        font-family: 'Lexend', 'Google Sans Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+        --copage-font-brand: 'Comfortaa', 'Google Sans Display', 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif;
+        --copage-font-ui: 'Lexend', 'Google Sans Text', 'Google Sans', 'Segoe UI Variable Text', 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        --copage-font-code: 'JetBrains Mono', 'Google Sans Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+        font-family: var(--copage-font-ui) !important;
         box-sizing: border-box !important;
       }
       *, *::before, *::after {
         box-sizing: border-box !important;
+      }
+
+      /* Universal Expressive Scrollbar Styling */
+      *::-webkit-scrollbar {
+        width: 5px;
+        height: 4px;
+      }
+      *::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      *::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.16);
+        border-radius: 9999px;
+      }
+      *::-webkit-scrollbar-thumb:hover {
+        background: rgba(168, 199, 250, 0.45);
+      }
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
       }
 
       /* Bounding Box Highlight (Material 3 Expressive Electric Primary / Mint Locked) */
@@ -215,8 +250,9 @@ export class InspectorOverlay {
         display: flex;
         flex-direction: column;
         gap: 12px;
+        overflow-x: hidden;
         animation: copageExpressiveSpring 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-        font-family: 'Lexend', 'Google Sans Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+        font-family: var(--copage-font-ui) !important;
       }
 
       @keyframes copageExpressiveSpring {
@@ -238,26 +274,39 @@ export class InspectorOverlay {
         flex-wrap: wrap;
       }
       .copage-dock-logo {
-        height: 20px;
-        width: auto;
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
         display: block;
         object-fit: contain;
+        flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
       }
       .copage-brand-tag {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: 8px;
+        user-select: none;
+      }
+      .copage-brand-title {
+        font-family: var(--copage-font-brand) !important;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: #ffffff;
+        line-height: 1;
+        display: inline-block;
       }
       .copage-tag-badge {
         font-size: 13px;
         font-weight: 600;
         color: #a8c7fa;
-        font-family: 'JetBrains Mono', monospace !important;
+        font-family: var(--copage-font-code) !important;
       }
       .copage-dim-badge {
         font-size: 11px;
         color: #ffdf99;
-        font-family: 'JetBrains Mono', monospace !important;
+        font-family: var(--copage-font-code) !important;
       }
       .copage-class-badge {
         font-size: 11px;
@@ -265,26 +314,47 @@ export class InspectorOverlay {
         max-width: 240px;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-family: var(--copage-font-code) !important;
       }
 
-      /* Breadcrumbs bar (M3 Pill Chips) */
+      /* Breadcrumbs bar (M3 Pill Chips) with Sleek Expressive Horizontal Scrollbar */
       .copage-breadcrumbs-bar {
         display: flex;
         align-items: center;
         gap: 6px;
         overflow-x: auto;
-        padding-bottom: 2px;
+        overflow-y: hidden;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(168, 199, 250, 0.35) rgba(255, 255, 255, 0.04);
+        padding-bottom: 5px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .copage-breadcrumbs-bar::-webkit-scrollbar {
+        height: 4px;
+      }
+      .copage-breadcrumbs-bar::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 9999px;
+      }
+      .copage-breadcrumbs-bar::-webkit-scrollbar-thumb {
+        background: rgba(168, 199, 250, 0.35);
+        border-radius: 9999px;
+        transition: background-color 0.2s ease;
+      }
+      .copage-breadcrumbs-bar::-webkit-scrollbar-thumb:hover {
+        background: #a8c7fa;
       }
       .copage-bc-btn {
         background: rgba(255, 255, 255, 0.07);
         border: 1px solid rgba(255, 255, 255, 0.12);
         color: rgba(255, 255, 255, 0.75);
         font-size: 11px;
-        font-family: 'JetBrains Mono', monospace !important;
+        font-family: var(--copage-font-code) !important;
         padding: 3px 10px;
         border-radius: 9999px;
         cursor: pointer;
         white-space: nowrap;
+        flex-shrink: 0;
         transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
       }
       .copage-bc-btn:hover {
@@ -707,21 +777,40 @@ export class InspectorOverlay {
       .copage-code-title {
         font-size: 11px;
         color: rgba(255, 255, 255, 0.65);
-        font-family: 'JetBrains Mono', monospace !important;
+        font-family: var(--copage-font-code) !important;
       }
       .copage-code-pre {
         background-color: #0f0f12;
         border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 16px;
         padding: 12px;
-        font-family: "JetBrains Mono", monospace !important;
+        font-family: var(--copage-font-code) !important;
         font-size: 11px;
         line-height: 1.45;
         color: rgba(255, 255, 255, 0.9);
         max-height: 180px;
         overflow-y: auto;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.18) rgba(0, 0, 0, 0.2);
         white-space: pre-wrap;
+        word-break: break-word;
         margin: 0;
+      }
+      .copage-code-pre::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+      }
+      .copage-code-pre::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 8px;
+      }
+      .copage-code-pre::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 8px;
+      }
+      .copage-code-pre::-webkit-scrollbar-thumb:hover {
+        background: rgba(168, 199, 250, 0.45);
       }
     `;
 

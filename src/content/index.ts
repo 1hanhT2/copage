@@ -4,9 +4,22 @@ import type { ExtensionMessage } from "../lib/types";
 // Singleton inspector instance for this frame
 let inspector: ElementInspector | null = null;
 
-console.log("[Copage] Inspector content script loaded on", window.location.hostname);
+function injectGoogleFonts() {
+  const fontId = "copage-google-fonts";
+  if (document.getElementById(fontId)) return;
+  const link = document.createElement("link");
+  link.id = fontId;
+  link.rel = "stylesheet";
+  link.href = "https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=JetBrains+Mono:wght@400;500;600&family=Lexend:wght@400;500;600;700&display=swap";
+  try {
+    (document.head || document.documentElement).appendChild(link);
+  } catch {}
+}
+
+injectGoogleFonts();
 
 function getInspector(): ElementInspector {
+  injectGoogleFonts();
   if (!inspector) {
     inspector = new ElementInspector();
   }

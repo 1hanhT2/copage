@@ -25,6 +25,7 @@ import {
   getModelPillShapeClass,
   getElementM3Shape
 } from "../../lib/shapes";
+import { getBrandIconSvg } from "../../lib/brand-icons";
 import { setupDynamicFavicon } from "../../lib/favicon";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -107,6 +108,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  // Inject actual brand SVG icons from thesvg into provider buttons
+  const orBtn = providerToggleGroup?.querySelector('[data-provider="openrouter"]');
+  const oaiBtn = providerToggleGroup?.querySelector('[data-provider="openai-compatible"]');
+  if (orBtn) {
+    const existingSvg = orBtn.querySelector("svg");
+    if (existingSvg) existingSvg.outerHTML = getBrandIconSvg("openrouter", 15);
+  }
+  if (oaiBtn) {
+    const existingSvg = oaiBtn.querySelector("svg");
+    if (existingSvg) existingSvg.outerHTML = getBrandIconSvg("openai", 15);
+  }
+
   setProviderUI(config.provider);
 
   providerToggleGroup.querySelectorAll(".m3-toggle-button").forEach((btn) => {
@@ -153,14 +166,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const isSelected = customModelInput.value === preset.id;
       const shapeName = getCanonicalModelShape(preset.id);
       const watermarkSvg = getCanonicalM3ShapeSvg(shapeName, 90, "currentColor");
-      const shapeSvg = getCanonicalM3ShapeSvg(shapeName, 16, "currentColor");
+      const brandIcon = getBrandIconSvg(preset.id, 20);
       const card = document.createElement("div");
       card.className = `m3-action-card ${getModelCardShapeClass(preset.id)} ${isSelected ? "selected" : ""}`;
       card.innerHTML = `
         <div class="m3-action-card-watermark">${watermarkSvg}</div>
         <div class="m3-card-top" style="position: relative; z-index: 1;">
           <div class="m3-card-name">${preset.name}</div>
-          <div class="m3-card-badge">${shapeSvg}</div>
+          <div class="m3-card-badge">${brandIcon}</div>
         </div>
         <div class="m3-card-meta" style="position: relative; z-index: 1;">
           <span class="m3-card-tag">${preset.provider}</span>
@@ -174,20 +187,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Model Dropdown Menu with M3 Shapes
+  // Model Dropdown Menu with M3 Shapes & thesvg Brand Icons
   function renderModelDropdown() {
     modelDropdownMenu.innerHTML = "";
     RECOMMENDED_MODELS.forEach((preset) => {
       const isSelected = customModelInput.value === preset.id;
-      const shapeName = getCanonicalModelShape(preset.id);
-      const shapeSvg = getCanonicalM3ShapeSvg(shapeName, 16, "var(--m3-primary)");
+      const brandIcon = getBrandIconSvg(preset.id, 18);
       const item = document.createElement("div");
       item.className = `m3-menu-item ${isSelected ? "selected" : ""}`;
       item.setAttribute("role", "option");
       item.setAttribute("aria-selected", isSelected ? "true" : "false");
       item.innerHTML = `
         <div style="display: flex; align-items: center; gap: 10px;">
-          ${shapeSvg}
+          ${brandIcon}
           <div class="m3-menu-item-text">
             <span class="m3-menu-item-title">${preset.name}</span>
             <span class="m3-menu-item-desc">${preset.provider} • ${preset.speed} • ${preset.cost}</span>
@@ -205,20 +217,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === customModelInput.value);
-    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(customModelInput.value), 14, "currentColor");
+    const activeBrandIcon = getBrandIconSvg(customModelInput.value, 16);
     selectedModelText.innerHTML = activePreset
-      ? `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${activePreset.name} (${activePreset.provider})</span></span>`
-      : `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${customModelInput.value}</span></span>`;
+      ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeBrandIcon} <span>${activePreset.name} (${activePreset.provider})</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeBrandIcon} <span>${customModelInput.value}</span></span>`;
     modelDropdownTrigger.className = `m3-select-trigger ${getModelPillShapeClass(customModelInput.value)}`;
   }
 
   function selectModel(modelId: string, modelName: string) {
     customModelInput.value = modelId;
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === modelId);
-    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(modelId), 14, "currentColor");
+    const activeBrandIcon = getBrandIconSvg(modelId, 16);
     selectedModelText.innerHTML = activePreset
-      ? `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${activePreset.name} (${activePreset.provider})</span></span>`
-      : `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${modelName}</span></span>`;
+      ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeBrandIcon} <span>${activePreset.name} (${activePreset.provider})</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeBrandIcon} <span>${modelName}</span></span>`;
     modelDropdownTrigger.className = `m3-select-trigger ${getModelPillShapeClass(modelId)}`;
     document.querySelectorAll(".m3-action-card").forEach((c) => c.classList.remove("selected"));
     document.querySelectorAll(".m3-menu-item").forEach((item) => {

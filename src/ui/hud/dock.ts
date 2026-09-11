@@ -22,6 +22,8 @@ import {
   getCanonicalModelShape,
   getModelPillShapeClass
 } from "../../lib/shapes";
+import { COPAGE_ICON_DATA_URI } from "../../lib/copage-logo";
+import { getBrandIconSvg } from "../../lib/brand-icons";
 
 export class CopageDock {
   private container: HTMLElement;
@@ -221,17 +223,14 @@ export class CopageDock {
       )
       .join(chevronSvg);
 
-    const logoUrl = (typeof chrome !== "undefined" && chrome.runtime?.getURL)
-      ? chrome.runtime.getURL("assets/copage-logo-dark.png")
-      : "";
-
     this.container.innerHTML = `
       <div class="copage-dock-panel">
         <!-- Top Bar -->
         <div class="copage-dock-header">
           <div class="copage-badge-group">
-            <span class="copage-brand-tag">
-              ${logoUrl ? `<img src="${logoUrl}" alt="Copage" class="copage-dock-logo" />` : `<span>Copage</span>`}
+            <span class="copage-brand-tag" title="Copage Web Inspector">
+              <img src="${COPAGE_ICON_DATA_URI}" alt="Copage" class="copage-dock-logo" />
+              <span class="copage-brand-title">Copage</span>
             </span>
             <span class="copage-tag-badge">
               ${getCanonicalM3ShapeSvg(getElementM3Shape(d.tagName), 12, "#a8c7fa", "vertical-align: -1px; margin-right: 3px;")}
@@ -488,19 +487,19 @@ export class CopageDock {
         modelNameLabel.textContent = activePreset ? activePreset.name : (cfg.model.split("/").pop() || cfg.model);
       }
       if (modelIconSpan) {
-        modelIconSpan.innerHTML = `<span class="copage-shape-well">${getCanonicalM3ShapeSvg(getCanonicalModelShape(cfg.model), 13, "currentColor")}</span>`;
+        modelIconSpan.innerHTML = getBrandIconSvg(cfg.model, 15);
       }
 
       if (modelMenu) {
         modelMenu.innerHTML = "";
         RECOMMENDED_MODELS.forEach((preset) => {
           const isSelected = cfg.model === preset.id;
-          const shapeSvg = `<span class="copage-shape-well" style="width: 20px; height: 20px;">${getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 12, "currentColor")}</span>`;
+          const brandIcon = getBrandIconSvg(preset.id, 16);
           const item = document.createElement("div");
           item.className = `copage-menu-item ${isSelected ? "selected" : ""}`;
           item.innerHTML = `
             <div style="display: flex; align-items: center; gap: 8px;">
-              ${shapeSvg}
+              ${brandIcon}
               <div class="copage-menu-item-text">
                 <span class="copage-menu-item-title">${preset.name}</span>
                 <span class="copage-menu-item-desc">${preset.speed} • ${preset.cost}</span>
@@ -514,7 +513,7 @@ export class CopageDock {
             await setLLMConfig({ model: preset.id });
             modelNameLabel.textContent = preset.name;
             if (modelIconSpan) {
-              modelIconSpan.innerHTML = `<span class="copage-shape-well">${getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 13, "currentColor")}</span>`;
+              modelIconSpan.innerHTML = getBrandIconSvg(preset.id, 15);
             }
             if (modelTrigger) {
               modelTrigger.className = `copage-select-trigger ${getModelPillShapeClass(preset.id)}`;

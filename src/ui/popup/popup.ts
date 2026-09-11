@@ -7,6 +7,7 @@ import {
   getCanonicalModelShape,
   getModelPillShapeClass
 } from "../../lib/shapes";
+import { getBrandIconSvg } from "../../lib/brand-icons";
 import { setupDynamicFavicon } from "../../lib/favicon";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -39,7 +40,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     cardWatermark.innerHTML = getCanonicalM3ShapeSvg(getCanonicalModelShape(config.model), 130, "currentColor");
   }
 
-  if (statProvider) statProvider.textContent = config.provider === "openrouter" ? "OpenRouter" : "Custom OpenAI";
+  if (statProvider) {
+    const isOr = config.provider === "openrouter";
+    statProvider.innerHTML = `<span style="display: inline-flex; align-items: center; gap: 5px;">${getBrandIconSvg(isOr ? "openrouter" : "openai", 14)} <span>${isOr ? "OpenRouter" : "Custom OpenAI"}</span></span>`;
+  }
 
   if (statKey) {
     if (config.apiKey || config.provider === "openai-compatible") {
@@ -61,14 +65,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     modelMenu.innerHTML = "";
     RECOMMENDED_MODELS.forEach((preset) => {
       const isSelected = config.model === preset.id;
-      const shapeSvg = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 15, "var(--m3-primary)");
+      const brandIcon = getBrandIconSvg(preset.id, 16);
       const item = document.createElement("div");
       item.className = `m3-menu-item ${isSelected ? "selected" : ""}`;
       item.setAttribute("role", "option");
       item.setAttribute("aria-selected", isSelected ? "true" : "false");
       item.innerHTML = `
         <div style="display: flex; align-items: center; gap: 8px;">
-          ${shapeSvg}
+          ${brandIcon}
           <div class="m3-menu-item-text">
             <span class="m3-menu-item-title">${preset.name}</span>
             <span class="m3-menu-item-desc">${preset.speed} • ${preset.cost}</span>
@@ -83,8 +87,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.stopPropagation();
         config.model = preset.id;
         await setLLMConfig({ model: preset.id });
-        const newShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 14, "currentColor");
-        selectedModelLabel.innerHTML = `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${newShape}</span> <span>${preset.name}</span></span>`;
+        const newBrandIcon = getBrandIconSvg(preset.id, 16);
+        selectedModelLabel.innerHTML = `<span style="display:inline-flex; align-items:center; gap:8px;">${newBrandIcon} <span>${preset.name}</span></span>`;
         modelTrigger.className = `m3-select-trigger ${getModelPillShapeClass(preset.id)}`;
         if (cardWatermark) {
           cardWatermark.innerHTML = getCanonicalM3ShapeSvg(getCanonicalModelShape(preset.id), 130, "currentColor");
@@ -102,10 +106,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const activePreset = RECOMMENDED_MODELS.find((m) => m.id === config.model);
-    const activeShape = getCanonicalM3ShapeSvg(getCanonicalModelShape(config.model), 14, "currentColor");
+    const activeBrandIcon = getBrandIconSvg(config.model, 16);
     selectedModelLabel.innerHTML = activePreset
-      ? `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${activePreset.name}</span></span>`
-      : `<span style="display:inline-flex; align-items:center; gap:8px;"><span class="m3-shape-well">${activeShape}</span> <span>${config.model.split("/").pop() || config.model}</span></span>`;
+      ? `<span style="display:inline-flex; align-items:center; gap:8px;">${activeBrandIcon} <span>${activePreset.name}</span></span>`
+      : `<span style="display:inline-flex; align-items:center; gap:8px;">${activeBrandIcon} <span>${config.model.split("/").pop() || config.model}</span></span>`;
     modelTrigger.className = `m3-select-trigger ${getModelPillShapeClass(config.model)}`;
   }
 
