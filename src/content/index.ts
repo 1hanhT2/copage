@@ -4,6 +4,8 @@ import type { ExtensionMessage } from "../lib/types";
 // Singleton inspector instance for this frame
 let inspector: ElementInspector | null = null;
 
+console.log("[Copage] Inspector content script loaded on", window.location.hostname);
+
 function getInspector(): ElementInspector {
   if (!inspector) {
     inspector = new ElementInspector();

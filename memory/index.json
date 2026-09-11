@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T09:11:27.197Z",
-  "count": 16,
+  "generatedAt": "2026-09-11T09:11:27.804Z",
+  "count": 17,
   "entries": [
     {
       "file": "2026-09-11_1fd320d_chore-memory-update-memory-index.md",
@@ -25,6 +25,18 @@
       "tags": [
         "memory",
         "docs"
+      ]
+    },
+    {
+      "file": "2026-09-11_51fa857_chore-memory-sync-memory-index.md",
+      "hash": "51fa85758e8907f5e4180562d29185a5297687ce",
+      "short": "51fa857",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore(memory): sync memory index",
+      "tags": [
+        "memory"
       ]
     },
     {
