@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T14:05:10.712Z",
-  "count": 44,
+  "generatedAt": "2026-09-11T14:05:32.437Z",
+  "count": 45,
   "entries": [
     {
       "file": "2026-09-11_1401420_fix-bundle-content-script-as-standalone-iife-to-resolve-synt.md",
@@ -532,6 +532,19 @@
       "version": "null",
       "commit": "docs: align AGENTS.md, README.md, and specs with extension mission and LLM prompt synthesizer vision",
       "tags": [
+        "docs"
+      ]
+    },
+    {
+      "file": "2026-09-11_fd0a2a3_docs-memory-record-dropdown-popover-glitch-resolution.md",
+      "hash": "fd0a2a3bed5642d33b1bf3066ac3c41aa6d2d9c7",
+      "short": "fd0a2a3",
+      "date": "2026-09-11",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "docs(memory): record dropdown popover glitch resolution",
+      "tags": [
+        "memory",
         "docs"
       ]
     },
