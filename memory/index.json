@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-11T15:57:22.332Z",
-  "count": 59,
+  "generatedAt": "2026-09-12T01:46:47.733Z",
+  "count": 60,
   "entries": [
     {
       "file": "2026-09-11_02d9c6b_feat-library-add-component-library-to-save-and-manage-select.md",
@@ -738,6 +738,18 @@
       "author": "1hanhT2 <thanh--12@outlook.com>",
       "version": "null",
       "commit": "feat(shapes): expand to canonical 35 M3 Expressive shapes from m3e reference",
+      "tags": [
+        "feature"
+      ]
+    },
+    {
+      "file": "2026-09-12_6f2e997_feat-add-open-code-and-codex-harnesses-with-brand-icons-to-s.md",
+      "hash": "6f2e997205fac0e303f6316b03318dc5301b07d6",
+      "short": "6f2e997",
+      "date": "2026-09-12",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "feat: add Open Code and Codex harnesses with brand icons to selector island",
       "tags": [
         "feature"
       ]
