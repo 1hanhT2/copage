@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-12T01:46:47.733Z",
-  "count": 60,
+  "generatedAt": "2026-09-12T01:47:05.130Z",
+  "count": 61,
   "entries": [
     {
       "file": "2026-09-11_02d9c6b_feat-library-add-component-library-to-save-and-manage-select.md",
@@ -752,6 +752,18 @@
       "commit": "feat: add Open Code and Codex harnesses with brand icons to selector island",
       "tags": [
         "feature"
+      ]
+    },
+    {
+      "file": "2026-09-12_e1647d9_chore-sync-development-memory-for-open-code-and-codex-harnes.md",
+      "hash": "e1647d95ced9445e57ad261864b8e97d4fd620e0",
+      "short": "e1647d9",
+      "date": "2026-09-12",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore: sync development memory for Open Code and Codex harnesses",
+      "tags": [
+        "memory"
       ]
     }
   ]
