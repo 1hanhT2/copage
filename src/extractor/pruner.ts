@@ -127,7 +127,8 @@ export function pruneElementTree(
       continue;
     }
 
-    cleanEl.setAttribute(name, attr.value);
+    const targetAttrName = (isSvg && name === "viewbox") ? "viewBox" : name;
+    cleanEl.setAttribute(targetAttrName, attr.value);
   }
 
   // Live form state capture (SingleFile inspiration)
@@ -151,13 +152,18 @@ export function pruneElementTree(
     }
   }
 
-  // Process children (including shadowRoot fallback for Web Components)
-  let child: Node | null = el.firstChild || (el.shadowRoot ? el.shadowRoot.firstChild : null);
+  // Process children (including shadowRoot for Web Components)
+  const childNodes: Node[] = [];
+  if (el.shadowRoot) {
+    el.shadowRoot.childNodes.forEach((c) => childNodes.push(c));
+  }
+  el.childNodes.forEach((c) => childNodes.push(c));
+
   let childCount = 0;
   let omittedCount = 0;
 
-  while (child) {
-    if (childCount >= truncateThreshold && el.children.length > truncateThreshold + 1) {
+  for (const child of childNodes) {
+    if (childCount >= truncateThreshold && childNodes.length > truncateThreshold + 1) {
       omittedCount++;
     } else {
       const prunedChild = pruneElementTree(child, depth + 1, options);
@@ -168,7 +174,6 @@ export function pruneElementTree(
         }
       }
     }
-    child = child.nextSibling;
   }
 
   if (omittedCount > 0) {

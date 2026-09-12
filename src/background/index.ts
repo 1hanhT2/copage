@@ -38,8 +38,8 @@ async function toggleInspectorInTab(tab: chrome.tabs.Tab) {
 
   const tabId = tab.id;
   try {
-    // 1. Fast path: try sending message to already injected content script
-    await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
+    // 1. Fast path: try sending message to already injected content script in top frame
+    await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage, { frameId: 0 });
   } catch {
     // 2. Tab was opened before extension installation or reload; dynamically inject content.js
     try {
@@ -48,7 +48,7 @@ async function toggleInspectorInTab(tab: chrome.tabs.Tab) {
         files: ["content.js"]
       });
       // The promise resolves after top-level script execution, so onMessage is active
-      await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
+      await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage, { frameId: 0 });
     } catch (err) {
       console.warn("[Copage] Cannot execute script in tab:", tabId, err);
     }

@@ -93,7 +93,7 @@ describe("DOM & Style Extractor Engine", () => {
     `;
 
     const cleanHtml = formatPrunedHtml(div.firstElementChild as HTMLElement);
-    expect(cleanHtml).toContain("viewbox=\"0 0 24 24\"");
+    expect(cleanHtml).toContain("viewBox=\"0 0 24 24\"");
     expect(cleanHtml).toContain("d=\"M5 12h14\"");
     expect(cleanHtml).toContain("stroke-width=\"2\"");
     expect(cleanHtml).toContain("Action");

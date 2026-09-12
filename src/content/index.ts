@@ -16,8 +16,7 @@ function injectGoogleFonts() {
   } catch {}
 }
 
-injectGoogleFonts();
-
+// Only inject fonts when inspector is explicitly requested
 function getInspector(): ElementInspector {
   injectGoogleFonts();
   if (!inspector) {
@@ -64,7 +63,7 @@ if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.onMessage)
       showToast(active ? "Copage Inspector Active (Hover to inspect, Esc to exit)" : "Copage Inspector Deactivated", active);
       sendResponse({ active });
     } else if (message.type === "GET_INSPECTOR_STATE") {
-      sendResponse({ active: !!inspector });
+      sendResponse({ active: inspector ? inspector.getIsActive() : false });
     }
     return true;
   });

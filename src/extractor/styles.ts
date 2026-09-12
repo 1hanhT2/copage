@@ -142,10 +142,10 @@ export function extractFlatDistilledStyles(element: HTMLElement): Record<string,
   };
 }
 
-export function extractRelevantCssVariables(element: HTMLElement): Record<string, string> {
+export function extractRelevantCssVariables(element: HTMLElement, precomputed?: CSSStyleDeclaration): Record<string, string> {
   const vars: Record<string, string> = {};
   try {
-    const computed = window.getComputedStyle(element);
+    const computed = precomputed || window.getComputedStyle(element);
     for (let i = 0; i < computed.length; i++) {
       const prop = computed[i];
       if (prop.startsWith("--")) {

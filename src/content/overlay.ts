@@ -87,6 +87,23 @@ export class InspectorOverlay {
         scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
       }
 
+      /* M3 Expressive Focus Rings */
+      button:focus-visible,
+      [role="button"]:focus-visible,
+      [role="radio"]:focus-visible,
+      [role="combobox"]:focus-visible,
+      [role="option"]:focus-visible,
+      .copage-bc-btn:focus-visible,
+      .copage-btn-secondary:focus-visible,
+      .copage-segmented-btn:focus-visible,
+      .copage-select-trigger:focus-visible,
+      .copage-split-main:focus-visible,
+      .copage-split-arrow-btn:focus-visible,
+      .copage-menu-item:focus-visible {
+        outline: 2px solid #a8c7fa !important;
+        outline-offset: 2px !important;
+      }
+
       /* Bounding Box Highlight (Material 3 Expressive Electric Primary / Mint Locked) */
       .copage-bbox {
         position: fixed !important;
@@ -239,7 +256,9 @@ export class InspectorOverlay {
         transform: translateX(-50%);
         width: 92vw;
         max-width: 760px;
-        background: linear-gradient(180deg, rgba(28, 27, 33, 0.96) 0%, rgba(20, 19, 24, 0.98) 100%);
+        background:
+          radial-gradient(120% 120% at 50% -20%, rgba(168, 199, 250, 0.12) 0%, rgba(208, 188, 255, 0.08) 45%, rgba(120, 220, 119, 0.03) 75%, transparent 100%),
+          linear-gradient(180deg, rgba(28, 27, 33, 0.96) 0%, rgba(20, 19, 24, 0.98) 100%);
         backdrop-filter: blur(28px) saturate(190%);
         border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 28px;
@@ -250,7 +269,6 @@ export class InspectorOverlay {
         display: flex;
         flex-direction: column;
         gap: 12px;
-        overflow-x: hidden;
         animation: copageExpressiveSpring 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         font-family: var(--copage-font-ui) !important;
       }
@@ -595,13 +613,14 @@ export class InspectorOverlay {
         font-size: 11px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.7);
-        border-radius: 8px;
+        border-radius: 9999px;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         white-space: nowrap;
         flex-shrink: 0;
         gap: 6px;
+        clip-path: polygon(8px 0%, calc(100% - 8px) 0%, calc(100% - 2px) 16.7%, 100% 33.3%, 100% 50%, 100% 66.7%, calc(100% - 2px) 83.3%, calc(100% - 8px) 100%, 8px 100%, 2px 83.3%, 0% 66.7%, 0% 50%, 0% 33.3%, 2px 16.7%);
         transition: clip-path 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.18s ease, color 0.18s ease;
         font-family: 'Lexend', sans-serif !important;
       }

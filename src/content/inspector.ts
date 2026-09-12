@@ -5,14 +5,29 @@ import type { InspectedElementData } from "../lib/types";
 
 export function getDeepElementFromPoint(x: number, y: number): Element | null {
   let el = document.elementFromPoint(x, y);
+  if (!el) return null;
+  const initialTag = el.tagName.toLowerCase();
+  if (initialTag === "copage-inspector-root" || el.id === "copage-inspector-root") return null;
+
   while (el && (el as Element).shadowRoot) {
     const nested = (el as Element).shadowRoot!.elementFromPoint(x, y);
     if (!nested || nested === el) break;
+    const nestedTag = nested.tagName.toLowerCase();
+    if (nestedTag === "copage-inspector-root" || nested.id === "copage-inspector-root") return null;
     el = nested;
   }
   if (!el) return null;
   const tag = el.tagName.toLowerCase();
   if (tag === "copage-inspector-root" || el.id === "copage-inspector-root") return null;
+
+  const root = el.getRootNode();
+  if (root instanceof ShadowRoot) {
+    const hostTag = root.host?.tagName.toLowerCase();
+    if (root.host?.id === "copage-inspector-root" || hostTag === "copage-inspector-root") {
+      return null;
+    }
+  }
+
   return el;
 }
 
@@ -23,6 +38,9 @@ export class ElementInspector {
   private currentLockedTarget: Element | null = null;
   private currentElementData: InspectedElementData | null = null;
   private rafId: number | null = null;
+  private scrollRafId: number | null = null;
+  private lastPointerX = 0;
+  private lastPointerY = 0;
   private isActive = false;
   private isLocked = false;
   private pointerMoveHandler: (e: PointerEvent) => void;
@@ -58,13 +76,14 @@ export class ElementInspector {
 
     this.pointerMoveHandler = (e: PointerEvent) => {
       if (!this.isActive || this.isLocked) return;
-      const x = e.clientX;
-      const y = e.clientY;
+      this.lastPointerX = e.clientX;
+      this.lastPointerY = e.clientY;
 
       if (!this.rafId) {
         this.rafId = requestAnimationFrame(() => {
           this.rafId = null;
-          const target = getDeepElementFromPoint(x, y);
+          if (!this.isActive || this.isLocked) return;
+          const target = getDeepElementFromPoint(this.lastPointerX, this.lastPointerY);
           if (target && target !== this.currentHoverTarget) {
             this.currentHoverTarget = target;
             this.overlay.updateHover(target);
@@ -75,10 +94,16 @@ export class ElementInspector {
 
     this.scrollHandler = () => {
       if (!this.isActive) return;
-      if (this.isLocked && this.currentLockedTarget) {
-        this.overlay.updateLockedPosition(this.currentLockedTarget.getBoundingClientRect());
-      } else if (this.currentHoverTarget) {
-        this.overlay.updateHover(this.currentHoverTarget);
+      if (!this.scrollRafId) {
+        this.scrollRafId = requestAnimationFrame(() => {
+          this.scrollRafId = null;
+          if (!this.isActive) return;
+          if (this.isLocked && this.currentLockedTarget) {
+            this.overlay.updateLockedPosition(this.currentLockedTarget.getBoundingClientRect());
+          } else if (this.currentHoverTarget) {
+            this.overlay.updateHover(this.currentHoverTarget);
+          }
+        });
       }
     };
   }
@@ -95,11 +120,23 @@ export class ElementInspector {
   public deactivate() {
     if (!this.isActive) return;
     this.isActive = false;
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+    if (this.scrollRafId) {
+      cancelAnimationFrame(this.scrollRafId);
+      this.scrollRafId = null;
+    }
     this.unlock();
     this.eventManager.disable();
     window.removeEventListener("pointermove", this.pointerMoveHandler);
     window.removeEventListener("scroll", this.scrollHandler);
     this.overlay.clearHover();
+  }
+
+  public getIsActive(): boolean {
+    return this.isActive;
   }
 
   public toggle(): boolean {

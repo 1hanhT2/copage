@@ -28,6 +28,24 @@ import {
 import { getBrandIconSvg } from "../../lib/brand-icons";
 import { setupDynamicFavicon } from "../../lib/favicon";
 
+function escapeHtml(str: string): string {
+  return (str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function sanitizeUrl(url?: string): string {
+  if (!url) return "#";
+  const trimmed = url.trim();
+  if (/^https?:\/\//i.test(trimmed)) {
+    return escapeHtml(trimmed);
+  }
+  return "#";
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   setupDynamicFavicon();
 
@@ -173,6 +191,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       const brandIcon = getBrandIconSvg(preset.id, 20);
       const card = document.createElement("div");
       card.className = `m3-action-card ${getModelCardShapeClass(preset.id)} ${isSelected ? "selected" : ""}`;
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("role", "radio");
+      card.setAttribute("aria-checked", isSelected ? "true" : "false");
+      card.setAttribute("aria-label", `${preset.name} - ${preset.provider}`);
       card.innerHTML = `
         <div class="m3-action-card-watermark">${watermarkSvg}</div>
         <div class="m3-card-top" style="position: relative; z-index: 1;">
@@ -186,6 +208,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
       card.addEventListener("click", () => {
         selectModel(preset.id, preset.name);
+      });
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          selectModel(preset.id, preset.name);
+        }
       });
       modelPresetsContainer.appendChild(card);
     });
@@ -641,11 +669,18 @@ document.addEventListener("DOMContentLoaded", async () => {
           ? `<svg viewBox="0 0 24 24" width="16" height="16" fill="#ffdf99"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`
           : `<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>`;
 
+        const safeUrl = sanitizeUrl(item.url);
+        const safeTitle = escapeHtml(item.pageTitle || item.url || "Untitled Component");
+        const safeName = escapeHtml(item.name || item.tagName);
+        const safeTagName = escapeHtml(item.tagName);
+        const safeDimensions = escapeHtml(item.dimensions);
+        const safeNotes = escapeHtml(item.notes || "");
+
         const tagsHtml = (item.tags || [])
           .map(
             (t) => `
-            <span class="m3-badge-pill" data-tag="${t}">
-              <span>${t}</span>
+            <span class="m3-badge-pill" data-tag="${escapeHtml(t)}">
+              <span>${escapeHtml(t)}</span>
               <button class="tag-remove-btn" title="Remove tag">&times;</button>
             </span>
           `
@@ -655,13 +690,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         card.innerHTML = `
           <div class="m3-lib-header-row">
             <div class="m3-lib-title-group">
-              <span class="m3-lib-shape-badge" title="Element type: <${item.tagName}>">${shapeSvg}</span>
-              <input type="text" class="m3-lib-title-edit" value="${item.name || item.tagName}" title="Click to rename component" />
-              <span class="m3-lib-tag-chip">&lt;${item.tagName}&gt;</span>
-              <span class="m3-lib-dim-chip">${item.dimensions}</span>
+              <span class="m3-lib-shape-badge" title="Element type: &lt;${safeTagName}&gt;">${shapeSvg}</span>
+              <input type="text" class="m3-lib-title-edit" value="${safeName}" title="Click to rename component" />
+              <span class="m3-lib-tag-chip">&lt;${safeTagName}&gt;</span>
+              <span class="m3-lib-dim-chip">${safeDimensions}</span>
             </div>
             <div class="m3-lib-controls">
-              <span class="m3-lib-date">${timeStr}</span>
+              <span class="m3-lib-date">${escapeHtml(timeStr)}</span>
               <button class="m3-icon-btn m3-star-btn ${item.favorite ? "favorited" : ""}" title="${item.favorite ? "Unfavorite" : "Mark as favorite"}">
                 ${starSvg}
               </button>
@@ -674,11 +709,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
 
           <div class="m3-lib-source-row">
-            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="m3-lib-link" title="${item.url}">
+            <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="m3-lib-link" title="${safeUrl}">
               <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
                 <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
               </svg>
-              <span>${item.pageTitle || item.url}</span>
+              <span>${safeTitle}</span>
             </a>
             <div class="m3-lib-tags-list">
               ${tagsHtml}
@@ -690,7 +725,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <svg viewBox="0 0 24 24" width="13" height="13" fill="rgba(255,255,255,0.4)" style="flex-shrink:0;">
               <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
             </svg>
-            <input type="text" class="m3-lib-notes-input" placeholder="+ Add a note..." value="${item.notes || ""}" />
+            <input type="text" class="m3-lib-notes-input" placeholder="+ Add a note..." value="${safeNotes}" />
           </div>
 
           <div class="m3-lib-actions-row">
@@ -720,8 +755,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             </button>
           </div>
 
-          <pre class="m3-lib-drawer">${item.generatedCode || item.cleanHtml}</pre>
+          <pre class="m3-lib-drawer"></pre>
         `;
+
+        const drawer = card.querySelector(".m3-lib-drawer") as HTMLElement;
+        if (drawer) {
+          drawer.textContent = item.generatedCode || item.cleanHtml;
+        }
 
         // Rename title
         const titleInput = card.querySelector(".m3-lib-title-edit") as HTMLInputElement;
@@ -827,10 +867,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Toggle drawer
         const drawerBtn = card.querySelector(".toggle-drawer-btn") as HTMLElement;
-        const drawer = card.querySelector(".m3-lib-drawer") as HTMLElement;
         drawerBtn?.addEventListener("click", () => {
-          const isOpen = drawer.classList.toggle("open");
-          drawerBtn.classList.toggle("active", isOpen);
+          if (drawer) {
+            const isOpen = drawer.classList.toggle("open");
+            drawerBtn.classList.toggle("active", isOpen);
+          }
         });
 
         libraryContainer.appendChild(card);

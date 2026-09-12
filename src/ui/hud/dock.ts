@@ -25,6 +25,15 @@ import {
 import { COPAGE_ICON_DATA_URI } from "../../lib/copage-logo";
 import { getBrandIconSvg } from "../../lib/brand-icons";
 
+function escapeHtml(str: string): string {
+  return (str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export class CopageDock {
   private container: HTMLElement;
   private currentData: InspectedElementData | null = null;
@@ -32,13 +41,22 @@ export class CopageDock {
   private generatedCode = "";
   private onUnlock: () => void;
   private onSelectBreadcrumb: (index: number) => void;
+  private streamAbortController: AbortController | null = null;
+  private dockAbortController: AbortController | null = null;
+  private copyTimeouts = new WeakMap<HTMLElement, { timer: ReturnType<typeof setTimeout>; originalHtml: string }>();
 
   constructor(
     container: HTMLElement,
     callbacks: { onUnlock: () => void; onSelectBreadcrumb: (index: number) => void }
   ) {
     this.container = container;
-    this.onUnlock = callbacks.onUnlock;
+    this.onUnlock = () => {
+      if (this.streamAbortController) {
+        this.streamAbortController.abort();
+        this.streamAbortController = null;
+      }
+      callbacks.onUnlock();
+    };
     this.onSelectBreadcrumb = callbacks.onSelectBreadcrumb;
   }
 
@@ -66,26 +84,44 @@ export class CopageDock {
   }
 
   public hide() {
+    if (this.streamAbortController) {
+      this.streamAbortController.abort();
+      this.streamAbortController = null;
+    }
+    if (this.dockAbortController) {
+      this.dockAbortController.abort();
+      this.dockAbortController = null;
+    }
     this.container.innerHTML = "";
     this.currentData = null;
   }
 
   private async copyToClipboard(text: string, button: HTMLElement, successLabel = "Copied!") {
+    let state = this.copyTimeouts.get(button);
+    if (state) {
+      clearTimeout(state.timer);
+    } else {
+      state = { timer: setTimeout(() => {}, 0), originalHtml: button.innerHTML };
+      this.copyTimeouts.set(button, state);
+    }
+
     try {
       await navigator.clipboard.writeText(text);
-      const originalHtml = button.innerHTML;
       button.innerHTML = `
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="#66bb6a" style="flex-shrink: 0;">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="#78dc77" style="flex-shrink: 0;">
           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
         </svg>
-        <span style="color: #a5d6a7; font-weight: 500;">${successLabel}</span>
+        <span style="color: #78dc77; font-weight: 500;">${escapeHtml(successLabel)}</span>
       `;
-      button.style.backgroundColor = "rgba(102, 187, 106, 0.15)";
-      button.style.borderColor = "rgba(102, 187, 106, 0.4)";
-      setTimeout(() => {
-        button.innerHTML = originalHtml;
-        button.style.backgroundColor = "";
-        button.style.borderColor = "";
+      button.style.backgroundColor = "rgba(120, 220, 119, 0.16)";
+      button.style.borderColor = "rgba(120, 220, 119, 0.4)";
+      state.timer = setTimeout(() => {
+        if (state) {
+          button.innerHTML = state.originalHtml;
+          button.style.backgroundColor = "";
+          button.style.borderColor = "";
+          this.copyTimeouts.delete(button);
+        }
       }, 1600);
     } catch {
       const ta = document.createElement("textarea");
@@ -94,10 +130,12 @@ export class CopageDock {
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
-      const originalHtml = button.innerHTML;
-      button.innerHTML = `<span>${successLabel}</span>`;
-      setTimeout(() => {
-        button.innerHTML = originalHtml;
+      button.innerHTML = `<span>${escapeHtml(successLabel)}</span>`;
+      state.timer = setTimeout(() => {
+        if (state) {
+          button.innerHTML = state.originalHtml;
+          this.copyTimeouts.delete(button);
+        }
       }, 1600);
     }
   }
@@ -114,15 +152,22 @@ export class CopageDock {
     URL.revokeObjectURL(url);
   }
 
-  private async handleStreamGeneration(outputPre: HTMLElement, actionBtn: HTMLButtonElement) {
+  private async handleStreamGeneration(outputPre: HTMLElement, actionBtn: HTMLButtonElement, promptTarget: PromptTarget = "react-component") {
     if (!this.currentData || this.isStreaming) return;
 
     const config = await getLLMConfig();
     if (!config.apiKey && config.provider === "openrouter") {
       outputPre.textContent = "Error: OpenRouter API key not configured. Open Copage extension settings to add your key.";
-      outputPre.style.color = "#f44336";
+      outputPre.style.color = "#ffb4ab";
       return;
     }
+
+    if (this.streamAbortController) {
+      this.streamAbortController.abort();
+      this.streamAbortController = null;
+    }
+    this.streamAbortController = new AbortController();
+    const signal = this.streamAbortController.signal;
 
     this.isStreaming = true;
     this.generatedCode = "";
@@ -136,7 +181,8 @@ export class CopageDock {
     outputPre.textContent = "Connecting to " + config.model + "...\n";
     outputPre.style.color = "rgba(255, 255, 255, 0.6)";
 
-    const { system, prompt } = buildPromptForTarget(this.currentData, "react-component");
+    const { system, prompt } = buildPromptForTarget(this.currentData, promptTarget);
+    let streamRafId: number | null = null;
 
     try {
       await streamCompletion(
@@ -147,11 +193,19 @@ export class CopageDock {
         ],
         (delta) => {
           this.generatedCode += delta;
-          outputPre.textContent = this.generatedCode;
-          outputPre.style.color = "rgba(255, 255, 255, 0.87)";
-          outputPre.scrollTop = outputPre.scrollHeight;
-        }
+          if (!streamRafId) {
+            streamRafId = requestAnimationFrame(() => {
+              streamRafId = null;
+              outputPre.textContent = this.generatedCode;
+              outputPre.style.color = "rgba(255, 255, 255, 0.87)";
+              outputPre.scrollTop = outputPre.scrollHeight;
+            });
+          }
+        },
+        signal
       );
+
+      if (signal.aborted || !this.currentData) return;
 
       actionBtn.disabled = false;
       actionBtn.innerHTML = `
@@ -191,9 +245,10 @@ export class CopageDock {
         } catch {}
       }
     } catch (err: unknown) {
+      if (signal.aborted) return;
       const msg = err instanceof Error ? err.message : String(err);
       outputPre.textContent = `Stream Error: ${msg}\n\nTip: Check API Key or choose a different model.`;
-      outputPre.style.color = "#f44336";
+      outputPre.style.color = "#ffb4ab";
       actionBtn.disabled = false;
       actionBtn.innerHTML = `
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
@@ -203,6 +258,7 @@ export class CopageDock {
       `;
     } finally {
       this.isStreaming = false;
+      this.streamAbortController = null;
     }
   }
 
@@ -215,9 +271,9 @@ export class CopageDock {
     const breadcrumbHtml = d.breadcrumbs
       .map(
         (b) => `
-        <button class="copage-bc-btn" data-index="${b.index}" title="Select parent &lt;${b.tagName}&gt;">
+        <button class="copage-bc-btn" data-index="${b.index}" title="Select parent &lt;${escapeHtml(b.tagName)}&gt;">
           ${getCanonicalM3ShapeSvg(getElementM3Shape(b.tagName), 11, "currentColor", "opacity: 0.85; margin-right: 2px;")}
-          <span>&lt;${b.tagName}${b.className ? `.${b.className}` : ""}&gt;</span>
+          <span>&lt;${escapeHtml(b.tagName)}${b.className ? `.${escapeHtml(b.className)}` : ""}&gt;</span>
         </button>
       `
       )
@@ -234,10 +290,10 @@ export class CopageDock {
             </span>
             <span class="copage-tag-badge">
               ${getCanonicalM3ShapeSvg(getElementM3Shape(d.tagName), 12, "#a8c7fa", "vertical-align: -1px; margin-right: 3px;")}
-              <span>&lt;${d.tagName}&gt;</span>
+              <span>&lt;${escapeHtml(d.tagName)}&gt;</span>
             </span>
             <span class="copage-dim-badge">${d.rect.width} × ${d.rect.height}px</span>
-            ${d.classList.length > 0 ? `<span class="copage-class-badge">${d.classList.slice(0, 3).join(".")}</span>` : ""}
+            ${d.classList.length > 0 ? `<span class="copage-class-badge">${escapeHtml(d.classList.slice(0, 3).join("."))}</span>` : ""}
           </div>
           <div class="copage-header-actions">
             <button id="copage-save-library-btn" class="copage-btn-secondary copage-save-btn" title="Save selected element to Component Library">
@@ -260,28 +316,28 @@ export class CopageDock {
 
         <!-- Material 3 Segmented Toggle Group for Prompt Targets with Official Brand Icons -->
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-          <div class="copage-segmented-group" id="copage-prompt-targets">
-            <button class="copage-segmented-btn active" data-target="cursor" title="Copy production prompt for Cursor &amp; Windsurf">
+          <div class="copage-segmented-group" id="copage-prompt-targets" role="radiogroup" aria-label="Prompt format target">
+            <button class="copage-segmented-btn active" data-target="cursor" role="radio" aria-checked="true" title="Copy production prompt for Cursor &amp; Windsurf">
               ${getBrandIconSvg("cursor", 13)}
               <span>Cursor</span>
             </button>
-            <button class="copage-segmented-btn" data-target="claude" title="Copy detailed UI decomposition prompt for Claude">
+            <button class="copage-segmented-btn" data-target="claude" role="radio" aria-checked="false" title="Copy detailed UI decomposition prompt for Claude">
               ${getBrandIconSvg("claude", 13)}
               <span>Claude</span>
             </button>
-            <button class="copage-segmented-btn" data-target="v0" title="Copy Tailwind component prompt for v0 &amp; 21st.dev">
+            <button class="copage-segmented-btn" data-target="v0" role="radio" aria-checked="false" title="Copy Tailwind component prompt for v0 &amp; 21st.dev">
               ${getBrandIconSvg("v0", 13)}
               <span>v0 / 21st</span>
             </button>
-            <button class="copage-segmented-btn" data-target="opencode" title="Copy clean prompt for Open Code">
+            <button class="copage-segmented-btn" data-target="opencode" role="radio" aria-checked="false" title="Copy clean prompt for Open Code">
               ${getBrandIconSvg("opencode", 13)}
               <span>Open Code</span>
             </button>
-            <button class="copage-segmented-btn" data-target="codex" title="Copy code generation prompt for OpenAI Codex">
+            <button class="copage-segmented-btn" data-target="codex" role="radio" aria-checked="false" title="Copy code generation prompt for OpenAI Codex">
               ${getBrandIconSvg("codex", 13)}
               <span>Codex</span>
             </button>
-            <button class="copage-segmented-btn" data-target="html-tailwind" title="Copy semantic HTML with mapped Tailwind utilities">
+            <button class="copage-segmented-btn" data-target="html-tailwind" role="radio" aria-checked="false" title="Copy semantic HTML with mapped Tailwind utilities">
               ${getBrandIconSvg("tailwind", 13)}
               <span>Tailwind HTML</span>
             </button>
@@ -300,15 +356,15 @@ export class CopageDock {
               <span class="copage-model-label">Model:</span>
               <div class="copage-select-wrap" id="copage-dock-select-wrap">
                 <div class="copage-trigger-contour">
-                  <div id="copage-dock-model-trigger" class="copage-select-trigger" tabindex="0">
-                    <span id="copage-dock-model-icon" style="display: inline-flex; align-items: center;">${getBrandIconSvg("gemma", 15)}</span>
+                  <div id="copage-dock-model-trigger" class="copage-select-trigger" tabindex="0" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-controls="copage-dock-model-menu" aria-label="Select AI Model">
+                    <span id="copage-dock-model-icon" class="copage-shape-well" style="display: inline-flex; align-items: center;">${getBrandIconSvg("gemma", 15)}</span>
                     <span id="copage-dock-model-name">Gemma 4 26B A4B</span>
                     <svg class="copage-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                       <path d="M7 10l5 5 5-5z"/>
                     </svg>
                   </div>
                 </div>
-                <div id="copage-dock-model-menu" class="copage-menu-popover">
+                <div id="copage-dock-model-menu" class="copage-menu-popover" role="listbox" aria-label="AI Models">
                   <!-- Injected dynamically -->
                 </div>
               </div>
@@ -460,6 +516,11 @@ export class CopageDock {
       });
     });
 
+    // Setup abortable controller for render-scoped event listeners to prevent memory accumulation
+    this.dockAbortController?.abort();
+    this.dockAbortController = new AbortController();
+    const { signal } = this.dockAbortController;
+
     // Segmented Prompt Target selection & Copy Prompt
     let activePromptTarget: PromptTarget = "cursor";
     const promptTargetBtns = this.container.querySelectorAll(".copage-segmented-btn");
@@ -469,8 +530,13 @@ export class CopageDock {
       btn.addEventListener("click", (e) => {
         const target = (e.currentTarget as HTMLElement).dataset.target as PromptTarget;
         activePromptTarget = target;
-        promptTargetBtns.forEach((b) => b.classList.remove("active"));
-        (e.currentTarget as HTMLElement).classList.add("active");
+        promptTargetBtns.forEach((b) => {
+          b.classList.remove("active");
+          b.setAttribute("aria-checked", "false");
+        });
+        const currentBtn = e.currentTarget as HTMLElement;
+        currentBtn.classList.add("active");
+        currentBtn.setAttribute("aria-checked", "true");
 
         // Quick copy prompt on target click
         const { prompt } = buildPromptForTarget(this.currentData!, activePromptTarget);
@@ -488,6 +554,7 @@ export class CopageDock {
     const modelMenu = this.container.querySelector("#copage-dock-model-menu") as HTMLElement;
     const modelNameLabel = this.container.querySelector("#copage-dock-model-name") as HTMLElement;
     const modelIconSpan = this.container.querySelector("#copage-dock-model-icon") as HTMLElement;
+    const dockSelectWrap = this.container.querySelector("#copage-dock-select-wrap") as HTMLElement;
 
     getLLMConfig().then((cfg) => {
       const activePreset = RECOMMENDED_MODELS.find((m) => m.id === cfg.model);
@@ -508,6 +575,9 @@ export class CopageDock {
           const brandIcon = getBrandIconSvg(preset.id, 16);
           const item = document.createElement("div");
           item.className = `copage-menu-item ${isSelected ? "selected" : ""}`;
+          item.setAttribute("role", "option");
+          item.setAttribute("aria-selected", isSelected ? "true" : "false");
+          item.setAttribute("tabindex", "0");
           item.innerHTML = `
             <div style="display: flex; align-items: center; gap: 8px;">
               ${brandIcon}
@@ -520,7 +590,8 @@ export class CopageDock {
               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
             </svg>
           `;
-          item.addEventListener("click", async () => {
+
+          const selectThisModel = async () => {
             await setLLMConfig({ model: preset.id });
             modelNameLabel.textContent = preset.name;
             if (modelIconSpan) {
@@ -528,40 +599,58 @@ export class CopageDock {
             }
             if (modelTrigger) {
               modelTrigger.className = `copage-select-trigger ${getModelPillShapeClass(preset.id)}`;
+              modelTrigger.setAttribute("aria-expanded", "false");
             }
-            modelMenu.querySelectorAll(".copage-menu-item").forEach((it) => it.classList.remove("selected"));
+            modelMenu.querySelectorAll(".copage-menu-item").forEach((it) => {
+              it.classList.remove("selected");
+              it.setAttribute("aria-selected", "false");
+            });
             item.classList.add("selected");
+            item.setAttribute("aria-selected", "true");
             modelMenu.classList.remove("open");
             modelTrigger.classList.remove("open");
             dockSelectWrap?.classList.remove("open");
+          };
+
+          item.addEventListener("click", selectThisModel);
+          item.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              selectThisModel();
+            }
           });
           modelMenu.appendChild(item);
         });
       }
     });
 
-    const dockSelectWrap = this.container.querySelector("#copage-dock-select-wrap") as HTMLElement;
+    const toggleModelMenu = (open?: boolean) => {
+      const willOpen = open !== undefined ? open : !modelMenu.classList.contains("open");
+      modelMenu.classList.toggle("open", willOpen);
+      modelTrigger.classList.toggle("open", willOpen);
+      modelTrigger.setAttribute("aria-expanded", willOpen ? "true" : "false");
+      dockSelectWrap?.classList.toggle("open", willOpen);
+      if (willOpen) {
+        actionsMenu?.classList.remove("open");
+      }
+    };
 
     modelTrigger?.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isOpen = modelMenu.classList.toggle("open");
-      modelTrigger.classList.toggle("open", isOpen);
-      dockSelectWrap?.classList.toggle("open", isOpen);
-      // Close actions menu if open
-      actionsMenu?.classList.remove("open");
+      toggleModelMenu();
     });
 
     modelTrigger?.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        const isOpen = modelMenu.classList.toggle("open");
-        modelTrigger.classList.toggle("open", isOpen);
-        dockSelectWrap?.classList.toggle("open", isOpen);
-        actionsMenu?.classList.remove("open");
+        toggleModelMenu();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        toggleModelMenu(true);
+        const firstOption = modelMenu.querySelector(".copage-menu-item") as HTMLElement;
+        firstOption?.focus();
       } else if (e.key === "Escape") {
-        modelMenu.classList.remove("open");
-        modelTrigger.classList.remove("open");
-        dockSelectWrap?.classList.remove("open");
+        toggleModelMenu(false);
       }
     });
 
@@ -573,9 +662,7 @@ export class CopageDock {
       e.stopPropagation();
       const isOpen = actionsMenu.classList.toggle("open");
       // Close model menu if open
-      modelMenu?.classList.remove("open");
-      modelTrigger?.classList.remove("open");
-      dockSelectWrap?.classList.remove("open");
+      toggleModelMenu(false);
     });
 
     // Actions items
@@ -602,24 +689,26 @@ export class CopageDock {
       });
     });
 
-    // Dismiss menus on click outside inside dock
-    this.container.addEventListener("click", (e) => {
-      if (!modelTrigger.contains(e.target as Node) && !modelMenu.contains(e.target as Node)) {
-        modelMenu.classList.remove("open");
-        modelTrigger.classList.remove("open");
-        dockSelectWrap?.classList.remove("open");
-      }
-      if (!splitArrow.contains(e.target as Node) && !actionsMenu.contains(e.target as Node)) {
-        actionsMenu.classList.remove("open");
-      }
-    });
+    // Dismiss menus on click outside inside dock using abortable signal to prevent listener leak
+    this.container.addEventListener(
+      "click",
+      (e) => {
+        if (!modelTrigger.contains(e.target as Node) && !modelMenu.contains(e.target as Node)) {
+          toggleModelMenu(false);
+        }
+        if (!splitArrow.contains(e.target as Node) && !actionsMenu.contains(e.target as Node)) {
+          actionsMenu.classList.remove("open");
+        }
+      },
+      { signal }
+    );
 
     // Stream generation button
     const streamBtn = this.container.querySelector("#copage-stream-btn") as HTMLButtonElement;
     const outputPre = this.container.querySelector("#copage-stream-output") as HTMLElement;
 
     streamBtn?.addEventListener("click", () => {
-      this.handleStreamGeneration(outputPre, streamBtn);
+      this.handleStreamGeneration(outputPre, streamBtn, activePromptTarget);
     });
 
     // Copy generated code button

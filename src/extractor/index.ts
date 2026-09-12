@@ -57,13 +57,19 @@ export function extractElementData(element: HTMLElement): InspectedElementData {
 
   const parent = element.parentElement || undefined;
   const distilledStyles = extractDistilledStyles(element, parent);
-  const flatStyles = extractFlatDistilledStyles(element);
+  const flatStyles = {
+    ...distilledStyles.layout,
+    ...distilledStyles.boxModel,
+    ...distilledStyles.typography,
+    ...distilledStyles.visual,
+    ...distilledStyles.transforms
+  };
   const tailwindClasses = mapStylesToTailwind(flatStyles);
   const cleanHtml = formatPrunedHtml(element);
   const svgAssets = extractSvgAssets(element);
   const breadcrumbs = extractBreadcrumbs(element);
   const computedFont = cleanFontFamily(computed.fontFamily);
-  const cssVariables = extractRelevantCssVariables(element);
+  const cssVariables = extractRelevantCssVariables(element, computed);
 
   return {
     tagName: element.tagName.toLowerCase(),

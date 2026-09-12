@@ -56,7 +56,8 @@ export async function testConnection(config: LLMConfig): Promise<{ success: bool
 export async function streamCompletion(
   config: LLMConfig,
   messages: ChatMessage[],
-  onChunk: (delta: string) => void
+  onChunk: (delta: string) => void,
+  signal?: AbortSignal
 ): Promise<string> {
   const baseUrl = config.baseUrl.replace(/\/$/, "");
   const url = `${baseUrl}/chat/completions`;
@@ -81,7 +82,8 @@ export async function streamCompletion(
       model: config.model,
       messages,
       stream: true
-    })
+    }),
+    signal
   });
 
   if (!response.ok) {
@@ -98,29 +100,45 @@ export async function streamCompletion(
   let accumulated = "";
   let buffer = "";
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
+  try {
+    while (true) {
+      if (signal?.aborted) {
+        await reader.cancel().catch(() => {});
+        break;
+      }
 
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split("\n");
-    buffer = lines.pop() || "";
+      const { done, value } = await reader.read();
+      if (done) break;
 
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed || !trimmed.startsWith("data:")) continue;
-      const dataStr = trimmed.slice(5).trim();
-      if (dataStr === "[DONE]") continue;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
 
-      try {
-        const json = JSON.parse(dataStr);
-        const delta = json.choices?.[0]?.delta?.content || "";
-        if (delta) {
-          accumulated += delta;
-          onChunk(delta);
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed || !trimmed.startsWith("data:")) continue;
+        const dataStr = trimmed.slice(5).trim();
+        if (dataStr === "[DONE]") continue;
+
+        try {
+          const json = JSON.parse(dataStr);
+          if (json.error) {
+            throw new Error(json.error.message || "LLM Streaming Error");
+          }
+          const delta = json.choices?.[0]?.delta?.content || "";
+          if (delta) {
+            accumulated += delta;
+            onChunk(delta);
+          }
+        } catch (parseErr) {
+          if (parseErr instanceof Error && parseErr.message.includes("LLM")) {
+            throw parseErr;
+          }
         }
-      } catch {}
+      }
     }
+  } finally {
+    reader.releaseLock();
   }
 
   return accumulated;
