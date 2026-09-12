@@ -4,21 +4,8 @@ import type { ExtensionMessage } from "../lib/types";
 // Singleton inspector instance for this frame
 let inspector: ElementInspector | null = null;
 
-function injectGoogleFonts() {
-  const fontId = "copage-google-fonts";
-  if (document.getElementById(fontId)) return;
-  const link = document.createElement("link");
-  link.id = fontId;
-  link.rel = "stylesheet";
-  link.href = "https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=JetBrains+Mono:wght@400;500;600&family=Lexend:wght@400;500;600;700&display=swap";
-  try {
-    (document.head || document.documentElement).appendChild(link);
-  } catch {}
-}
-
-// Only inject fonts when inspector is explicitly requested
+// Only instantiate inspector when explicitly requested
 function getInspector(): ElementInspector {
-  injectGoogleFonts();
   if (!inspector) {
     inspector = new ElementInspector();
   }

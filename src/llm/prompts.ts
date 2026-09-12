@@ -30,9 +30,9 @@ Vector Assets:
 ${svgSummary}
 
 Extracted Clean HTML:
-\`\`\`html
+\`\`\`\`html
 ${cleanHtml}
-\`\`\`
+\`\`\`\`
 `.trim();
 
   if (target === "cursor") {

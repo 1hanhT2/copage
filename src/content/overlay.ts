@@ -12,18 +12,6 @@ export class InspectorOverlay {
   private isLocked = false;
 
   constructor(callbacks: { onUnlock: () => void; onSelectBreadcrumb: (index: number) => void }) {
-    // Inject web fonts into document head so Shadow DOM can render Comfortaa, Lexend, JetBrains Mono
-    const fontId = "copage-google-fonts";
-    if (!document.getElementById(fontId)) {
-      const link = document.createElement("link");
-      link.id = fontId;
-      link.rel = "stylesheet";
-      link.href = "https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=JetBrains+Mono:wght@400;500;600&family=Lexend:wght@400;500;600;700&display=swap";
-      try {
-        (document.head || document.documentElement).appendChild(link);
-      } catch {}
-    }
-
     // 1. Create custom host element and apply inline styles (custom tag avoids matching page div CSS)
     this.hostEl = document.createElement("copage-inspector-root");
     this.hostEl.id = "copage-inspector-root";
