@@ -20,6 +20,8 @@ import { svg as htmlSvg } from "thesvg/html5";
 import { svg as cursorSvg } from "thesvg/cursor";
 import { svg as claudeSvg } from "thesvg/claude";
 import { svg as v0Svg } from "thesvg/v0";
+import { svg as opencodeSvg } from "thesvg/opencode";
+import { svg as codexSvg } from "thesvg/codex-openai";
 
 /**
  * Official vector brand icon for Poolside (beach umbrella in circle silhouette).
@@ -31,7 +33,7 @@ export const poolsideSvg = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="
  */
 export const thinkingmachinesSvg = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title>Thinking Machines</title><path fill-rule="evenodd" clip-rule="evenodd" d="M5 2h14a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm1 0v7h3.5v7h5v-7H18V2H6z"/></svg>`;
 
-export { reactSvg, tailwindSvg, vueSvg, svelteSvg, htmlSvg, cursorSvg, claudeSvg, v0Svg };
+export { reactSvg, tailwindSvg, vueSvg, svelteSvg, htmlSvg, cursorSvg, claudeSvg, v0Svg, opencodeSvg, codexSvg };
 
 /**
  * Normalizes an SVG string from thesvg or custom brand asset to fit given dimensions cleanly.
@@ -74,7 +76,9 @@ export type BrandIconKey =
   | "html"
   | "cursor"
   | "claude"
-  | "v0";
+  | "v0"
+  | "opencode"
+  | "codex";
 
 export const BRAND_SVGS: Record<string, string> = {
   gemini: geminiSvg,
@@ -103,7 +107,9 @@ export const BRAND_SVGS: Record<string, string> = {
   html5: htmlSvg,
   cursor: cursorSvg,
   claude: claudeSvg,
-  v0: v0Svg
+  v0: v0Svg,
+  opencode: opencodeSvg,
+  codex: codexSvg
 };
 
 /**
@@ -126,6 +132,8 @@ export function getBrandIconSvg(identifier: string, size = 16, extraStyle = ""):
   else if (lower.includes("claude") || lower.includes("anthropic")) raw = claudeSvg;
   else if (lower.includes("cursor") || lower.includes("windsurf")) raw = cursorSvg;
   else if (lower.includes("v0") || lower.includes("21st")) raw = v0Svg;
+  else if (lower.includes("opencode") || lower.includes("open code")) raw = opencodeSvg;
+  else if (lower.includes("codex")) raw = codexSvg;
   else if (lower.includes("react")) raw = reactSvg;
   else if (lower.includes("tailwind")) raw = tailwindSvg;
   else if (lower.includes("vue")) raw = vueSvg;
@@ -152,13 +160,15 @@ export function getFrameworkIconSvg(framework: string, size = 14, extraStyle = "
 }
 
 /**
- * Resolves the official brand icon for an LLM prompt target (Cursor, Claude, v0, Tailwind HTML).
+ * Resolves the official brand icon for an LLM prompt target (Cursor, Claude, v0, Open Code, Codex, Tailwind HTML).
  */
 export function getPromptTargetIconSvg(target: string, size = 14, extraStyle = ""): string {
   const lower = (target || "").toLowerCase();
   if (lower.includes("cursor")) return formatBrandSvg(cursorSvg, size, extraStyle);
   if (lower.includes("claude")) return formatBrandSvg(claudeSvg, size, extraStyle);
   if (lower.includes("v0") || lower.includes("21st")) return formatBrandSvg(v0Svg, size, extraStyle);
+  if (lower.includes("opencode") || lower.includes("open code")) return formatBrandSvg(opencodeSvg, size, extraStyle);
+  if (lower.includes("codex")) return formatBrandSvg(codexSvg, size, extraStyle);
   if (lower.includes("tailwind") || lower.includes("html-tailwind")) return formatBrandSvg(tailwindSvg, size, extraStyle);
   if (lower.includes("react")) return formatBrandSvg(reactSvg, size, extraStyle);
   return formatBrandSvg(openrouterSvg, size, extraStyle);

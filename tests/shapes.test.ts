@@ -85,6 +85,8 @@ describe("Material 3 Expressive Shapes", () => {
     expect(getTargetM3Shape("cursor")).toBe("diamond");
     expect(getTargetM3Shape("claude")).toBe("flower");
     expect(getTargetM3Shape("v0")).toBe("arch");
+    expect(getTargetM3Shape("opencode")).toBe("pixel-triangle");
+    expect(getTargetM3Shape("codex")).toBe("oval");
     expect(getTargetM3Shape("html-tailwind")).toBe("sunny");
     expect(getTargetM3Shape("react-component")).toBe("gem");
 
@@ -148,11 +150,15 @@ describe("Material 3 Expressive Shapes", () => {
     expect(getTargetPillShape("cursor")).toBe("diamond");
     expect(getTargetPillShape("claude")).toBe("scalloped");
     expect(getTargetPillShape("v0")).toBe("arch");
+    expect(getTargetPillShape("opencode")).toBe("rugged");
+    expect(getTargetPillShape("codex")).toBe("round");
     expect(getTargetPillShape("html-tailwind")).toBe("rugged");
 
     expect(getTargetPillShapeClass("cursor")).toBe("m3-pill-diamond");
     expect(getTargetPillShapeClass("claude")).toBe("m3-pill-scalloped");
     expect(getTargetPillShapeClass("v0")).toBe("m3-pill-arch");
+    expect(getTargetPillShapeClass("opencode")).toBe("m3-pill-rugged");
+    expect(getTargetPillShapeClass("codex")).toBe("m3-pill-round");
     expect(getTargetPillShapeClass("html-tailwind")).toBe("m3-pill-rugged");
   });
 });

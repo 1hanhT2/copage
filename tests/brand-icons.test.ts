@@ -13,6 +13,8 @@ import {
   cursorSvg,
   claudeSvg,
   v0Svg,
+  opencodeSvg,
+  codexSvg,
   poolsideSvg,
   thinkingmachinesSvg
 } from "../src/lib/brand-icons";
@@ -49,7 +51,7 @@ describe("Brand and Framework Icons", () => {
     expect(twIcon).toContain('width="14"');
   });
 
-  it("provides official icons for prompt targets (Cursor, Claude, v0, Tailwind)", () => {
+  it("provides official icons for prompt targets (Cursor, Claude, v0, Open Code, Codex, Tailwind)", () => {
     const cursorIcon = getPromptTargetIconSvg("cursor", 13);
     expect(cursorIcon).toContain("<svg");
 
@@ -58,6 +60,12 @@ describe("Brand and Framework Icons", () => {
 
     const v0Icon = getPromptTargetIconSvg("v0", 13);
     expect(v0Icon).toContain("<svg");
+
+    const opencodeIcon = getPromptTargetIconSvg("opencode", 13);
+    expect(opencodeIcon).toContain("<svg");
+
+    const codexIcon = getPromptTargetIconSvg("codex", 13);
+    expect(codexIcon).toContain("<svg");
 
     const twIcon = getPromptTargetIconSvg("html-tailwind", 13);
     expect(twIcon).toContain("<svg");

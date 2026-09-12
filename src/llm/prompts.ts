@@ -86,6 +86,40 @@ Rules:
     };
   }
 
+  if (target === "opencode") {
+    return {
+      system: "You are an autonomous frontend developer agent running in Open Code. You generate clean, modular, production-ready frontend code with zero setup friction.",
+      prompt: `
+Recreate this inspected web UI component for Open Code:
+
+${contextBlock}
+
+Guidelines for Open Code:
+1. Output production-ready TypeScript + React component styled with Tailwind CSS.
+2. Ensure clear file structure, typed props, and zero unexplained external dependencies.
+3. Use Lucide React icons for any icon placeholders.
+4. Provide clean JSX without conversational preamble so it can be directly piped into the codebase.
+`.trim()
+    };
+  }
+
+  if (target === "codex") {
+    return {
+      system: "You are OpenAI Codex, a state-of-the-art code generation model. You specialize in precise, idiomatic, and highly efficient UI implementations.",
+      prompt: `
+Implement this extracted UI component using modern React and Tailwind CSS:
+
+${contextBlock}
+
+Codex Requirements:
+1. Return purely the TypeScript React code block.
+2. Structure with semantic HTML5 elements and fluid Tailwind utility classes.
+3. Map vector assets to equivalent Lucide React icon components.
+4. Support light/dark mode variants where appropriate and maintain strict typing.
+`.trim()
+    };
+  }
+
   if (target === "html-tailwind") {
     return {
       system: "You are an HTML and Tailwind CSS converter. You output pure HTML with Tailwind utility classes.",

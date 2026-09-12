@@ -580,11 +580,18 @@ export class InspectorOverlay {
         background-color: #15151a;
         padding: 3px;
         gap: 3px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        align-items: center;
+        max-width: 100%;
+      }
+      .copage-segmented-group::-webkit-scrollbar {
+        display: none;
       }
       .copage-segmented-btn {
         background: transparent;
         border: none;
-        padding: 5px 14px;
+        padding: 5px 12px;
         font-size: 11px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.7);
@@ -592,6 +599,8 @@ export class InspectorOverlay {
         cursor: pointer;
         display: inline-flex;
         align-items: center;
+        white-space: nowrap;
+        flex-shrink: 0;
         gap: 6px;
         transition: clip-path 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.18s ease, color 0.18s ease;
         font-family: 'Lexend', sans-serif !important;
@@ -618,6 +627,12 @@ export class InspectorOverlay {
       }
       .copage-segmented-btn[data-target="v0"].active {
         clip-path: polygon(8px 0%, calc(100% - 8px) 0%, calc(100% - 8px) 25%, calc(100% - 2px) 35%, calc(100% - 1px) 50%, calc(100% - 2px) 65%, calc(100% - 8px) 75%, calc(100% - 8px) 100%, 8px 100%, 8px 75%, 2px 65%, 1px 50%, 2px 35%, 8px 25%);
+      }
+      .copage-segmented-btn[data-target="opencode"].active {
+        clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 6px) 33.3%, 100% 50%, calc(100% - 6px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 6px 66.7%, 0% 50%, 6px 33.3%, 0% 16.7%);
+      }
+      .copage-segmented-btn[data-target="codex"].active {
+        clip-path: polygon(16px 0%, calc(100% - 16px) 0%, calc(100% - 6px) 15%, calc(100% - 1px) 33%, 100% 50%, calc(100% - 1px) 67%, calc(100% - 6px) 85%, calc(100% - 16px) 100%, 16px 100%, 6px 85%, 1px 67%, 0% 50%, 1px 33%, 6px 15%);
       }
       .copage-segmented-btn[data-target="html-tailwind"].active {
         clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 16.7%, calc(100% - 6px) 33.3%, 100% 50%, calc(100% - 6px) 66.7%, 100% 83.3%, calc(100% - 8px) 100%, 8px 100%, 0% 83.3%, 6px 66.7%, 0% 50%, 6px 33.3%, 0% 16.7%);

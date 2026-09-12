@@ -277,6 +277,10 @@ export function getTargetM3Shape(target: PromptTarget): M3CanonicalShapeName {
       return "flower";
     case "v0":
       return "arch";
+    case "opencode":
+      return "pixel-triangle";
+    case "codex":
+      return "oval";
     case "html-tailwind":
       return "sunny";
     case "react-component":
@@ -398,6 +402,10 @@ export function getTargetPillShape(target: PromptTarget): M3PillShapeName {
       return "scalloped";
     case "v0":
       return "arch";
+    case "opencode":
+      return "rugged";
+    case "codex":
+      return "round";
     case "html-tailwind":
       return "rugged";
     case "react-component":

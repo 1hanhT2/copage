@@ -273,12 +273,20 @@ export class CopageDock {
               ${getBrandIconSvg("v0", 13)}
               <span>v0 / 21st</span>
             </button>
+            <button class="copage-segmented-btn" data-target="opencode" title="Copy clean prompt for Open Code">
+              ${getBrandIconSvg("opencode", 13)}
+              <span>Open Code</span>
+            </button>
+            <button class="copage-segmented-btn" data-target="codex" title="Copy code generation prompt for OpenAI Codex">
+              ${getBrandIconSvg("codex", 13)}
+              <span>Codex</span>
+            </button>
             <button class="copage-segmented-btn" data-target="html-tailwind" title="Copy semantic HTML with mapped Tailwind utilities">
               ${getBrandIconSvg("tailwind", 13)}
               <span>Tailwind HTML</span>
             </button>
           </div>
-          <button id="copage-copy-prompt-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 5px 12px;">
+          <button id="copage-copy-prompt-btn" class="copage-btn-secondary" style="font-size: 11px; padding: 5px 12px; white-space: nowrap; flex-shrink: 0;">
             ${getCanonicalM3ShapeSvg("puffy-diamond", 13, "currentColor")}
             <span>Copy Prompt</span>
           </button>
@@ -293,8 +301,8 @@ export class CopageDock {
               <div class="copage-select-wrap" id="copage-dock-select-wrap">
                 <div class="copage-trigger-contour">
                   <div id="copage-dock-model-trigger" class="copage-select-trigger" tabindex="0">
-                    <span id="copage-dock-model-icon" style="display: inline-flex; align-items: center;"></span>
-                    <span id="copage-dock-model-name">Gemini 2.5 Flash</span>
+                    <span id="copage-dock-model-icon" style="display: inline-flex; align-items: center;">${getBrandIconSvg("gemma", 15)}</span>
+                    <span id="copage-dock-model-name">Gemma 4 26B A4B</span>
                     <svg class="copage-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                       <path d="M7 10l5 5 5-5z"/>
                     </svg>

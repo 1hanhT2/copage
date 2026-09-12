@@ -80,6 +80,8 @@ export type PromptTarget =
   | "cursor"
   | "claude"
   | "v0"
+  | "opencode"
+  | "codex"
   | "react-component"
   | "html-tailwind";
 

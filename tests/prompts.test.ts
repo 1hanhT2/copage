@@ -49,4 +49,18 @@ describe("Prompt Synthesizer", () => {
     const { prompt } = buildPromptForTarget(mockData, "claude");
     expect(prompt).toContain("Please analyze and recreate this UI component");
   });
+
+  it("builds an Open Code agent reproduction prompt", () => {
+    const { system, prompt } = buildPromptForTarget(mockData, "opencode");
+    expect(system).toContain("autonomous frontend developer agent running in Open Code");
+    expect(prompt).toContain("Recreate this inspected web UI component for Open Code");
+    expect(prompt).toContain("140px × 42px");
+  });
+
+  it("builds a Codex specialized code generation prompt", () => {
+    const { system, prompt } = buildPromptForTarget(mockData, "codex");
+    expect(system).toContain("OpenAI Codex");
+    expect(prompt).toContain("Implement this extracted UI component using modern React and Tailwind CSS");
+    expect(prompt).toContain("Codex Requirements");
+  });
 });
