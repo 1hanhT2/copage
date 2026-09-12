@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-12T02:52:44.528Z",
-  "count": 70,
+  "generatedAt": "2026-09-12T03:43:52.589Z",
+  "count": 71,
   "entries": [
     {
       "file": "2026-09-11_02d9c6b_feat-library-add-component-library-to-save-and-manage-select.md",
@@ -777,6 +777,19 @@
       "commit": "chore: record final memory index",
       "tags": [
         "memory"
+      ]
+    },
+    {
+      "file": "2026-09-12_518f516_fix-resolve-content-script-iframe-overhead-remove-host-font-.md",
+      "hash": "518f51659ec574d29f9e55708ce72181d0de289c",
+      "short": "518f516",
+      "date": "2026-09-12",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "fix: resolve content script iframe overhead, remove host font injection, and expand test coverage",
+      "tags": [
+        "fix",
+        "test"
       ]
     },
     {
