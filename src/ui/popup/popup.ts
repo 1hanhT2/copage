@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-      await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
+      await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage, { frameId: 0 });
       window.close();
     } catch {
       // Content script was not present in this tab; inject it dynamically
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           target: { tabId, allFrames: false },
           files: ["content.js"]
         });
-        await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage);
+        await chrome.tabs.sendMessage(tabId, { type: "TOGGLE_INSPECTOR" } as ExtensionMessage, { frameId: 0 });
         window.close();
       } catch {
         if (activateBtnText) activateBtnText.textContent = "Cannot inspect this page";

@@ -42,10 +42,23 @@ export class EventManager {
     this.keydownInterceptor = (e: KeyboardEvent) => {
       if (!this.isCapturing) return;
 
-      // If typing inside an input/textarea/select inside our dock, do not intercept navigation keys
+      // If event originated inside Copage Inspector Shadow DOM (dock, popovers, controls)
       const path = e.composedPath();
+      const isInsideCopage = path.some(
+        (el) => el instanceof Element && (el.tagName.toLowerCase() === "copage-inspector-root" || el.id === "copage-inspector-root")
+      );
+
+      if (isInsideCopage) {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          this.navHandlers.onCancel();
+        }
+        return;
+      }
+
+      // If typing inside an input/textarea/select on the host page, do not intercept navigation keys
       for (const el of path) {
-        if (el instanceof Element && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT")) {
+        if (el instanceof Element && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT" || (el as HTMLElement).isContentEditable)) {
           if (e.key === "Escape") {
             this.navHandlers.onCancel();
           }

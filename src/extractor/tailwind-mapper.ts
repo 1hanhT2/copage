@@ -64,11 +64,18 @@ const BORDER_RADIUS_MAP: Record<string, string> = {
 };
 
 export function rgbToHex(rgb: string): string {
-  const match = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  const match = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
   if (!match) return rgb;
   const r = parseInt(match[1], 10).toString(16).padStart(2, "0");
   const g = parseInt(match[2], 10).toString(16).padStart(2, "0");
   const b = parseInt(match[3], 10).toString(16).padStart(2, "0");
+  if (match[4] !== undefined) {
+    const alphaVal = parseFloat(match[4]);
+    if (alphaVal < 1) {
+      const a = Math.round(alphaVal * 255).toString(16).padStart(2, "0");
+      return `#${r}${g}${b}${a}`;
+    }
+  }
   return `#${r}${g}${b}`;
 }
 

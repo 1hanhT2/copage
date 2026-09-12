@@ -86,8 +86,8 @@ function shouldIgnoreValue(prop: string, val: string): boolean {
   return false;
 }
 
-export function extractDistilledStyles(element: HTMLElement, parentElement?: HTMLElement): DistilledStyles {
-  const computed = window.getComputedStyle(element);
+export function extractDistilledStyles(element: HTMLElement, parentElement?: HTMLElement, precomputed?: CSSStyleDeclaration): DistilledStyles {
+  const computed = precomputed || window.getComputedStyle(element);
   const parentComputed = parentElement ? window.getComputedStyle(parentElement) : null;
 
   const extractGroup = (props: string[]): Record<string, string> => {

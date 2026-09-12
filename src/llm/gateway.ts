@@ -120,20 +120,23 @@ export async function streamCompletion(
         const dataStr = trimmed.slice(5).trim();
         if (dataStr === "[DONE]") continue;
 
+        let json: any;
         try {
-          const json = JSON.parse(dataStr);
-          if (json.error) {
-            throw new Error(json.error.message || "LLM Streaming Error");
-          }
-          const delta = json.choices?.[0]?.delta?.content || "";
-          if (delta) {
-            accumulated += delta;
-            onChunk(delta);
-          }
-        } catch (parseErr) {
-          if (parseErr instanceof Error && parseErr.message.includes("LLM")) {
-            throw parseErr;
-          }
+          json = JSON.parse(dataStr);
+        } catch {
+          // Ignore malformed or partial JSON chunks
+          continue;
+        }
+
+        if (json?.error) {
+          const errMsg = typeof json.error === "string" ? json.error : (json.error.message || json.error.code || "LLM Streaming Error");
+          throw new Error(`LLM Error: ${errMsg}`);
+        }
+
+        const delta = json?.choices?.[0]?.delta?.content || "";
+        if (delta) {
+          accumulated += delta;
+          onChunk(delta);
         }
       }
     }

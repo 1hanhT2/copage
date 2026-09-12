@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span class="m3-shape-beacon ready">
             ${getCanonicalM3ShapeSvg("gem", 18, "#78dc77")}
           </span>
-          <span>${res.message}</span>
+          <span>${escapeHtml(res.message)}</span>
         `;
       } else {
         testResultBox.className = "m3-alert m3-alert-error";
@@ -378,7 +378,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span class="m3-shape-beacon warning">
             ${getCanonicalM3ShapeSvg("boom", 18, "#ffb4ab")}
           </span>
-          <span>${res.message}</span>
+          <span>${escapeHtml(res.message)}</span>
         `;
       }
     } catch {

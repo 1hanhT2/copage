@@ -56,7 +56,7 @@ export function extractElementData(element: HTMLElement): InspectedElementData {
   };
 
   const parent = element.parentElement || undefined;
-  const distilledStyles = extractDistilledStyles(element, parent);
+  const distilledStyles = extractDistilledStyles(element, parent, computed);
   const flatStyles = {
     ...distilledStyles.layout,
     ...distilledStyles.boxModel,
