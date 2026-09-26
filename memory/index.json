@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-12T03:43:59.970Z",
-  "count": 72,
+  "generatedAt": "2026-09-26T13:17:41.088Z",
+  "count": 73,
   "entries": [
     {
       "file": "2026-09-11_02d9c6b_feat-library-add-component-library-to-save-and-manage-select.md",
@@ -897,6 +897,18 @@
       "author": "1hanhT2 <thanh--12@outlook.com>",
       "version": "null",
       "commit": "chore: track post-commit memory stub",
+      "tags": [
+        "memory"
+      ]
+    },
+    {
+      "file": "2026-09-26_7bf32ed_chore-sync-memory-index-and-manifest.md",
+      "hash": "7bf32ed08c2dd752878ced57da8bcda9db71662e",
+      "short": "7bf32ed",
+      "date": "2026-09-26",
+      "author": "1hanhT2 <thanh--12@outlook.com>",
+      "version": "null",
+      "commit": "chore: sync memory index and manifest",
       "tags": [
         "memory"
       ]
